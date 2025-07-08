@@ -1,6 +1,7 @@
 // AI Cursor + Ethan Le code with comments and explanations for code comprehension. Language: C# (C Sharp)
 
 using UnityEngine;
+using LifeCraft.Core;
 
 namespace LifeCraft.UI
 {
@@ -13,52 +14,54 @@ namespace LifeCraft.UI
         public ResourceDisplay creativitySparksDisplay; // Add this field to the Inspector to assign the Creativity Sparks ResourceDisplay.
         public ResourceDisplay balanceTicketsDisplay; // Add this field to the Inspector to assign the Balance Tickets ResourceDisplay.
 
-        // Private variables that track the player's current resource amounts:
-        private int energyCrystals = 100;
-        private int wisdomOrbs = 100;
-        private int heartTokens = 100;
-        private int creativitySparks = 100;
-        private int balanceTickets = 0;
-
         void Start()
         {
-            // Initialize each display with its resource type and starting amount (100 for now)
-            energyCrystalsDisplay.Initialize(LifeCraft.Core.ResourceManager.ResourceType.EnergyCrystals, energyCrystals);
-            wisdomOrbsDisplay.Initialize(LifeCraft.Core.ResourceManager.ResourceType.WisdomOrbs, wisdomOrbs);
-            heartTokensDisplay.Initialize(LifeCraft.Core.ResourceManager.ResourceType.HeartTokens, heartTokens);
-            creativitySparksDisplay.Initialize(LifeCraft.Core.ResourceManager.ResourceType.CreativitySparks, creativitySparks);
-            balanceTicketsDisplay.Initialize(LifeCraft.Core.ResourceManager.ResourceType.BalanceTickets, balanceTickets);
+            // Initialize each display with its resource type and the current value from ResourceManager.Instance
+            energyCrystalsDisplay.Initialize(ResourceManager.ResourceType.EnergyCrystals, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.EnergyCrystals));
+            wisdomOrbsDisplay.Initialize(ResourceManager.ResourceType.WisdomOrbs, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.WisdomOrbs));
+            heartTokensDisplay.Initialize(ResourceManager.ResourceType.HeartTokens, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.HeartTokens));
+            creativitySparksDisplay.Initialize(ResourceManager.ResourceType.CreativitySparks, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.CreativitySparks));
+            balanceTicketsDisplay.Initialize(ResourceManager.ResourceType.BalanceTickets, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.BalanceTickets));
+
+            // --- Fix: Immediately update the UI to reflect the current resource values at game start ---
+            // This ensures the UI is correct even before any resource changes occur.
+            OnResourceUpdated(ResourceManager.ResourceType.EnergyCrystals, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.EnergyCrystals));
+            OnResourceUpdated(ResourceManager.ResourceType.WisdomOrbs, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.WisdomOrbs));
+            OnResourceUpdated(ResourceManager.ResourceType.HeartTokens, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.HeartTokens));
+            OnResourceUpdated(ResourceManager.ResourceType.CreativitySparks, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.CreativitySparks));
+            OnResourceUpdated(ResourceManager.ResourceType.BalanceTickets, ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.BalanceTickets));
         }
 
-        // Call this method to add resource when a quest is COMPLETED: 
-        public void AddResource(string regionName, int amount)
+        void OnEnable()
         {
-            switch (regionName) // Check which region the quest was completed in: 
+            ResourceManager.Instance.OnResourceUpdated.AddListener(OnResourceUpdated);
+        }
+
+        void OnDisable()
+        {
+            ResourceManager.Instance.OnResourceUpdated.RemoveListener(OnResourceUpdated);
+        }
+
+        private void OnResourceUpdated(ResourceManager.ResourceType resourceType, int newAmount)
+        {
+            switch (resourceType)
             {
-                case "Health Harbor":
-                    energyCrystals += amount; // Add the amount to the Energy Crystals resource. 
-                    energyCrystalsDisplay.UpdateAmount(energyCrystals); // Update the display with the new amount. 
+                case ResourceManager.ResourceType.EnergyCrystals:
+                    energyCrystalsDisplay.UpdateAmount(newAmount);
                     break;
-                case "Mind Palace":
-                    wisdomOrbs += amount; // Add the amount to the Wisdom Orbs resource. 
-                    wisdomOrbsDisplay.UpdateAmount(wisdomOrbs); // Update the display with the new amount. 
+                case ResourceManager.ResourceType.WisdomOrbs:
+                    wisdomOrbsDisplay.UpdateAmount(newAmount);
                     break;
-                case "Social Square":
-                    heartTokens += amount; // Add the amount to the Heart Tokens resource. 
-                    heartTokensDisplay.UpdateAmount(heartTokens); // Update the display with the new amount. 
+                case ResourceManager.ResourceType.HeartTokens:
+                    heartTokensDisplay.UpdateAmount(newAmount);
                     break;
-                case "Creative Commons":
-                    creativitySparks += amount; // Add the amount to the Creativity Sparks resource. 
-                    creativitySparksDisplay.UpdateAmount(creativitySparks); // Update the display with the new amount. 
-                    break; 
+                case ResourceManager.ResourceType.CreativitySparks:
+                    creativitySparksDisplay.UpdateAmount(newAmount);
+                    break;
+                case ResourceManager.ResourceType.BalanceTickets:
+                    balanceTicketsDisplay.UpdateAmount(newAmount);
+                    break;
             }
-        }
-
-        // Call this method to add Balance Tickets when all daily quests are completed
-        public void AddBalanceTickets(int amount)
-        {
-            balanceTickets += amount; // Add the amount to the Balance Tickets resource.
-            balanceTicketsDisplay.UpdateAmount(balanceTickets); // Update the display with the new amount.
         }
     }
 } 

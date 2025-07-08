@@ -90,13 +90,20 @@ namespace LifeCraft.Core
 
         private void Awake()
         {
+            Initialize();
+        }
+
+        public void Initialize()
+        {
             // Initialize resources
+            _resources.Clear();
             foreach (var resource in initialResources)
             {
                 _resources[resource.type] = resource.amount;
             }
 
             // Build habit reward lookup
+            _habitRewardLookup.Clear();
             foreach (var reward in habitRewards)
             {
                 _habitRewardLookup[reward.habitName] = reward;

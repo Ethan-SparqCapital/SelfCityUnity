@@ -13,7 +13,6 @@ namespace LifeCraft.Core
     public class GameManager : MonoBehaviour
     {
         [Header("Game Systems")]
-        [SerializeField] private ResourceManager resourceManager;
         [SerializeField] private CityBuilder cityBuilder;
         [SerializeField] private UnlockSystem unlockSystem;
         [SerializeField] private QuestManager questManager;
@@ -83,12 +82,6 @@ namespace LifeCraft.Core
         /// </summary>
         private void InitializeGame()
         {
-            // Load or create resource manager
-            if (resourceManager == null)
-            {
-                resourceManager = ResourceManager.Instance;
-            }
-
             // Find or create other systems
             if (cityBuilder == null)
                 cityBuilder = FindFirstObjectByType<CityBuilder>();
@@ -225,8 +218,7 @@ namespace LifeCraft.Core
             try
             {
                 // Save resource data
-                if (resourceManager != null)
-                    resourceManager.SaveResources();
+                if (ResourceManager.Instance != null) ResourceManager.Instance.SaveResources();
 
                 // Save city data
                 if (cityBuilder != null)
@@ -272,8 +264,7 @@ namespace LifeCraft.Core
             try
             {
                 // Load resource data
-                if (resourceManager != null)
-                    resourceManager.LoadResources();
+                if (ResourceManager.Instance != null) ResourceManager.Instance.LoadResources();
 
                 // Load city data
                 if (cityBuilder != null)
@@ -355,11 +346,6 @@ namespace LifeCraft.Core
         /// Check if game is paused
         /// </summary>
         public bool IsGamePaused => isGamePaused;
-
-        /// <summary>
-        /// Get resource manager
-        /// </summary>
-        public ResourceManager ResourceManager => resourceManager;
 
         /// <summary>
         /// Get city builder

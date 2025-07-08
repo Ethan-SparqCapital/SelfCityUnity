@@ -30,7 +30,6 @@ namespace LifeCraft.Core
         [Header("References")]
         [SerializeField] private Tilemap tilemap;
         [SerializeField] private Transform buildingContainer;
-        [SerializeField] private ResourceManager resourceManager;
         [SerializeField] private UnlockSystem unlockSystem;
 
         // Events (replacing Godot signals)
@@ -54,8 +53,8 @@ namespace LifeCraft.Core
             if (tilemap == null)
                 tilemap = FindFirstObjectByType<Tilemap>();
             
-            if (resourceManager == null)
-                resourceManager = ResourceManager.Instance;
+            //if (unlockSystem == null)
+                //unlockSystem = UnlockSystem.Instance;
         }
 
         /// <summary>
@@ -120,7 +119,7 @@ namespace LifeCraft.Core
             var buildingData = _buildingTypeLookup[buildingType];
 
             // Check if player can afford the building
-            if (resourceManager.SpendResources(buildingData.costResource, buildingData.costAmount))
+            if (ResourceManager.Instance.SpendResources(buildingData.costResource, buildingData.costAmount))
             {
                 PlaceBuildingInWorld(buildingType, mapPos);
                 return true;

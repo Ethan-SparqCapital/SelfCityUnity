@@ -5,6 +5,7 @@ using TMPro; // we are using TMPro for TextMeshPro, which is a text rendering sy
 using UnityEngine.UI; // we are using UnityEngine.UI for UI components like Button and InputField, which are used to create user interfaces in Unity. 
 using LifeCraft.UI; // we are using LifeCraft.UI for the ResourceBarManager, which manages the resource bar UI and functionality. 
 using LifeCraft.Systems; // we are using LifeCraft.Systems for the QuestManager, which manages the quests in the game. 
+using LifeCraft.Core; // we are using LifeCraft.Core for the ResourceManager, which manages the player's resources.
 
 public class ToDoListManager : MonoBehaviour // this class manages the to-do list UI and functionality 
 {
@@ -170,7 +171,8 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
         {
             if (dailyQuestsButtonHandler.resourceBarManager != null)
             {
-                dailyQuestsButtonHandler.resourceBarManager.AddBalanceTickets(1);
+                //dailyQuestsButtonHandler.resourceBarManager.AddBalanceTickets(1);
+                ResourceManager.Instance.AddResources(ResourceManager.ResourceType.BalanceTickets, 1); // Add 1 Balance Ticket to the player's resources using the ResourceManager. 
                 dailyQuestsButtonHandler.balanceTicketRewarded = true; // Mark as rewarded for this set
                 Debug.Log("All daily quests completed! Rewarding 1 Balance Ticket.");
             }
@@ -211,12 +213,25 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
     /// </summary>
     private void GiveCurrencyReward(string questText, int rewardAmount = 5)
     {
-        string region = GetRegionFromQuest(questText); // Extract the region name from the quest text. 
-        if (!string.IsNullOrEmpty(region) && resourceBarManager != null) // Check if the region is valid and the ResourceBarManager is assigned (exists). 
+        string region = GetRegionFromQuest(questText);
+        if (!string.IsNullOrEmpty(region))
         {
-            resourceBarManager.AddResource(region, rewardAmount); // Call the "AddResource" method from the ResourceBarManager class to add a dynamic reward for the completed quest/task. 
+            switch (region)
+            {
+                case "Health Harbor":
+                    ResourceManager.Instance.AddResources(ResourceManager.ResourceType.EnergyCrystals, rewardAmount);
+                    break;
+                case "Mind Palace":
+                    ResourceManager.Instance.AddResources(ResourceManager.ResourceType.WisdomOrbs, rewardAmount);
+                    break;
+                case "Social Square":
+                    ResourceManager.Instance.AddResources(ResourceManager.ResourceType.HeartTokens, rewardAmount);
+                    break;
+                case "Creative Commons":
+                    ResourceManager.Instance.AddResources(ResourceManager.ResourceType.CreativitySparks, rewardAmount);
+                    break;
+            }
         }
-
         Debug.Log($"Reward player for completing: {questText} (+{rewardAmount})");
     }
 

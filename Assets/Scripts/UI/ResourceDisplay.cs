@@ -66,8 +66,7 @@ namespace LifeCraft.UI
         public void UpdateAmount(int newAmount)
         {
             previousAmount = currentAmount;
-            currentAmount = newAmount;
-
+            currentAmount = ResourceManager.Instance.GetResourceTotal(resourceType);
             UpdateDisplay();
             PlayUpdateAnimation();
         }

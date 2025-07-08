@@ -24,12 +24,9 @@ namespace LifeCraft.UI
         [SerializeField] private Button closeBuildingPanelButton;
 
         [Header("City UI")]
-        [SerializeField] private GameObject cityPanel;
         [SerializeField] private Button cityViewButton;
-        [SerializeField] private Button dashboardButton;
 
         [Header("Dashboard UI")]
-        [SerializeField] private GameObject dashboardPanel;
         [SerializeField] private Transform habitContainer;
         [SerializeField] private GameObject habitItemPrefab;
 
@@ -37,6 +34,17 @@ namespace LifeCraft.UI
         [SerializeField] private GameObject notificationPanel;
         [SerializeField] private TextMeshProUGUI notificationText;
         [SerializeField] private float notificationDuration = 3f;
+
+        [Header("Bottom Bar Navigation")]
+        [SerializeField] private Button cityTabButton; // Button to switch to city view. 
+        [SerializeField] private Button homeTabButton; // Button to switch to home view. 
+        [SerializeField] private Button shopTabButton; // Button to switch to shop view. 
+        [SerializeField] private Button profileTabButton; // Button to switch to profile view. 
+
+        [SerializeField] private GameObject cityPanel; // Panel for city view. 
+        [SerializeField] private GameObject homePanel; // Panel for home view. 
+        [SerializeField] private GameObject shopPanel; // Panel for shop view. 
+        [SerializeField] private GameObject profilePanel; // Panel for profile view. 
 
         // References
         private ResourceManager resourceManager;
@@ -61,6 +69,7 @@ namespace LifeCraft.UI
         {
             // Get references
             resourceManager = ResourceManager.Instance;
+            resourceManager.Initialize();
             cityBuilder = FindFirstObjectByType<LifeCraft.Core.CityBuilder>();
             unlockSystem = FindFirstObjectByType<Systems.UnlockSystem>();
 
@@ -141,14 +150,59 @@ namespace LifeCraft.UI
         /// </summary>
         private void SetupNavigation()
         {
+            // Existing navigation setup:
             if (cityViewButton != null)
                 cityViewButton.onClick.AddListener(ShowCityPanel);
-            
-            if (dashboardButton != null)
-                dashboardButton.onClick.AddListener(ShowDashboardPanel);
-            
+
             if (closeBuildingPanelButton != null)
                 closeBuildingPanelButton.onClick.AddListener(HideBuildingPanel);
+
+            // --- Bottom Bar Navigation ---
+            if (cityTabButton != null)
+                cityTabButton.onClick.AddListener(ShowCityPanel); // If the city tab is not null, add a listener to show the city panel when clicked. 
+
+            if (homeTabButton != null)
+                homeTabButton.onClick.AddListener(ShowHomePanel); // If the home tab is not null, add a listener to show the home panel when clicked. 
+
+            if (shopTabButton != null)
+                shopTabButton.onClick.AddListener(ShowShopPanel); // If the shop tab is not null, add a listener to show the shop panel when clicked. 
+
+            if (profileTabButton != null)
+                profileTabButton.onClick.AddListener(ShowProfilePanel); // If the profile tab is not null, add a listener to show the profile panel when clicked. 
+        }
+
+        // --- Buttom Bar Panel Switching Methods ---
+
+        public void ShowHomePanel() // If the Home panel is selected, show the Home panel and hide the others. 
+        {
+            if (homePanel != null) homePanel.SetActive(true);
+            if (cityPanel != null) cityPanel.SetActive(false);
+            if (shopPanel != null) shopPanel.SetActive(false);
+            if (profilePanel != null) profilePanel.SetActive(false); 
+        }
+
+        public void ShowCityPanel() // If the City panel is selected, show the City panel and hide the others. 
+        {
+            if (homePanel != null) homePanel.SetActive(false);
+            if (cityPanel != null) cityPanel.SetActive(true);
+            if (shopPanel != null) shopPanel.SetActive(false);
+            if (profilePanel != null) profilePanel.SetActive(false); 
+        }
+
+        public void ShowShopPanel() // If the Shop panel is selected, show the Shop panel and hide the others. 
+        {
+            if (homePanel != null) homePanel.SetActive(false);
+            if (cityPanel != null) cityPanel.SetActive(false);
+            if (shopPanel != null) shopPanel.SetActive(true);
+            if (profilePanel != null) profilePanel.SetActive(false); 
+        }
+
+        public void ShowProfilePanel() // If the Profile panel is selected, show the Profile panel and hide the others. 
+        {
+            if (homePanel != null) homePanel.SetActive(false);
+            if (cityPanel != null) cityPanel.SetActive(false);
+            if (shopPanel != null) shopPanel.SetActive(false);
+            if (profilePanel != null) profilePanel.SetActive(true); 
         }
 
         /// <summary>
@@ -182,30 +236,6 @@ namespace LifeCraft.UI
             
             // TODO: Enter building placement mode
             Debug.Log($"Selected building: {buildingType}");
-        }
-
-        /// <summary>
-        /// Show city panel
-        /// </summary>
-        public void ShowCityPanel()
-        {
-            if (cityPanel != null)
-                cityPanel.SetActive(true);
-            
-            if (dashboardPanel != null)
-                dashboardPanel.SetActive(false);
-        }
-
-        /// <summary>
-        /// Show dashboard panel
-        /// </summary>
-        public void ShowDashboardPanel()
-        {
-            if (dashboardPanel != null)
-                dashboardPanel.SetActive(true);
-            
-            if (cityPanel != null)
-                cityPanel.SetActive(false);
         }
 
         /// <summary>
