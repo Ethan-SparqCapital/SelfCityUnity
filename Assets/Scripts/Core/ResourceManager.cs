@@ -99,7 +99,7 @@ namespace LifeCraft.Core
             _resources.Clear();
             foreach (var resource in initialResources)
             {
-                _resources[resource.type] = resource.amount;
+                _resources[resource.type] = resource.amount; 
             }
 
             // Build habit reward lookup
