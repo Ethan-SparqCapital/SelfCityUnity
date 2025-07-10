@@ -3,6 +3,7 @@ using LifeCraft.Systems;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using LifeCraft.UI;
+using System.Collections.Generic;
 
 namespace LifeCraft.Core
 {
@@ -211,38 +212,54 @@ namespace LifeCraft.Core
         }
 
         /// <summary>
-        /// Save the current game
+        /// Save the current game state to local device storage (PlayerPrefs)
+        /// 
+        /// UPDATE: Implemented comprehensive local save system that preserves all game data:
+        /// - Resource amounts and types
+        /// - City layout and building states
+        /// - Unlocked items and progression
+        /// - Quest progress and custom quests
+        /// - Current game state and pause status
+        /// - Save timestamp for tracking
+        /// 
+        /// This ensures complete data persistence between game sessions.
         /// </summary>
         public void SaveGame()
         {
             try
             {
-                // Save resource data
+                // Save resource data (player's currency and materials)
                 if (ResourceManager.Instance != null) ResourceManager.Instance.SaveResources();
 
-                // Save city data
+                // Save city data (building positions, health, construction status)
                 if (cityBuilder != null)
                 {
                     var cityData = cityBuilder.GetSaveData();
-                    // TODO: Save to file
+                    string cityJson = JsonUtility.ToJson(new CitySaveWrapper { buildings = cityData });
+                    PlayerPrefs.SetString("CityData", cityJson);
                 }
 
-                // Save unlock data
+                // Save unlock data (progressed items and features)
                 if (unlockSystem != null)
                 {
                     var unlockData = unlockSystem.GetSaveData();
-                    // TODO: Save to file
+                    string unlockJson = JsonUtility.ToJson(unlockData);
+                    PlayerPrefs.SetString("UnlockData", unlockJson);
                 }
 
-                // Save quest data
+                // Save quest data (daily quests, custom quests, progress)
                 if (questManager != null)
                     questManager.SaveQuests();
 
-                // Save self-care data
-                //if (selfCareManager != null)
-                    //selfCareManager.SaveSelfCareData();
-
-                Debug.Log("Game saved successfully!");
+                // Save current game state and pause status
+                PlayerPrefs.SetInt("GameState", (int)currentGameState);
+                PlayerPrefs.SetInt("IsPaused", isGamePaused ? 1 : 0);
+                
+                // Save timestamp for tracking when the game was last saved
+                PlayerPrefs.SetString("LastSaveTime", System.DateTime.UtcNow.ToString("O"));
+                
+                PlayerPrefs.Save(); // Force write to device storage
+                Debug.Log("Game saved successfully to local storage!");
                 
                 if (uiManager != null)
                     uiManager.ShowNotification("Game saved!");
@@ -257,40 +274,58 @@ namespace LifeCraft.Core
         }
 
         /// <summary>
-        /// Load a saved game
+        /// Load a saved game from local device storage (PlayerPrefs)
+        /// 
+        /// UPDATE: Implemented comprehensive local load system that restores all game data:
+        /// - Resource amounts and types
+        /// - City layout and building states  
+        /// - Unlocked items and progression
+        /// - Quest progress and custom quests
+        /// - Current game state and pause status
+        /// 
+        /// This ensures players can continue exactly where they left off.
         /// </summary>
         public void LoadGame()
         {
             try
             {
-                // Load resource data
+                // Load resource data (player's currency and materials)
                 if (ResourceManager.Instance != null) ResourceManager.Instance.LoadResources();
 
-                // Load city data
-                if (cityBuilder != null)
+                // Load city data (building positions, health, construction status)
+                if (cityBuilder != null && PlayerPrefs.HasKey("CityData"))
                 {
-                    // TODO: Load from file
-                    // var cityData = LoadCityData();
-                    // cityBuilder.LoadCity(cityData);
+                    string cityJson = PlayerPrefs.GetString("CityData");
+                    var cityWrapper = JsonUtility.FromJson<CitySaveWrapper>(cityJson);
+                    cityBuilder.LoadCity(cityWrapper.buildings);
                 }
 
-                // Load unlock data
-                if (unlockSystem != null)
+                // Load unlock data (progressed items and features)
+                if (unlockSystem != null && PlayerPrefs.HasKey("UnlockData"))
                 {
-                    // TODO: Load from file
-                    // var unlockData = LoadUnlockData();
-                    // unlockSystem.LoadSaveData(unlockData);
+                    string unlockJson = PlayerPrefs.GetString("UnlockData");
+                    var unlockData = JsonUtility.FromJson<LifeCraft.Systems.UnlockSaveData>(unlockJson);
+                    unlockSystem.LoadSaveData(unlockData);
                 }
 
-                // Load quest data
-                //if (questManager != null)
-                    //questManager.LoadQuests();
+                // Load quest data (daily quests, custom quests, progress)
+                if (questManager != null)
+                    questManager.LoadQuests();
 
-                // Load self-care data
-                //if (selfCareManager != null)
-                    //selfCareManager.LoadSelfCareData();
+                // Load game state and pause status
+                if (PlayerPrefs.HasKey("GameState"))
+                {
+                    GameState savedState = (GameState)PlayerPrefs.GetInt("GameState");
+                    SetGameState(savedState);
+                }
+                
+                if (PlayerPrefs.HasKey("IsPaused"))
+                {
+                    bool savedPause = PlayerPrefs.GetInt("IsPaused") == 1;
+                    SetPaused(savedPause);
+                }
 
-                Debug.Log("Game loaded successfully!");
+                Debug.Log("Game loaded successfully from local storage!");
                 
                 if (uiManager != null)
                     uiManager.ShowNotification("Game loaded!");
@@ -305,13 +340,27 @@ namespace LifeCraft.Core
         }
 
         /// <summary>
-        /// Load game data (called on initialization)
+        /// Load game data on initialization (called during game startup)
+        /// 
+        /// UPDATE: Implemented automatic save detection and loading.
+        /// Checks for existing save data and automatically loads it if found.
+        /// This ensures seamless continuation of player progress between app launches.
         /// </summary>
         private void LoadGameData()
         {
-            // Load saved data if it exists
-            // For now, just initialize with default values
-            Debug.Log("Loading game data...");
+            // Check if we have saved data from a previous session
+            if (PlayerPrefs.HasKey("LastSaveTime"))
+            {
+                string lastSaveTime = PlayerPrefs.GetString("LastSaveTime");
+                Debug.Log($"Found saved game from: {lastSaveTime}");
+                
+                // Auto-load the game on startup to restore player progress
+                LoadGame();
+            }
+            else
+            {
+                Debug.Log("No saved game found, starting fresh...");
+            }
         }
 
         /// <summary>
@@ -386,4 +435,114 @@ namespace LifeCraft.Core
         Settings,
         GameOver
     }
+
+    // Wrapper class for city save data serialization
+    [System.Serializable]
+    public class CitySaveWrapper
+    {
+        public List<BuildingSaveData> buildings;
+    }
+
+    /*
+    ================================================================================
+    CLOUD SAVE INTEGRATION - TO BE IMPLEMENTED LATER
+    ================================================================================
+    
+    When implementing user accounts and cloud save, replace the above save/load methods
+    with cloud-based storage. This will enable cross-device sync and data backup.
+    
+    Example implementation structure:
+    
+    public async Task SaveGameToCloud(string userId)
+    {
+        try
+        {
+            var gameData = new GameSaveData
+            {
+                resources = ResourceManager.Instance.GetAllResources(),
+                cityData = cityBuilder.GetSaveData(),
+                unlockData = unlockSystem.GetSaveData(),
+                questData = questManager.GetSaveData(),
+                gameState = currentGameState,
+                isPaused = isGamePaused,
+                saveTimestamp = DateTime.UtcNow,
+                version = "1.0"
+            };
+            
+            string jsonData = JsonUtility.ToJson(gameData);
+            await CloudSaveManager.Instance.SaveData(userId, "gameData", jsonData);
+            
+            // Also save locally as backup
+            SaveGame();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Cloud save failed: {e.Message}");
+            // Fall back to local save only
+            SaveGame();
+        }
+    }
+    
+    public async Task LoadGameFromCloud(string userId)
+    {
+        try
+        {
+            string jsonData = await CloudSaveManager.Instance.LoadData(userId, "gameData");
+            if (!string.IsNullOrEmpty(jsonData))
+            {
+                var gameData = JsonUtility.FromJson<GameSaveData>(jsonData);
+                
+                // Restore all game systems
+                ResourceManager.Instance.LoadFromData(gameData.resources);
+                cityBuilder.LoadCity(gameData.cityData);
+                unlockSystem.LoadSaveData(gameData.unlockData);
+                questManager.LoadFromData(gameData.questData);
+                SetGameState(gameData.gameState);
+                SetPaused(gameData.isPaused);
+            }
+            else
+            {
+                // No cloud data, load from local storage
+                LoadGame();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Cloud load failed: {e.Message}");
+            // Fall back to local load
+            LoadGame();
+        }
+    }
+    
+    [System.Serializable]
+    public class GameSaveData
+    {
+        public Dictionary<ResourceType, int> resources;
+        public List<BuildingSaveData> cityData;
+        public UnlockSaveData unlockData;
+        public QuestSaveData questData;
+        public GameState gameState;
+        public bool isPaused;
+        public DateTime saveTimestamp;
+        public string version;
+    }
+    
+    // Cloud Save Manager Singleton (to be implemented)
+    public class CloudSaveManager
+    {
+        public static CloudSaveManager Instance { get; private set; }
+        
+        public async Task SaveData(string userId, string dataKey, string jsonData)
+        {
+            // Implement cloud save logic (Firebase, PlayFab, etc.)
+            // This will vary based on your chosen cloud service
+        }
+        
+        public async Task<string> LoadData(string userId, string dataKey)
+        {
+            // Implement cloud load logic
+            // Return JSON string or null if no data exists
+        }
+    }
+    */
 } 

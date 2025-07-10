@@ -17,8 +17,13 @@ SelfCity is a 2D city-building game where players construct and manage their own
   - Completing quests rewards you with the correct region-based currency (crystals, hearts, magical, stars, etc.).
   - **Dynamic Rewards:** The reward amount and icon are parsed directly from the quest string (e.g., "+5"), and are displayed and rewarded dynamically in all quest and To-Do list UIs.
 - **🎯 Interactive UI**
-  - Modern, responsive user interface with modal windows for quests and custom tasks
+  - Modern, responsive user interface with modal windows for quests, custom tasks, and chest opening confirmations
+  - Confirmation modal prevents accidental spending of tickets when opening chests
   - All quest lists and the To-Do list display both the reward amount and the correct resource icon for each quest.
+- **📦 Inventory & Shop System**
+  - Decorations and buildings won from chests or purchased from the shop are stored in a persistent inventory
+  - Flexible shop UI for region-specific buildings and currencies
+  - Drag-and-drop from inventory to city
 - **📱 Drag & Drop** - Intuitive building placement system
 - **🎨 Visual Assets** - Rich collection of sprites and visual elements
 - **🔧 Modular Architecture** - Well-structured codebase for easy expansion
@@ -82,7 +87,11 @@ Assets/
    - **Custom Tasks**: Click "Add Custom Task" to open a modal where you can create your own healthy habits, assign them to a region, and add them to your To-Do list.
 3. **Earn Rewards**
    - Completing quests in the To-Do list gives you the correct region-based currency and amount, as shown in the UI.
-4. **Expand Districts** - Unlock new areas as you progress
+4. **Open Chests with Confirmation**
+   - When opening a Decor Chest or Premium Decor Chest, a confirmation modal appears to prevent accidental spending of Balance Tickets. Confirm to open and receive a random reward, which is added to your inventory.
+5. **Manage Your Inventory**
+   - All decorations and buildings you win or purchase are stored in your inventory. Use the inventory UI to view, filter, and drag items into your city.
+6. **Expand Districts** - Unlock new areas as you progress
 
 ## 📝 Custom Tasks Feature
 
@@ -112,6 +121,11 @@ Assets/
 - `CustomTaskModalHandler.cs` - Handles the custom quest modal logic
 - `QuestItemUI.cs` - Handles quest item display and "Add To-Do" logic
 - `ToDoListManager.cs` - Manages the To-Do list and quest completion
+- `DecorChestManager.cs` - Handles chest opening logic and confirmation modal integration
+- `RewardModal.cs` - Displays reward popups for chests and shop purchases
+- `PurchaseConfirmModal.cs` - Displays confirmation modal before spending tickets or making purchases
+- `InventoryManager.cs` - Manages player inventory for decorations and buildings
+- `ShopBuildingItemUI.cs` - Handles shop item display and purchase logic
 
 ### Adding New Features
 1. Create scripts in appropriate folders

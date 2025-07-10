@@ -185,21 +185,141 @@ namespace LifeCraft.Core
         }
 
         /// <summary>
-        /// Save current resource amounts (for persistence)
+        /// Save current resource amounts to local device storage (PlayerPrefs)
+        /// This ensures player progress is preserved between game sessions.
+        /// 
+        /// UPDATE: Implemented local persistence using PlayerPrefs for immediate data saving.
+        /// Each resource type is saved with a unique key (e.g., "Resource_EnergyCrystals").
+        /// This provides basic data persistence until cloud save is implemented.
         /// </summary>
         public void SaveResources()
         {
-            // TODO: Implement save system
-            Debug.Log("Saving resources...");
+            try
+            {
+                // Save each resource type with a unique key
+                foreach (var kvp in _resources)
+                {
+                    string key = $"Resource_{kvp.Key}";
+                    PlayerPrefs.SetInt(key, kvp.Value);
+                }
+                PlayerPrefs.Save(); // Force write to device storage
+                Debug.Log("Resources saved successfully to local storage!");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to save resources: {e.Message}");
+            }
         }
 
         /// <summary>
-        /// Load saved resource amounts
+        /// Load saved resource amounts from local device storage (PlayerPrefs)
+        /// 
+        /// UPDATE: Implemented local data loading with fallback to default values.
+        /// If saved data exists, it loads the saved amounts and triggers UI updates.
+        /// If no saved data exists or loading fails, it falls back to default initialization.
         /// </summary>
         public void LoadResources()
         {
-            // TODO: Implement load system
-            Debug.Log("Loading resources...");
+            try
+            {
+                // Initialize with default values first (safety fallback)
+                Initialize();
+                
+                // Load saved values if they exist in PlayerPrefs
+                foreach (ResourceType resourceType in System.Enum.GetValues(typeof(ResourceType)))
+                {
+                    string key = $"Resource_{resourceType}";
+                    if (PlayerPrefs.HasKey(key))
+                    {
+                        int savedAmount = PlayerPrefs.GetInt(key);
+                        _resources[resourceType] = savedAmount;
+                        
+                        // Trigger event to update UI with loaded values
+                        OnResourceUpdated?.Invoke(resourceType, savedAmount);
+                    }
+                }
+                Debug.Log("Resources loaded successfully from local storage!");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to load resources: {e.Message}");
+                // Fall back to default initialization if loading fails
+                Initialize();
+            }
         }
+
+        /*
+        ================================================================================
+        CLOUD SAVE INTEGRATION - TO BE IMPLEMENTED LATER
+        ================================================================================
+        
+        When implementing user accounts and cloud save, replace the above methods with
+        cloud-based storage. This will enable cross-device sync and data backup.
+        
+        Example implementation structure:
+        
+        public async Task SaveResourcesToCloud(string userId)
+        {
+            try
+            {
+                var resourceData = new ResourceSaveData
+                {
+                    resources = _resources,
+                    saveTimestamp = DateTime.UtcNow,
+                    version = "1.0"
+                };
+                
+                string jsonData = JsonUtility.ToJson(resourceData);
+                await CloudSaveManager.Instance.SaveData(userId, "resources", jsonData);
+                
+                // Also save locally as backup
+                SaveResources();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Cloud save failed: {e.Message}");
+                // Fall back to local save only
+                SaveResources();
+            }
+        }
+        
+        public async Task LoadResourcesFromCloud(string userId)
+        {
+            try
+            {
+                string jsonData = await CloudSaveManager.Instance.LoadData(userId, "resources");
+                if (!string.IsNullOrEmpty(jsonData))
+                {
+                    var resourceData = JsonUtility.FromJson<ResourceSaveData>(jsonData);
+                    _resources = resourceData.resources;
+                    
+                    // Update UI for all resources
+                    foreach (var kvp in _resources)
+                    {
+                        OnResourceUpdated?.Invoke(kvp.Key, kvp.Value);
+                    }
+                }
+                else
+                {
+                    // No cloud data, load from local storage
+                    LoadResources();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Cloud load failed: {e.Message}");
+                // Fall back to local load
+                LoadResources();
+            }
+        }
+        
+        [System.Serializable]
+        public class ResourceSaveData
+        {
+            public Dictionary<ResourceType, int> resources;
+            public DateTime saveTimestamp;
+            public string version;
+        }
+        */
     }
 } 

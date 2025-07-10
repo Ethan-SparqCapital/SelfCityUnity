@@ -292,8 +292,77 @@ namespace LifeCraft.Systems
         // Empty stub methods added for Unity migration compatibility
         public void Initialize() { }
         public void UpdateQuests() { }
-        public void SaveQuests() { }
-        public void LoadQuests() { }
+        
+        /// <summary>
+        /// Save quest data to local device storage (PlayerPrefs)
+        /// 
+        /// UPDATE: Implemented local persistence for quest system data:
+        /// - Daily quest generation timestamp (ensures 24-hour reset cycle)
+        /// - Custom quests created by the player (organized by region)
+        /// 
+        /// This preserves quest progress and custom quests between game sessions.
+        /// </summary>
+        public void SaveQuests()
+        {
+            try
+            {
+                // Save daily quests generation time (for 24-hour reset logic)
+                PlayerPrefs.SetString("QuestGenerationTime", _generationTime.ToString("O"));
+                
+                // Save custom quests (player-created quests by region)
+                string customQuestsJson = JsonUtility.ToJson(new CustomQuestsWrapper { quests = customQuests });
+                PlayerPrefs.SetString("CustomQuests", customQuestsJson);
+                
+                PlayerPrefs.Save(); // Force write to device storage
+                Debug.Log("Quest data saved successfully to local storage!");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to save quests: {e.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Load quest data from local device storage (PlayerPrefs)
+        /// 
+        /// UPDATE: Implemented local data loading for quest system:
+        /// - Restores daily quest generation timestamp
+        /// - Loads custom quests created by the player
+        /// 
+        /// This ensures quest continuity and preserves player-created content.
+        /// </summary>
+        public void LoadQuests()
+        {
+            try
+            {
+                // Load daily quests generation time (for 24-hour reset logic)
+                if (PlayerPrefs.HasKey("QuestGenerationTime"))
+                {
+                    string timeStr = PlayerPrefs.GetString("QuestGenerationTime");
+                    if (DateTime.TryParse(timeStr, out DateTime savedTime))
+                    {
+                        _generationTime = savedTime;
+                    }
+                }
+                
+                // Load custom quests (player-created quests by region)
+                if (PlayerPrefs.HasKey("CustomQuests"))
+                {
+                    string customQuestsJson = PlayerPrefs.GetString("CustomQuests");
+                    var wrapper = JsonUtility.FromJson<CustomQuestsWrapper>(customQuestsJson);
+                    if (wrapper?.quests != null)
+                    {
+                        customQuests = wrapper.quests;
+                    }
+                }
+                
+                Debug.Log("Quest data loaded successfully from local storage!");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to load quests: {e.Message}");
+            }
+        }
 
         // Add this method to allow other scripts to fetch the STATIC region quests (different from Daily Quests) by name
         public List<string> GetRegionQuests(string regionName)
@@ -342,4 +411,84 @@ namespace LifeCraft.Systems
             _dailyQuests.Remove(questText);
         }
     }
+
+    /// <summary>
+    /// Wrapper class for custom quests serialization
+    /// </summary>
+    [System.Serializable]
+    public class CustomQuestsWrapper
+    {
+        public Dictionary<string, List<string>> quests;
+    }
+
+    /*
+    ================================================================================
+    CLOUD SAVE INTEGRATION - TO BE IMPLEMENTED LATER
+    ================================================================================
+    
+    When implementing user accounts and cloud save, replace the above save/load methods
+    with cloud-based storage. This will enable cross-device sync and data backup.
+    
+    Example implementation structure:
+    
+    public async Task SaveQuestsToCloud(string userId)
+    {
+        try
+        {
+            var questData = new QuestSaveData
+            {
+                generationTime = _generationTime,
+                customQuests = customQuests,
+                saveTimestamp = DateTime.UtcNow,
+                version = "1.0"
+            };
+            
+            string jsonData = JsonUtility.ToJson(questData);
+            await CloudSaveManager.Instance.SaveData(userId, "quests", jsonData);
+            
+            // Also save locally as backup
+            SaveQuests();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Cloud save failed: {e.Message}");
+            // Fall back to local save only
+            SaveQuests();
+        }
+    }
+    
+    public async Task LoadQuestsFromCloud(string userId)
+    {
+        try
+        {
+            string jsonData = await CloudSaveManager.Instance.LoadData(userId, "quests");
+            if (!string.IsNullOrEmpty(jsonData))
+            {
+                var questData = JsonUtility.FromJson<QuestSaveData>(jsonData);
+                _generationTime = questData.generationTime;
+                customQuests = questData.customQuests;
+            }
+            else
+            {
+                // No cloud data, load from local storage
+                LoadQuests();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Cloud load failed: {e.Message}");
+            // Fall back to local load
+            LoadQuests();
+        }
+    }
+    
+    [System.Serializable]
+    public class QuestSaveData
+    {
+        public DateTime generationTime;
+        public Dictionary<string, List<string>> customQuests;
+        public DateTime saveTimestamp;
+        public string version;
+    }
+    */
 } 
