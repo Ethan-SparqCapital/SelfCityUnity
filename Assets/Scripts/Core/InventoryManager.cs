@@ -87,13 +87,16 @@ namespace LifeCraft.Core
         
         /// <summary>
         /// Add a decoration by name (creates a basic DecorationItem).
-        /// Used when winning a decoration from a chest.
+        /// Used when winning a decoration from a chest or purchasing from a shop.
+        /// Now supports setting the region for correct shop filtering in the UI.
         /// </summary>
-        public bool AddDecorationByName(string decorationName, string source = "Unknown", bool isPremium = false)
+        public bool AddDecorationByName(string decorationName, string source = "Unknown", bool isPremium = false, RegionType region = RegionType.Decoration)
         {
+            // Create a new DecorationItem with the specified name, source, premium status, and region.
             var decoration = new DecorationItem(decorationName, "", DecorationRarity.Common, isPremium)
             {
-                source = source
+                source = source,
+                region = region // Set the region for shop filtering
             };
             return AddDecoration(decoration);
         }

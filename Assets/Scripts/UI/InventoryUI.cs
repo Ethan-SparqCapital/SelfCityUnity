@@ -75,12 +75,12 @@ namespace LifeCraft.UI
             if (sortDropdown != null)
             {
                 sortDropdown.ClearOptions();
-                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Name (A-Z)"));
-                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Name (Z-A)"));
-                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Rarity (Low-High)"));
-                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Rarity (High-Low)"));
-                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Date Acquired (Newest)"));
-                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Date Acquired (Oldest)"));
+                sortDropdown.options.Add(new TMP_Dropdown.OptionData("All Items")); // Default option to show all items. 
+                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Decorations")); // Show only Decoration items. 
+                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Health Harbor Buildings")); // Show only Health Harbor buildings. 
+                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Mind Palace Buildings")); // Show only Mind Palace buildings. 
+                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Creative Commons Buildings")); // Show only Creative Commons buildings. 
+                sortDropdown.options.Add(new TMP_Dropdown.OptionData("Social Square Buildings")); // Show only Social Square buildings. 
                 sortDropdown.onValueChanged.AddListener(OnSortChanged);
             }
             // Setup premium toggle
@@ -149,7 +149,7 @@ namespace LifeCraft.UI
             // Apply sorting
             ApplySorting();
         }
-        
+
         /// <summary>
         /// Apply sorting to the filtered items.
         /// </summary>
@@ -158,25 +158,26 @@ namespace LifeCraft.UI
             if (sortDropdown == null) return;
             switch (sortDropdown.value)
             {
-                case 0: // Name (A-Z)
-                    _filteredItems = _filteredItems.OrderBy(item => item.displayName).ToList();
+                //  case 0: // All Items, no filter needed. 
+                case 1: // Decorations
+                    _filteredItems = _filteredItems.Where(item => item.region == RegionType.Decoration).ToList();
                     break;
-                case 1: // Name (Z-A)
-                    _filteredItems = _filteredItems.OrderByDescending(item => item.displayName).ToList();
+                case 2: // Health Harbor Buildings
+                    _filteredItems = _filteredItems.Where(item => item.region == RegionType.HealthHarbor).ToList();
                     break;
-                case 2: // Rarity (Low-High)
-                    _filteredItems = _filteredItems.OrderBy(item => item.rarity).ToList();
+                case 3: // Mind Palace Buildings
+                    _filteredItems = _filteredItems.Where(item => item.region == RegionType.MindPalace).ToList();
                     break;
-                case 3: // Rarity (High-Low)
-                    _filteredItems = _filteredItems.OrderByDescending(item => item.rarity).ToList();
+                case 4: // Creative Commons Buildings
+                    _filteredItems = _filteredItems.Where(item => item.region == RegionType.CreativeCommons).ToList();
                     break;
-                case 4: // Date Acquired (Newest)
-                    _filteredItems = _filteredItems.OrderByDescending(item => item.dateAcquired).ToList();
-                    break;
-                case 5: // Date Acquired (Oldest)
-                    _filteredItems = _filteredItems.OrderBy(item => item.dateAcquired).ToList();
+                case 5: // Social Square Buildings
+                    _filteredItems = _filteredItems.Where(item => item.region == RegionType.SocialSquare).ToList();
                     break;
             }
+
+            // Always sort alphabetically by displayName:
+            _filteredItems = _filteredItems.OrderBy(item => item.displayName).ToList(); 
         }
         
         /// <summary>
@@ -312,6 +313,8 @@ namespace LifeCraft.UI
                 rarityFilter.value = 0;
             if (premiumOnlyToggle != null)
                 premiumOnlyToggle.isOn = false;
+            if (sortDropdown != null)
+                sortDropdown.value = 0; // Reset to "All Items". 
             ApplyFiltersAndSort();
             PopulateInventoryGrid();
             UpdateItemCount();

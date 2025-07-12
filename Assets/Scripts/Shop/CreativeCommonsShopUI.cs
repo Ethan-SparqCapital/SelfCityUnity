@@ -56,16 +56,21 @@ namespace LifeCraft.Shop
             if (current >= item.price) // If the player has enough resources to buy the item, proceed with the purchase. 
             {
                 ResourceManager.Instance.SpendResources(ResourceManager.ResourceType.CreativitySparks, item.price); // Deduct the item's price from the player's resources. 
-                InventoryManager.Instance.AddDecorationByName(item.name, "ShopPurchase", false); // Add the purchased item to the player's inventory. 
+                // Add the purchased item to the player's inventory and set its region for correct filtering in the UI.
+                InventoryManager.Instance.AddDecorationByName(item.name, "ShopPurchase", false, RegionType.CreativeCommons);
                 if (rewardModal != null)
                 {
                     rewardModal.Show($"You got a {item.name}! Congratulations!", item.icon);
                 }
-                // Optionally show a success modal or notification here
+                // Optionally show a success modal or notification here (Done!)
             }
             else
             {
-                // Optionally show an error modal or notification here
+                if (rewardModal != null)
+                {
+                    rewardModal.Show("Not enough Creativity Sparks to buy this item!", resourceIcon); // Show a warning modal if the player doesn't have enough resources. 
+                }
+                // Optionally show an error modal or notification here (Done!)
             }
         }
     }

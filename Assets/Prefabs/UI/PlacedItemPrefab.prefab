@@ -110,7 +110,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4999938124374565372
 CanvasRenderer:
@@ -161,9 +161,9 @@ GameObject:
   - component: {fileID: 1300006745953968087}
   - component: {fileID: 2541253018646879296}
   - component: {fileID: 4824211242602326334}
-  - component: {fileID: 4415044505766812770}
+  - component: {fileID: 2153579903358790038}
   m_Layer: 5
-  m_Name: InventoryItemPrefab
+  m_Name: PlacedItemPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -229,7 +229,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4415044505766812770
+--- !u!114 &2153579903358790038
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -238,22 +238,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7319920927127002613}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a47eae8365629154490dec951ba2480d, type: 3}
+  m_Script: {fileID: 11500000, guid: d69f39851562c024cb2c48b4adb96c8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconImage: {fileID: 3419504959504096753}
-  nameText: {fileID: 985561241772974318}
-  rarityText: {fileID: 0}
-  backgroundImage: {fileID: 4824211242602326334}
-  premiumBadge: {fileID: 6629297388673040814}
-  dragPreviewPrefab: {fileID: 0}
-  dragCanvas: {fileID: 0}
-  placedItemPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
-  commonColor: {r: 1, g: 1, b: 1, a: 1}
-  uncommonColor: {r: 0, g: 1, b: 0, a: 1}
-  rareColor: {r: 0, g: 0, b: 1, a: 1}
-  epicColor: {r: 1, g: 0, b: 1, a: 1}
-  legendaryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &7897237966908646616
 GameObject:
   m_ObjectHideFlags: 0

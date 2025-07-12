@@ -8,6 +8,8 @@ public class DecorChestManager : MonoBehaviour
     public PrizePoolManager prizePoolManager; // Add the PrizePoolManager field to the Inspector. This will be used to access the prize pools for decorations. 
     public RewardModal rewardModal; // Reference to the RewardModal popup (assign in Inspector). 
 
+    public Sprite balanceTicketIcon; // Icon for Balance Tickets (assign in Inspector). 
+
     public PurchaseConfirmModal purchaseConfirmModal; // Reference to the PurchaseConfirmModal (assign in Inspector). 
 
     // Call this from the Decor Chest button (for free & premium players)
@@ -44,8 +46,12 @@ public class DecorChestManager : MonoBehaviour
         int tickets = ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.BalanceTickets); // Get the total number of Balance Tickets the player has using the ResourceManager. 
         if (tickets < 1)
         {
-            Debug.LogWarning("Not enough Balance tickets to open a Decor Chest!");
-            // TODO: Show UI warning to the player that they need more Balance Tickets to open a Decor chest. 
+            //Debug.LogWarning("Not enough Balance tickets to open a Decor Chest!");
+            // TODO: Show UI warning to the player that they need more Balance Tickets to open a Decor chest. (Done!) 
+            if (rewardModal != null)
+            {
+                rewardModal.Show("Not enough Balance Tickets to open a Decor Chest!", balanceTicketIcon); // Show a warning modal if the player doesn't have enough resources.
+            }
             return; 
         }
 
@@ -126,8 +132,12 @@ public class DecorChestManager : MonoBehaviour
         int tickets = ResourceManager.Instance.GetResourceTotal(ResourceManager.ResourceType.BalanceTickets); // Get the total number of Balance Tickets the player has using the ResourceManager. 
         if (tickets < 1)
         {
-            Debug.LogWarning("Not enough Balance Tickets to open a Premium Decor Chest!");
-            // TODO: Show UI warning to the player that they need more Balance Tickets to open a Premium Decor chest. 
+            //Debug.LogWarning("Not enough Balance Tickets to open a Premium Decor Chest!");
+            // TODO: Show UI warning to the player that they need more Balance Tickets to open a Premium Decor chest. (Done!)
+            if (rewardModal != null)
+            {
+                rewardModal.Show("Not enough Balance Tickets to open a Premium Decor Chest!", balanceTicketIcon); // Show a warning modal if the player doesn't have enough resources. 
+            }
             return; 
         }
 

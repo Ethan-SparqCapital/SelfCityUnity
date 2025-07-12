@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
-using LifeCraft.Core;
+using LifeCraft.Core; // To access RegionEditManager and DecorationItem classes. 
+using LifeCraft.UI; // To access InventoryUI and PlacedItemUI
 
 namespace LifeCraft.UI
 {
@@ -23,6 +24,8 @@ namespace LifeCraft.UI
         [Header("Drag Settings")]
         [SerializeField] private GameObject dragPreviewPrefab; // Optional: prefab for drag preview
         [SerializeField] private Canvas dragCanvas; // Canvas to drag on
+
+        [SerializeField] private GameObject placedItemPrefab; // Prefab for placed item in the city grid. 
         
         [Header("Colors")]
         [SerializeField] private Color commonColor = Color.white;
@@ -41,13 +44,35 @@ namespace LifeCraft.UI
         // Events for UI/logic to subscribe to
         public System.Action<DraggableInventoryItem> OnItemClicked;
         public System.Action<DraggableInventoryItem, Vector3> OnItemDropped;
-        
+
+        [SerializeField] private GameObject inventoryPanel; // Reference to the inventory panel GameObject
+
         // Called when the object is created
         private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             if (_canvasGroup == null)
                 _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+
+            // Automatically find the main Canvas if not assigned. 
+            if (dragCanvas == null)
+            {
+                dragCanvas = FindFirstObjectByType<Canvas>(); // Use new Unity API
+            }
+
+            // Try to auto-find the inventory panel if not assigned
+            if (inventoryPanel == null)
+            {
+                var invUI = FindFirstObjectByType<InventoryUI>();
+                if (invUI != null)
+                {
+                    var panelField = invUI.GetType().GetField("inventoryPanel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    if (panelField != null)
+                    {
+                        inventoryPanel = panelField.GetValue(invUI) as GameObject;
+                    }
+                }
+            }
         }
         
         /// <summary>
@@ -128,6 +153,11 @@ namespace LifeCraft.UI
         // Called when drag starts
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (RegionEditManager.Instance == null || !RegionEditManager.Instance.IsEditModeActive)
+            {
+                return; // Only allow dragging in edit mode. 
+            }
+
             if (_decorationItem == null) return;
             _originalPosition = transform.position;
             _originalParent = transform.parent;
@@ -147,10 +177,19 @@ namespace LifeCraft.UI
                 _canvasGroup.alpha = 0.5f;
             // Move to drag canvas (so it appears above other UI)
             transform.SetParent(dragCanvas.transform);
+
+            // Hide the inventory panel when dragging starts
+            if (inventoryPanel != null)
+                inventoryPanel.SetActive(false);
         }
         // Called while dragging
         public void OnDrag(PointerEventData eventData)
         {
+            if (RegionEditManager.Instance == null || !RegionEditManager.Instance.IsEditModeActive)
+            {
+                return; // Only allow dragging in edit mode. 
+            }
+
             if (_decorationItem == null) return;
             transform.position = eventData.position;
             if (_dragPreview != null)
@@ -159,6 +198,11 @@ namespace LifeCraft.UI
         // Called when drag ends
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (RegionEditManager.Instance == null || !RegionEditManager.Instance.IsEditModeActive)
+            {
+                return; // Only allow dragging in edit mode. 
+            }
+
             if (_decorationItem == null) return;
             // Restore original appearance
             if (_canvasGroup != null)
@@ -182,7 +226,47 @@ namespace LifeCraft.UI
                 if (result.gameObject.CompareTag("CityGrid") || result.gameObject.CompareTag("BuildableArea"))
                 {
                     droppedOnValidTarget = true;
-                    OnItemDropped?.Invoke(this, result.worldPosition);
+
+                    // Remove from inventory data
+                    if (_decorationItem != null && InventoryManager.Instance != null)
+                    {
+                        InventoryManager.Instance.RemoveDecoration(_decorationItem);
+                    }
+
+                    // Instantiate the placed item prefab as a child of the grid cell:
+                    if (placedItemPrefab != null)
+                    {
+                        GameObject placedItem = Instantiate(placedItemPrefab, result.gameObject.transform); // Create the placed item in the grid cell. 
+                        placedItem.transform.localPosition = Vector3.zero; // Reset position to center of the cell. 
+                        placedItem.transform.localScale = Vector3.one; // Reset scale to 1. 
+
+                        // Set icon and name on the placed item:
+                        var iconImage = placedItem.transform.Find("IconImage")?.GetComponent<Image>();
+                        if (iconImage != null && iconImage.sprite != null)
+                        {
+                            iconImage.sprite = this.iconImage.sprite; // Set the icon sprite from the draggable item. 
+                        }
+                        else if (iconImage != null)
+                        {
+                            iconImage.color = this.iconImage.color; // Set the icon color if no sprite is assigned (fallback for placeholder). 
+                        }
+
+                        var nameText = placedItem.transform.Find("Name")?.GetComponent<TMPro.TextMeshProUGUI>(); // Find the name TextMeshPro component in the placed item prefab. 
+                        if (nameText != null)
+                        {
+                            nameText.text = _decorationItem.displayName; // Set the name text from the item. 
+                        }
+
+                        // Pass the DecorationItem to the placed item for removal logic
+                        var placedItemUI = placedItem.GetComponent<PlacedItemUI>();
+                        if (placedItemUI != null)
+                            placedItemUI.Initialize(_decorationItem);
+                    }
+
+                    // Remove from inventory UI:
+                    Destroy(gameObject); // Destroy the draggable item UI element. 
+
+                    OnItemDropped?.Invoke(this, result.worldPosition); // Notify listeners that the item was dropped successfully. 
                     break;
                 }
             }
@@ -190,6 +274,10 @@ namespace LifeCraft.UI
             {
                 Debug.Log($"Dropped {_decorationItem.displayName} but no valid target found");
             }
+
+            // Show the inventory panel again after drag ends
+            if (inventoryPanel != null)
+                inventoryPanel.SetActive(true);
         }
         // Called on click (not drag)
         public void OnPointerClick(PointerEventData eventData)

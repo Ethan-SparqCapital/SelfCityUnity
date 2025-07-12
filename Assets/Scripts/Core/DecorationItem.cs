@@ -22,6 +22,7 @@ namespace LifeCraft.Core
         public DecorationRarity rarity = DecorationRarity.Common; // Rarity for sorting/filtering
         public Vector2Int size = Vector2Int.one; // Size in grid cells (2x2 for now, can be changed later)
         public bool isPremium = false; // True if won from a premium chest
+        public RegionType region = RegionType.Decoration; // Region for filtering (default to Decoration)
         
         [Header("Metadata")]
         public System.DateTime dateAcquired; // When the player got this item
@@ -66,5 +67,17 @@ namespace LifeCraft.Core
         Rare,
         Epic,
         Legendary
+    }
+
+    /// <summary>
+    /// Region types for shop filtering
+    /// </summary>
+    public enum RegionType
+    {
+        Decoration,
+        HealthHarbor,
+        MindPalace,
+        CreativeCommons,
+        SocialSquare
     }
 } 

@@ -16,6 +16,9 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
     public ResourceBarManager resourceBarManager; // this is a reference to the ResourceBarManager script, which manages the resource bar UI and functionality (this line adds this field into the Inspector). 
 
     public DailyQuestsButtonHandler dailyQuestsButtonHandler; // this line adds the field into the Inspector, which is a reference to the DailyQuestsButtonHandler script that handles the daily quests button functionality. 
+
+    public RewardModal rewardModal; // This line adds the field into the Inspector, which is a reference to the RewardModal script that handles the reward modal popup functionality. 
+
     /// <summary>
     /// Call this method to add a quest/task to the To-Do List. 
     /// </summary> 
@@ -121,6 +124,7 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
     public Sprite mindPalaceSprite; // Assign in Inspector: the sprite for the Mind Palace region. 
     public Sprite socialSquareSprite; // Assign in Inspector: the sprite for the Social Square region. 
     public Sprite creativeCommonsSprite; // Assign in Inspector: the sprite for the Creative Commons region. 
+    public Sprite balanceTicketSprite; // Assign in Inspector: the sprite for the Balance Ticket reward. 
     public Sprite defaultSprite; // Assign in Inspector: the default sprite for regions that don't have a specific sprite assigned. 
 
     /// <summary>
@@ -174,7 +178,12 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
                 //dailyQuestsButtonHandler.resourceBarManager.AddBalanceTickets(1);
                 ResourceManager.Instance.AddResources(ResourceManager.ResourceType.BalanceTickets, 1); // Add 1 Balance Ticket to the player's resources using the ResourceManager. 
                 dailyQuestsButtonHandler.balanceTicketRewarded = true; // Mark as rewarded for this set
-                Debug.Log("All daily quests completed! Rewarding 1 Balance Ticket.");
+
+                rewardModal.Show(
+                    "You got 1 Balance Ticket for completing today's Daily Quests! Keep up the good work!",
+                    balanceTicketSprite // Assign the sprite for the Balance Ticket reward in the Inspector. 
+                ); // Show the reward modal popup to the player with a congratulatory message and the Balance Ticket icon. 
+                //Debug.Log("All daily quests completed! Rewarding 1 Balance Ticket.");
             }
         }
     }
