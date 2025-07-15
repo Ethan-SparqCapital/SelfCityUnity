@@ -40,12 +40,7 @@ namespace LifeCraft.Core
                 if (_instance == null)
                 {
                     _instance = FindFirstObjectByType<GameManager>();
-                    if (_instance == null)
-                    {
-                        GameObject go = new GameObject("GameManager");
-                        _instance = go.AddComponent<GameManager>();
-                        DontDestroyOnLoad(go);
-                    }
+                    // Removed runtime GameObject creation to avoid duplicates.
                 }
                 return _instance;
             }
@@ -59,6 +54,11 @@ namespace LifeCraft.Core
                 _instance = this;
                 DontDestroyOnLoad(gameObject);
                 InitializeGame();
+                // --- Load all game data (city, inventory, etc.) ---
+                LoadGameData();
+                // --- Update UI after loading data ---
+                if (UIManager.Instance != null)
+                    UIManager.Instance.InitializeUI();
             }
             else if (_instance != this)
             {
@@ -74,8 +74,12 @@ namespace LifeCraft.Core
 
         private void Update()
         {
-            HandleInput();
             UpdateGameSystems();
+        }
+
+        private void OnApplicationQuit()
+        {
+            SaveGame();
         }
 
         /// <summary>
@@ -102,9 +106,6 @@ namespace LifeCraft.Core
             // Find UI manager
             if (uiManager == null)
                 uiManager = FindFirstObjectByType<UIManager>();
-
-            // Load saved game data
-            LoadGameData();
         }
 
         /// <summary>
@@ -125,30 +126,6 @@ namespace LifeCraft.Core
                 //selfCareManager.Initialize();
 
             Debug.Log("Game started successfully!");
-        }
-
-        /// <summary>
-        /// Handle input
-        /// </summary>
-        private void HandleInput()
-        {
-            // Pause/Resume
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                TogglePause();
-            }
-
-            // Save game
-            if (Input.GetKeyDown(KeyCode.F5))
-            {
-                SaveGame();
-            }
-
-            // Load game
-            if (Input.GetKeyDown(KeyCode.F9))
-            {
-                LoadGame();
-            }
         }
 
         /// <summary>
@@ -235,8 +212,14 @@ namespace LifeCraft.Core
                 if (cityBuilder != null)
                 {
                     var cityData = cityBuilder.GetSaveData();
+                    Debug.Log($"Saving {cityData.Count} buildings");
                     string cityJson = JsonUtility.ToJson(new CitySaveWrapper { buildings = cityData });
                     PlayerPrefs.SetString("CityData", cityJson);
+                    Debug.Log($"City data saved: {cityJson}");
+                }
+                else
+                {
+                    Debug.LogWarning("CityBuilder is null during save");
                 }
 
                 // Save unlock data (progressed items and features)
@@ -291,13 +274,31 @@ namespace LifeCraft.Core
             {
                 // Load resource data (player's currency and materials)
                 if (ResourceManager.Instance != null) ResourceManager.Instance.LoadResources();
+                // --- Ensure the resource bar UI is updated after loading resources ---
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.InitializeUI(); // This will refresh the resource bar and all UI elements
+                }
 
                 // Load city data (building positions, health, construction status)
                 if (cityBuilder != null && PlayerPrefs.HasKey("CityData"))
                 {
                     string cityJson = PlayerPrefs.GetString("CityData");
+                    Debug.Log($"Loading city data: {cityJson}");
                     var cityWrapper = JsonUtility.FromJson<CitySaveWrapper>(cityJson);
-                    cityBuilder.LoadCity(cityWrapper.buildings);
+                    if (cityWrapper != null && cityWrapper.buildings != null)
+                    {
+                        Debug.Log($"Loading {cityWrapper.buildings.Count} buildings");
+                        cityBuilder.LoadCity(cityWrapper.buildings);
+                    }
+                    else
+                    {
+                        Debug.LogError("Failed to parse city data or buildings list is null");
+                    }
+                }
+                else
+                {
+                    Debug.Log("No city data to load or cityBuilder is null");
                 }
 
                 // Load unlock data (progressed items and features)
@@ -353,6 +354,17 @@ namespace LifeCraft.Core
             {
                 string lastSaveTime = PlayerPrefs.GetString("LastSaveTime");
                 Debug.Log($"Found saved game from: {lastSaveTime}");
+                
+                // Check if we have city data
+                if (PlayerPrefs.HasKey("CityData"))
+                {
+                    string cityJson = PlayerPrefs.GetString("CityData");
+                    Debug.Log($"Found city data: {cityJson}");
+                }
+                else
+                {
+                    Debug.Log("No city data found in save");
+                }
                 
                 // Auto-load the game on startup to restore player progress
                 LoadGame();

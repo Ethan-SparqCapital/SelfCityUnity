@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using LifeCraft.Shop; // DecorationDatabase class is in this namespace. 
 
 public class DecorationListImporter : EditorWindow
 {

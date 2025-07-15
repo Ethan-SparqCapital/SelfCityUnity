@@ -1,5 +1,9 @@
 using UnityEngine;
-public class TestDragScript : MonoBehaviour
+
+namespace LifeCraft.UI
 {
-    public TestToDoListManager testToDoListManager; // Reference to the TestToDoListManager script to call AddToDo method. 
+    public class TestDragScript : MonoBehaviour
+    {
+        public TestToDoListManager testToDoListManager; // Reference to the TestToDoListManager script to call AddToDo method. 
+    }
 }

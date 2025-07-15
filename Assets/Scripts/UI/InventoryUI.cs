@@ -20,6 +20,7 @@ namespace LifeCraft.UI
         [SerializeField] private GameObject inventoryItemPrefab; // Prefab for each inventory item
         [SerializeField] private TextMeshProUGUI itemCountText; // Text for item count
         [SerializeField] private TextMeshProUGUI titleText; // Title label
+        [SerializeField] private Transform placedCityItemsContainer; // Container for placed items in the city grid, assigned in the Inspector. 
         
         [Header("Filter Controls")]
         [SerializeField] private TMP_Dropdown rarityFilter; // Dropdown for rarity filter
@@ -206,6 +207,7 @@ namespace LifeCraft.UI
                     draggableItem.Initialize(item);
                     draggableItem.OnItemClicked += OnInventoryItemClicked;
                     draggableItem.OnItemDropped += OnInventoryItemDropped;
+                    draggableItem.placedCityItemsContainer = placedCityItemsContainer; // Assign the container for placed items in the city grid. 
                 }
                 _spawnedItems.Add(itemGO);
             }

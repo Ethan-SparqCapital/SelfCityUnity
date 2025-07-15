@@ -2,22 +2,25 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public class PrizePoolTimerUI : MonoBehaviour
+namespace LifeCraft.Shop
 {
-    public PrizePoolManager prizePoolManager; // Assign in Inspector
-    public TextMeshProUGUI timerText;         // Assign in Inspector
-
-    private void Update()
+    public class PrizePoolTimerUI : MonoBehaviour
     {
-        if (prizePoolManager == null || timerText == null) return;
+        public PrizePoolManager prizePoolManager; // Assign in Inspector
+        public TextMeshProUGUI timerText;         // Assign in Inspector
 
-        DateTime lastReset = prizePoolManager.GetLastResetTime();
-        TimeSpan timeSinceReset = DateTime.UtcNow - lastReset;
-        TimeSpan timeToNextReset = TimeSpan.FromHours(24) - timeSinceReset;
+        private void Update()
+        {
+            if (prizePoolManager == null || timerText == null) return;
 
-        if (timeToNextReset.TotalSeconds < 0)
-            timeToNextReset = TimeSpan.Zero;
+            DateTime lastReset = prizePoolManager.GetLastResetTime();
+            TimeSpan timeSinceReset = DateTime.UtcNow - lastReset;
+            TimeSpan timeToNextReset = TimeSpan.FromHours(24) - timeSinceReset;
 
-        timerText.text = $"Next refresh in: {timeToNextReset.Hours:D2}:{timeToNextReset.Minutes:D2}:{timeToNextReset.Seconds:D2}";
+            if (timeToNextReset.TotalSeconds < 0)
+                timeToNextReset = TimeSpan.Zero;
+
+            timerText.text = $"Next refresh in: {timeToNextReset.Hours:D2}:{timeToNextReset.Minutes:D2}:{timeToNextReset.Seconds:D2}";
+        }
     }
 }

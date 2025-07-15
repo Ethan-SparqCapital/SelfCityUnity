@@ -51,8 +51,17 @@ namespace LifeCraft.UI
         private CityBuilder cityBuilder;
         private Systems.UnlockSystem unlockSystem;
 
+        public static UIManager Instance { get; private set; } // Singleton instance of UIManager. 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this.gameObject); // Ensure only one instance exists. 
+                return; 
+            }
+
+            Instance = this; // Set the singleton instance. 
+
             resourceDisplays = new Dictionary<ResourceManager.ResourceType, ResourceDisplay>();
         }
 
@@ -65,11 +74,11 @@ namespace LifeCraft.UI
         /// <summary>
         /// Initialize all UI elements
         /// </summary>
-        private void InitializeUI()
+        public void InitializeUI()
         {
             // Get references
             resourceManager = ResourceManager.Instance;
-            resourceManager.Initialize();
+            // REMOVED: resourceManager.Initialize(); // This was resetting resources to default values!
             cityBuilder = FindFirstObjectByType<LifeCraft.Core.CityBuilder>();
             unlockSystem = FindFirstObjectByType<Systems.UnlockSystem>();
 

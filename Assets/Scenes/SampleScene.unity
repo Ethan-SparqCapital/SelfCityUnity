@@ -505,10 +505,10 @@ RectTransform:
   - {fileID: 392376798}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 139, y: -800}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27174960
 MonoBehaviour:
@@ -663,7 +663,7 @@ RectTransform:
   m_Father: {fileID: 844060036}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.9999957, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1217,9 +1217,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 699472897}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -90}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &115681391
@@ -1670,6 +1670,7 @@ GameObject:
   - component: {fileID: 171621962}
   - component: {fileID: 171621961}
   - component: {fileID: 171621960}
+  - component: {fileID: 171621963}
   m_Layer: 5
   m_Name: EditRegionButton
   m_TagString: Untagged
@@ -1740,19 +1741,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 171621961}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1825536640}
-        m_TargetAssemblyTypeName: RegionEditManager, Assembly-CSharp
-        m_MethodName: EnterEditMode
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &171621961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1791,6 +1780,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 171621957}
   m_CullTransparentMesh: 1
+--- !u!114 &171621963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171621957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4a14d3a11e59c6469e45eb52f6941b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  editButton: {fileID: 171621960}
+  editButtonText: {fileID: 1254195663}
 --- !u!1 &199863532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1901,9 +1904,9 @@ RectTransform:
   m_Father: {fileID: 997835829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 20, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &200179341
 MonoBehaviour:
@@ -2609,7 +2612,7 @@ RectTransform:
   m_Father: {fileID: 1687549788}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2776,7 +2779,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -140, y: 275}
+  m_AnchoredPosition: {x: -140, y: 330}
   m_SizeDelta: {x: 280, y: 550}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &235010168
@@ -3313,7 +3316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -531.4999, y: 487.2907}
+  m_AnchoredPosition: {x: -531.4998, y: 715.25}
   m_SizeDelta: {x: 1063, y: 563}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &291459266
@@ -3546,7 +3549,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 515050186}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.49557292
+  m_Size: 0.49557254
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4433,6 +4436,9 @@ GameObject:
   - component: {fileID: 314535078}
   - component: {fileID: 314535077}
   - component: {fileID: 314535076}
+  - component: {fileID: 314535082}
+  - component: {fileID: 314535081}
+  - component: {fileID: 314535080}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -4537,6 +4543,42 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &314535080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314535075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 395d8335a42a3a84e8e9b18dc2ce8585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &314535081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314535075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d17c67517bcb4349be361cb40b2c476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &314535082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314535075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d95125c545a6274db4be2535897886e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &318178820
 GameObject:
   m_ObjectHideFlags: 0
@@ -5639,9 +5681,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 27174959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -147.5}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &392376799
@@ -6362,8 +6404,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1636539563}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.5044271}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6572,9 +6614,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 915634708}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -90}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &429559567
@@ -7131,6 +7173,7 @@ RectTransform:
   - {fileID: 1721950199}
   - {fileID: 1834313855}
   - {fileID: 617782561}
+  - {fileID: 1635173584}
   - {fileID: 1257507282}
   - {fileID: 923031143}
   - {fileID: 1383734993}
@@ -7138,8 +7181,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 216.69897}
-  m_SizeDelta: {x: 0, y: -838.4196}
+  m_AnchoredPosition: {x: 0, y: -41.255}
+  m_SizeDelta: {x: 0, y: -322.51}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &464639033
 MonoBehaviour:
@@ -7196,6 +7239,7 @@ MonoBehaviour:
   inventoryItemPrefab: {fileID: 7319920927127002613, guid: 0bf7b1ad26426b4408e87cc905e87a41, type: 3}
   itemCountText: {fileID: 617782563}
   titleText: {fileID: 1834313857}
+  placedCityItemsContainer: {fileID: 1902738871}
   rarityFilter: {fileID: 0}
   premiumOnlyToggle: {fileID: 1257507283}
   sortDropdown: {fileID: 923031144}
@@ -7611,6 +7655,2542 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 482088400}
   m_CullTransparentMesh: 1
+--- !u!1 &482782325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 482782327}
+  - component: {fileID: 482782326}
+  m_Layer: 0
+  m_Name: CityBuilder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &482782326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482782325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dec0e1427f97a34091dc9473bc5c0dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingTypes:
+  - buildingName: Oak Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Pine Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Maple Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Cherry Blossom Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Palm Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Birch Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Willow Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Spruce Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Flower Bed
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Rose Bush
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sunflower Patch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Tulip Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Daffodil Cluster
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Lavender Patch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Hydrangea Bush
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Azalea Bush
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Garden Bench
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Picnic Table
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Wooden Fence
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: White Picket Fence
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Stone Path
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Brick Path
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Gravel Path
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Cobblestone Path
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Bird Bath
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Gazebo
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Pergola
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Arbor
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Trellis
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Ivy Archway
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Topiary
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Small Hedge
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Large Hedge
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Decorative Rock
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Boulder
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Rock Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Water Feature
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Koi Pond
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Lily Pond
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Small Bridge
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Wooden Bridge
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Stone Bridge
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Lamp Post
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Lantern Post
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fairy Lights
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: String Lights
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Hanging Lanterns
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Street Clock
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Bicycle Rack
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Trash Can
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Mailbox
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fire Hydrant
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Community Bulletin Board
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Welcome Sign
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: City Banner
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Community Mural
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Butterfly Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Birdhouse
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Squirrel Feeder
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Log Bench
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Tree Stump
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Mushroom Ring
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Flower Pot
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Hanging Basket
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Ivy Trellis
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Arbor Gate
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Stone Lantern
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Waterfall
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Rain Barrel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Compost Bin
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Vegetable Patch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Herb Spiral
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Raised Planter
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Cactus Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Succulent Planter
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Bamboo Grove
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Bonsai Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Zen Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sand Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Meditation Stone
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Wind Chime
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Weather Vane
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sundial
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Bird Feeder
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Rabbit Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fox Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Turtle Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Frog Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Squirrel Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Deer Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Lion Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Eagle Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Owl Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Dog Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Cat Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Dolphin Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Whale Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fish Pond
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Water Lily
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Reed Cluster
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Marsh Grass
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Wildflower Patch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fern Cluster
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Mossy Rock
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Pebble Border
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Log Pile
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fire Pit
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: BBQ Grill
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Picnic Blanket
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Hammock
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Swing Set
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Slide
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Seesaw
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Jungle Gym
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Climbing Wall
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sandbox
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sandbox Toys
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sandbox Umbrella
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sandbox Fence
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sandbox Castle
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Tunnel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Bridge
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Ladder
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rope Net
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Spinner
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Merry-Go-Round
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Spring Rider
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Balance Beam
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Monkey Bars
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Fireman Pole
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Stepping Stones
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Hopscotch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Chalk Art
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Basketball Hoop
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Soccer Goal
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Tetherball
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Kickball Base
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Baseball Diamond
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Batting Cage
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Scoreboard
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Bleachers
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Dugout
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Water Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Shade Sail
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Picnic Shelter
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Snack Stand
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Restroom
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Bike Rack
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Scooter Rack
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Skateboard Rack
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rollerblade Rack
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Helmet Locker
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Lost & Found
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground First Aid Station
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Information Board
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Map
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rules Sign
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Welcome Sign
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Exit Sign
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Direction Sign
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Distance Marker
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Height Chart
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Growth Chart
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Birthday Board
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Achievement Board
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Star Chart
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Weather Station
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rain Gauge
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Thermometer
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Wind Sock
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Barometer
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Anemometer
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Compass
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Globe
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Solar System Model
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rocket Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Spaceship Model
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Alien Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Astronaut Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Moon Rock
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Meteorite
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Satellite Dish
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Observatory Dome
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Planetarium
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Star Projector
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Telescope
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Binoculars
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Periscope
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Kaleidoscope
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Prism
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rainbow Arch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Cloud Bench
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Sun Dial
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Moon Bench
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Star Bench
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Galaxy Mural
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Nebula Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Comet Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Shooting Star
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Meteor Shower
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Aurora Lights
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Northern Lights
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Solar Flare
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Eclipse Model
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Sunflower Maze
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Corn Maze
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Hay Bale
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Scarecrow
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Pumpkin Patch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Apple Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Orchard Basket
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Fruit Stand
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Veggie Stand
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Flower Cart
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Seed Packet
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Watering Can
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Garden Tools
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Potting Bench
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Greenhouse
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Potting Shed
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Tool Shed
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Wheelbarrow
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Garden Hose
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Sprinkler
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rain Chain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rain Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Butterfly Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Pollinator Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Bird Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Squirrel Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rabbit Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Fairy Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Gnome Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Dragon Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Unicorn Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Mermaid Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Pirate Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Treasure Chest
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Pirate Ship
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Anchor
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Ship Wheel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Lifebuoy
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Lighthouse
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Beach Umbrella
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Beach Chair
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Beach Towel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Sandcastle
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Seashell
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Starfish
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Crab
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Dolphin
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Whale
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Shark
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Octopus
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Jellyfish
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Coral
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Seaweed
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Message Bottle
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Driftwood
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Surfboard
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Boogie Board
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Paddleboard
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Kayak
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Canoe
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Rowboat
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Sailboat
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Fishing Rod
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Fishing Net
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Fish Basket
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Fish Crate
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Fish Barrel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Fish Market
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Lobster Trap
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Crab Pot
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Oyster Basket
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Pearl
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Clam Shell
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Sand Dollar
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Sea Glass
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Beach Ball
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Volleyball Net
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Frisbee
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Kite
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Pinwheel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Bubble Wand
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Hula Hoop
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Jump Rope
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Bean Bag Toss
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Horseshoe Pit
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Cornhole Board
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Ladder Toss
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Bocce Court
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Croquet Set
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Mini Golf Hole
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Golf Flag
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Golf Ball
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Golf Club
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Golf Cart
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Scorecard
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Trophy
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Medal
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Ribbon
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Certificate
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Plaque
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Banner
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Playground Streamers
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Golden Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Crystal Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Neon Sign
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Rainbow Arch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Diamond Bench
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Luxury Lamp Post
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Billboard
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Hologram Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Platinum Mailbox
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Designer Flower Bed
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Marble Path
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Ornate Gazebo
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Water Feature
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Enchanted Lantern
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Royal Banner
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Waterfall
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Floating Lantern
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Enchanted Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Celestial Globe
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Starlight Archway
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Rose Gold Planter
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Illuminated Topiary
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Butterfly Swarm
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Magic Portal
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Glowing Mushroom Circle
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Aurora Borealis Projector
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Firefly Lamp
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Crystal Chandelier Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Rainbow Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Golden Bird Bath
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Silver Wind Chime
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Fairy Circle
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Prismatic Mosaic
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Star Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Shooting Star
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Meteor Shower
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Cloud Swing
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Rainbow Slide
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Water Lily Pond
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Lotus Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Koi Pond
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Dragon Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Phoenix Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Unicorn Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Pegasus Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Mermaid Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Dolphin Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Whale Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Jellyfish Lamp
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Coral Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Seahorse Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Octopus Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Treasure Chest
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Pirate Ship
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Lighthouse
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Ship Wheel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Anchor
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Compass Rose
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Map Table
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Telescope
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Observatory Dome
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Planetarium
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Rocket Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Satellite Dish
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Space Shuttle
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Moon Rock
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Meteorite
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Alien Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated UFO Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Robot Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Circuit Board Path
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Hologram Billboard
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Laser Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Plasma Globe
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Tesla Coil
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Electric Arc
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Lightning Rod
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Storm Cloud
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Rain Cloud
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Sun Dial
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Solar Panel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Wind Turbine
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Water Wheel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Geode Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Crystal Cave
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Gemstone Path
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Sapphire Bench
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Ruby Planter
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Emerald Lamp
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Amethyst Arch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Opal Mosaic
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Pearl Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Coral Reef
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Starfish Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Sand Dollar Path
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Seashell Bench
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Nautilus Lamp
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Mermaid Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Pirate Flag
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Treasure Map
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Parrot Sculpture
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Monkey Statue
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Banana Tree
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Coconut Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Surfboard Rack
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Lifeguard Chair
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Beach Umbrella
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Beach Ball
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Sandcastle
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animated Tiki Torch
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Wellness Clinic
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Yoga Studio
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Juice Bar
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sleep Sanctuary
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Nutrition Lab
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Spa Retreat
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Running Track
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Physical Therapy Center
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Biohacking Hub
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Aquatic Center
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Hydration Station
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fresh Air Foundry
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fitness Fortress
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Zen Cycle Studio
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Climbing Wall Plaza
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Mindful Mile Path
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sunlight Solarium
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Adventure Obstacle Park
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Wellness Workshop
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Movement Metro
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Meditation Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Therapy Center
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Gratitude Gardens
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Boundary Bridge
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Calm Cascade
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Reflection Pavilion
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Meditation Monument
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Therapy Tower
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Mindful Maze
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Insight Library
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Dream Dome
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Focus Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Resilience Retreat
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Memory Museum
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Empathy Emporium
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Puzzle Plaza
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Inspiration Observatory
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Mindfulness Monorail
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Wisdom Workshop
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Serotonin Springs
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Writers' Loft
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Street Art Alley
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Expression Exhibit
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Art Amphitheater
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Innovation Incubator
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Style Studio
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Music Monument
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Makerspace Market
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Inspiration Tower
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Animation Arcade
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Design Den
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Sculpture Studio
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Film Festival Plaza
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Improv Island
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Fashion Runway
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Game Dev Garage
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Poetry Pavilion
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: "Creative Caf\xE9"
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Color Splash Park
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Dream Lab
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Friendship Fountain
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Kindness Kiosk
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Community Center
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Cultural Pavilion
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Game Arcade
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Coffee Corner
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Family Fortress
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Support Network Hub
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Social Stage
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Volunteer Village
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Celebration Square
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Pet Park
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Teamwork Tower
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Compliment Carousel
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Empathy Exchange
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Social Skate Rink
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Kindness Garden
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Festival Field
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: "Connection Caf\xE9"
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  - buildingName: Positivity Plaza
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
+    costResource: 0
+    costAmount: 0
+    buildingSprite: {fileID: 0}
+  tilemap: {fileID: 0}
+  buildingContainer: {fileID: 1902738871}
+  unlockSystem: {fileID: 0}
+  OnBuildingPlaced:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &482782327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482782325}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 488.96045, y: 1004.09766, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &487103192
 GameObject:
   m_ObjectHideFlags: 0
@@ -8822,9 +11402,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1673595843}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -90}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &571680872
@@ -9748,7 +12328,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000012397766, y: 1937}
+  m_AnchoredPosition: {x: -0.00001335144, y: 1937.0001}
   m_SizeDelta: {x: 0.000009536743, y: 3840}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &637185778
@@ -10477,10 +13057,10 @@ RectTransform:
   - {fileID: 2088316171}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 139, y: -1200}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &699472898
 MonoBehaviour:
@@ -11188,9 +13768,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1673595843}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -147.5}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &745544174
@@ -11462,9 +14042,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 915634708}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -147.5}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &750712559
@@ -13631,6 +16211,142 @@ MonoBehaviour:
   premiumOnlyPoolSize: 9
   currentFreeAndPremiumPool: []
   currentPremiumOnlyPool: []
+--- !u!1 &861118281
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 861118282}
+  - component: {fileID: 861118284}
+  - component: {fileID: 861118283}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &861118282
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861118281}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1251690550}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &861118283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861118281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Inventory
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278233855
+  m_fontColor: {r: 1, g: 0.6647957, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 40
+  m_fontSizeBase: 40
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &861118284
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861118281}
+  m_CullTransparentMesh: 1
 --- !u!1 &867616441
 GameObject:
   m_ObjectHideFlags: 0
@@ -14181,10 +16897,10 @@ RectTransform:
   - {fileID: 750712558}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 139, y: -1000}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &915634709
 MonoBehaviour:
@@ -14344,7 +17060,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -1031.5803}
+  m_AnchoredPosition: {x: 540, y: -1547.49}
   m_SizeDelta: {x: 475, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &923031144
@@ -15048,10 +17764,10 @@ RectTransform:
   - {fileID: 713076591}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 139, y: -400}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &958895552
 MonoBehaviour:
@@ -18097,9 +20813,9 @@ RectTransform:
   m_Father: {fileID: 997835829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: -17}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1208376342
 MonoBehaviour:
@@ -18826,6 +21542,165 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245999131}
   m_CullTransparentMesh: 1
+--- !u!1 &1251690549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1251690550}
+  - component: {fileID: 1251690555}
+  - component: {fileID: 1251690554}
+  - component: {fileID: 1251690553}
+  - component: {fileID: 1251690552}
+  - component: {fileID: 1251690551}
+  m_Layer: 5
+  m_Name: InventoryButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1251690550
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251690549}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 861118282}
+  m_Father: {fileID: 1337891327}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 119, y: -1685}
+  m_SizeDelta: {x: 200, y: 200}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1251690551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251690549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!114 &1251690552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251690549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d734bff9e5d674b8ee4ff2f2171387, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryUI: {fileID: 464639035}
+  button: {fileID: 1251690553}
+  buttonText: {fileID: 861118283}
+  closeButton: {fileID: 1635173586}
+--- !u!114 &1251690553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251690549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1251690554}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1251690554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251690549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1251690555
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251690549}
+  m_CullTransparentMesh: 1
 --- !u!1 &1254195661
 GameObject:
   m_ObjectHideFlags: 0
@@ -18997,7 +21872,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 134.16669, y: -1051.5803}
+  m_AnchoredPosition: {x: 134.16667, y: -1567.49}
   m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1257507283
@@ -19353,9 +22228,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 27174959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -90}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1278325828
@@ -20028,6 +22903,7 @@ RectTransform:
   - {fileID: 299344246}
   - {fileID: 297219337}
   - {fileID: 1375882982}
+  - {fileID: 1902738871}
   m_Father: {fileID: 1337891327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -20726,6 +23602,7 @@ RectTransform:
   m_Children:
   - {fileID: 1315311753}
   - {fileID: 235010167}
+  - {fileID: 1251690550}
   m_Father: {fileID: 314535079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -21470,7 +24347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 945.8333, y: -1051.5803}
+  m_AnchoredPosition: {x: 945.8333, y: -1567.49}
   m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1383734994
@@ -22267,7 +25144,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 39303118}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999957
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -22602,9 +25479,9 @@ RectTransform:
   m_Father: {fileID: 997835829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: -17, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1506167217
 MonoBehaviour:
@@ -24072,6 +26949,148 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623171385}
   m_CullTransparentMesh: 1
+--- !u!1 &1635173583
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1635173584}
+  - component: {fileID: 1635173588}
+  - component: {fileID: 1635173587}
+  - component: {fileID: 1635173586}
+  - component: {fileID: 1635173585}
+  m_Layer: 5
+  m_Name: CloseButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1635173584
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635173583}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2005867795}
+  m_Father: {fileID: 464639032}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1000, y: -20}
+  m_SizeDelta: {x: 160, y: 40}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1635173585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635173583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!114 &1635173586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635173583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1635173587}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1635173587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635173583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1635173588
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1635173583}
+  m_CullTransparentMesh: 1
 --- !u!1 &1636539562
 GameObject:
   m_ObjectHideFlags: 0
@@ -24760,10 +27779,10 @@ RectTransform:
   - {fileID: 745544173}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 139, y: -600}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1673595844
 MonoBehaviour:
@@ -26080,8 +29099,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -545.7903}
-  m_SizeDelta: {x: 1080, y: 991.58}
+  m_AnchoredPosition: {x: 540, y: -773.75}
+  m_SizeDelta: {x: 1080, y: 1447.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1721950200
 MonoBehaviour:
@@ -26171,6 +29190,56 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!1 &1722064431
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1722064433}
+  - component: {fileID: 1722064432}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1722064432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722064431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4df1f2bc89209694a9c5815c0a20f477, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cityBuilder: {fileID: 482782326}
+  unlockSystem: {fileID: 0}
+  questManager: {fileID: 1081196833}
+  uiManager: {fileID: 1759787870}
+  currentGameState: 0
+  isGamePaused: 0
+--- !u!4 &1722064433
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722064431}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 488.96045, y: 1004.09766, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1732276298
 GameObject:
   m_ObjectHideFlags: 0
@@ -27322,6 +30391,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridOverlay: {fileID: 1375882981}
   inventoryPanel: {fileID: 464639031}
+  inventoryButton: {fileID: 1251690549}
+  OnEditModeChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1834313854
 GameObject:
   m_ObjectHideFlags: 0
@@ -27650,10 +30723,10 @@ RectTransform:
   - {fileID: 83042661}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 139, y: -1400}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1856178860
 MonoBehaviour:
@@ -27670,8 +30743,7 @@ MonoBehaviour:
   inventoryUI: {fileID: 464639035}
   button: {fileID: 1856178861}
   buttonText: {fileID: 83042662}
-  openText: Inventory
-  closeText: Close
+  closeButton: {fileID: 1635173586}
 --- !u!114 &1856178861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27919,6 +30991,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895361899}
   m_CullTransparentMesh: 1
+--- !u!1 &1902738870
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1902738871}
+  m_Layer: 5
+  m_Name: PlacedCityItemsContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1902738871
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902738870}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1315311753}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 45, y: 45}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1907114779
 GameObject:
   m_ObjectHideFlags: 0
@@ -29320,6 +32427,142 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000768604}
   m_CullTransparentMesh: 1
+--- !u!1 &2005867794
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2005867795}
+  - component: {fileID: 2005867797}
+  - component: {fileID: 2005867796}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2005867795
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005867794}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1635173584}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 40}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2005867796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005867794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Close
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 30
+  m_fontSizeBase: 30
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &2005867797
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005867794}
+  m_CullTransparentMesh: 1
 --- !u!1 &2009826053
 GameObject:
   m_ObjectHideFlags: 0
@@ -29760,9 +33003,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 699472897}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 100, y: -147.5}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2088316172
@@ -31109,7 +34352,9 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 752659833}
   - {fileID: 314535079}
+  - {fileID: 482782327}
   - {fileID: 623036942}
+  - {fileID: 1722064433}
   - {fileID: 1081196834}
   - {fileID: 1315174053}
   - {fileID: 278442807}

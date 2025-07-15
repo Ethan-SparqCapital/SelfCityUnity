@@ -14,10 +14,12 @@ namespace LifeCraft.UI
         [SerializeField] private InventoryUI inventoryUI; // Reference to the main inventory UI script
         [SerializeField] private Button button; // The button component this script is attached to
         [SerializeField] private TextMeshProUGUI buttonText; // Optional: Text label for the button
+
+        [SerializeField] private Button closeButton; // Button to close the inventory. 
         
-        [Header("Settings")]
-        [SerializeField] private string openText = "Inventory"; // Text to show when inventory is closed
-        [SerializeField] private string closeText = "Close"; // Text to show when inventory is open
+        //[Header("Settings")]
+        //[SerializeField] private string openText = "Inventory"; // Text to show when inventory is closed
+        //[SerializeField] private string closeText = "Close"; // Text to show when inventory is open
         
         // Called when the script instance is being loaded
         private void Start()
@@ -33,16 +35,23 @@ namespace LifeCraft.UI
             // Setup button click event
             if (button != null)
                 button.onClick.AddListener(ToggleInventory);
+
+            // Setup close button if assigned:
+            if (closeButton != null)
+                closeButton.onClick.AddListener(HideInventory); // Hide the inventory when close button is clicked. 
             
             // Update button text to reflect current state
-            UpdateButtonText();
+                //UpdateButtonText();
         }
-        
+
         // Called when the object is destroyed
         private void OnDestroy()
         {
             if (button != null)
-                button.onClick.RemoveListener(ToggleInventory);
+                button.onClick.RemoveListener(ToggleInventory); // Remove listener to prevent memory leaks. 
+
+            if (closeButton != null)
+                closeButton.onClick.RemoveListener(HideInventory); // Remove listener to prevent memory leaks. 
         }
         
         /// <summary>
@@ -53,7 +62,7 @@ namespace LifeCraft.UI
             if (inventoryUI != null)
             {
                 inventoryUI.ToggleInventory();
-                UpdateButtonText();
+                //UpdateButtonText();
             }
             else
             {
@@ -64,6 +73,7 @@ namespace LifeCraft.UI
         /// <summary>
         /// Update the button text based on inventory state.
         /// </summary>
+        /*
         private void UpdateButtonText()
         {
             if (buttonText != null && inventoryUI != null)
@@ -73,6 +83,7 @@ namespace LifeCraft.UI
                 buttonText.text = isOpen ? closeText : openText;
             }
         }
+        */
         
         /// <summary>
         /// Show the inventory panel.
@@ -82,7 +93,7 @@ namespace LifeCraft.UI
             if (inventoryUI != null)
             {
                 inventoryUI.ShowInventory();
-                UpdateButtonText();
+                //UpdateButtonText();
             }
         }
         
@@ -94,7 +105,7 @@ namespace LifeCraft.UI
             if (inventoryUI != null)
             {
                 inventoryUI.HideInventory();
-                UpdateButtonText();
+                //UpdateButtonText();
             }
         }
     }

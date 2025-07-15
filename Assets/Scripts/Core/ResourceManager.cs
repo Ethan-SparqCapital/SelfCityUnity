@@ -222,23 +222,42 @@ namespace LifeCraft.Core
         {
             try
             {
-                // Initialize with default values first (safety fallback)
-                Initialize();
-                
-                // Load saved values if they exist in PlayerPrefs
+                // Check if we have any saved data first
+                bool hasSavedData = false;
                 foreach (ResourceType resourceType in System.Enum.GetValues(typeof(ResourceType)))
                 {
                     string key = $"Resource_{resourceType}";
                     if (PlayerPrefs.HasKey(key))
                     {
-                        int savedAmount = PlayerPrefs.GetInt(key);
-                        _resources[resourceType] = savedAmount;
-                        
-                        // Trigger event to update UI with loaded values
-                        OnResourceUpdated?.Invoke(resourceType, savedAmount);
+                        hasSavedData = true;
+                        break;
                     }
                 }
-                Debug.Log("Resources loaded successfully from local storage!");
+
+                if (hasSavedData)
+                {
+                    // Load saved values without resetting to defaults first
+                    foreach (ResourceType resourceType in System.Enum.GetValues(typeof(ResourceType)))
+                    {
+                        string key = $"Resource_{resourceType}";
+                        if (PlayerPrefs.HasKey(key))
+                        {
+                            int savedAmount = PlayerPrefs.GetInt(key);
+                            _resources[resourceType] = savedAmount;
+                            
+                            // Trigger event to update UI with loaded values
+                            OnResourceUpdated?.Invoke(resourceType, savedAmount);
+                            Debug.Log($"Loaded {resourceType}: {savedAmount}");
+                        }
+                    }
+                    Debug.Log("Resources loaded successfully from local storage!");
+                }
+                else
+                {
+                    // No saved data, initialize with defaults
+                    Debug.Log("No saved resource data found, initializing with defaults");
+                    Initialize();
+                }
             }
             catch (System.Exception e)
             {

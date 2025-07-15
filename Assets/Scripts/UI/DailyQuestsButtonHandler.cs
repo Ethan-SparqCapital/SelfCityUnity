@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using LifeCraft.Systems;
 using LifeCraft.UI; 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class DailyQuestsButtonHandler : MonoBehaviour
 {
@@ -153,6 +156,23 @@ public class DailyQuestsButtonHandler : MonoBehaviour
             }
         }
         // FIX: The reward logic is now handled in the ToDoListManager after all removals, not here.
+    }
+
+    [ContextMenu("Force Reset Daily Quests (Developer Only)")]
+    public void ForceResetDailyQuests()
+    {
+        Debug.Log("[DEV] Forcing daily quests reset!");
+        var questManager = LifeCraft.Core.GameManager.Instance?.QuestManager;
+        if (questManager != null)
+        {
+            // Assuming QuestManager has a method to reset daily quests
+            questManager.ResetDailyQuests();
+            Debug.Log("[DEV] Daily quests have been reset.");
+        }
+        else
+        {
+            Debug.LogWarning("[DEV] QuestManager not found. Cannot reset daily quests.");
+        }
     }
 
     // Helper method to extract region from quest string

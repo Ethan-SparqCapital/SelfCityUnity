@@ -410,6 +410,25 @@ namespace LifeCraft.Systems
         {
             _dailyQuests.Remove(questText);
         }
+
+        /// <summary>
+        /// Developer-only: Force reset daily quests and regenerate them.
+        /// </summary>
+        public void ResetDailyQuests()
+        {
+            Debug.Log("[DEV] Resetting daily quests via developer command.");
+            // Clear current daily quests
+            if (_dailyQuests != null)
+                _dailyQuests.Clear();
+            // Reset generation time
+            _generationTime = DateTime.UtcNow;
+            // Generate new daily quests
+            _dailyQuests = GenerateRandomQuestsFromPool(DAILY_QUEST_POOL, QUEST_COUNT, (int)_generationTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
+            Debug.Log($"[DEV] Generated {_dailyQuests.Count} new daily quests.");
+            // Save immediately
+            SaveQuests();
+            Debug.Log("[DEV] Daily quests have been reset and saved.");
+        }
     }
 
     /// <summary>

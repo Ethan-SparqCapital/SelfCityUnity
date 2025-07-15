@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using LifeCraft.Systems;
+using LifeCraft.UI;
 
 public class CustomTaskModalHandler : MonoBehaviour
 {

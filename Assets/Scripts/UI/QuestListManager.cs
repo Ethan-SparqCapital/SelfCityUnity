@@ -10,6 +10,7 @@ Handles the UI representation of quests:
 
 using UnityEngine; // we are using UnityEngine for MonoBehaviour, which is the base class for all scripts in Unity. 
 using LifeCraft.Systems; // we are using LifeCraft.Systems to access the QuestManager class, which handles the quest logic and data. 
+using LifeCraft.UI;
 
 public class QuestListManager : MonoBehaviour // this class manages the quest list UI and functionality. 
 {

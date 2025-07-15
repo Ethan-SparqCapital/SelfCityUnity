@@ -1,19 +1,22 @@
 using UnityEngine;
 
-public class GridPopulator : MonoBehaviour
+namespace LifeCraft.Core
 {
-    public GameObject gridCellPrefab;
-    public Transform gridParent;
-    public int rows = 40; // Number of rows in the grid.
-    public int columns = 20; // Number of columns in the grid.
-
-    void Start()
+    public class GridPopulator : MonoBehaviour
     {
-        for (int y = 0; y < rows; y++)
+        public GameObject gridCellPrefab;
+        public Transform gridParent;
+        public int rows = 40; // Number of rows in the grid.
+        public int columns = 20; // Number of columns in the grid.
+
+        void Start()
         {
-            for (int x = 0; x < columns; x++)
+            for (int y = 0; y < rows; y++)
             {
-                Instantiate(gridCellPrefab, gridParent);
+                for (int x = 0; x < columns; x++)
+                {
+                    Instantiate(gridCellPrefab, gridParent);
+                }
             }
         }
     }

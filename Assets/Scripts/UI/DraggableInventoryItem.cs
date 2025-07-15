@@ -20,6 +20,8 @@ namespace LifeCraft.UI
         [SerializeField] private TextMeshProUGUI rarityText; // The rarity label
         [SerializeField] private Image backgroundImage; // Background for color coding
         [SerializeField] private Image premiumBadge; // Badge for premium items
+
+        public Transform placedCityItemsContainer; // Container for placed items in the city grid, assigned in the Inspector. 
         
         [Header("Drag Settings")]
         [SerializeField] private GameObject dragPreviewPrefab; // Optional: prefab for drag preview
@@ -179,6 +181,7 @@ namespace LifeCraft.UI
             transform.SetParent(dragCanvas.transform);
 
             // Hide the inventory panel when dragging starts
+            UpdateInventoryPanelReference();
             if (inventoryPanel != null)
                 inventoryPanel.SetActive(false);
         }
@@ -236,8 +239,8 @@ namespace LifeCraft.UI
                     // Instantiate the placed item prefab as a child of the grid cell:
                     if (placedItemPrefab != null)
                     {
-                        GameObject placedItem = Instantiate(placedItemPrefab, result.gameObject.transform); // Create the placed item in the grid cell. 
-                        placedItem.transform.localPosition = Vector3.zero; // Reset position to center of the cell. 
+                        GameObject placedItem = Instantiate(placedItemPrefab, placedCityItemsContainer); // Create a new placed item in the city grid container. 
+                        placedItem.transform.position = result.gameObject.transform.position; // Set position to the grid cell where it was dropped (and center it). 
                         placedItem.transform.localScale = Vector3.one; // Reset scale to 1. 
 
                         // Set icon and name on the placed item:
@@ -261,6 +264,12 @@ namespace LifeCraft.UI
                         var placedItemUI = placedItem.GetComponent<PlacedItemUI>();
                         if (placedItemUI != null)
                             placedItemUI.Initialize(_decorationItem);
+
+                        // --- NEW: Record the placed item in CityBuilder for persistent saving ---
+                        if (LifeCraft.Core.CityBuilder.Instance != null)
+                        {
+                            LifeCraft.Core.CityBuilder.Instance.RecordPlacedItem(_decorationItem, placedItem.transform.position);
+                        }
                     }
 
                     // Remove from inventory UI:
@@ -274,10 +283,12 @@ namespace LifeCraft.UI
             {
                 Debug.Log($"Dropped {_decorationItem.displayName} but no valid target found");
             }
-
-            // Show the inventory panel again after drag ends
-            if (inventoryPanel != null)
-                inventoryPanel.SetActive(true);
+            // After successfully placing the item in the city grid:
+            if (LifeCraft.Core.GameManager.Instance != null)
+            {
+                // Save the city layout immediately after placement to ensure persistence even if the game is closed or crashes.
+                LifeCraft.Core.GameManager.Instance.SaveGame();
+            }
         }
         // Called on click (not drag)
         public void OnPointerClick(PointerEventData eventData)
@@ -301,6 +312,23 @@ namespace LifeCraft.UI
                      $"Premium: {_decorationItem.isPremium}\n" +
                      $"Source: {_decorationItem.source}\n" +
                      $"Acquired: {_decorationItem.dateAcquired}");
+        }
+
+        // In OnBeginDrag and OnEndDrag, always get the inventoryPanel from InventoryUI to ensure correct reference after filtering:
+        private void UpdateInventoryPanelReference()
+        {
+            if (inventoryPanel == null)
+            {
+                var invUI = FindFirstObjectByType<InventoryUI>();
+                if (invUI != null)
+                {
+                    var panelField = invUI.GetType().GetField("inventoryPanel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    if (panelField != null)
+                    {
+                        inventoryPanel = panelField.GetValue(invUI) as GameObject;
+                    }
+                }
+            }
         }
     }
 } 

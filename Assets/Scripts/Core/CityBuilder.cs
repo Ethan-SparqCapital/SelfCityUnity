@@ -1,6 +1,7 @@
 using LifeCraft.Systems;
 using LifeCraft.Core;
-using LifeCraft.Buildings; 
+using LifeCraft.Buildings;
+using LifeCraft.UI; // Ensure all necessary namespaces are included for the CityBuilder functionality. 
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -41,8 +42,231 @@ namespace LifeCraft.Core
         private Dictionary<Vector3Int, GameObject> _placedBuildings = new Dictionary<Vector3Int, GameObject>();
         private Dictionary<string, BuildingTypeData> _buildingTypeLookup = new Dictionary<string, BuildingTypeData>();
 
+        // --- BEGIN: UI-based Placement Support ---
+        // This dictionary tracks placed items by world position for UI-based placement (not tilemap-based)
+        private Dictionary<Vector3, string> _uiPlacedItems = new Dictionary<Vector3, string>();
+
+        /// <summary>
+        /// Debug method to track UI placed items dictionary changes
+        /// </summary>
+        private void LogUIPlacedItemsState(string operation)
+        {
+            Debug.Log($"[UI PLACED ITEMS] {operation} - Current count: {_uiPlacedItems.Count}");
+            foreach (var kvp in _uiPlacedItems)
+            {
+                Debug.Log($"  - {kvp.Value} at {kvp.Key}");
+            }
+        }
+
+        /// <summary>
+        /// Record a placed item from the UI drag-and-drop system.
+        /// </summary>
+        public void RecordPlacedItem(DecorationItem item, Vector3 worldPosition)
+        {
+            if (item == null) return;
+            _uiPlacedItems[worldPosition] = item.displayName; // Use displayName as type identifier
+            Debug.Log($"Recorded UI-placed item '{item.displayName}' at {worldPosition}");
+            LogUIPlacedItemsState("After recording item");
+            
+            // Save the game immediately after recording a UI-placed item
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.SaveGame();
+                Debug.Log($"Saved game after recording UI-placed item '{item.displayName}' at {worldPosition}");
+            }
+        }
+
+        /// <summary>
+        /// Remove a placed item from the UI drag-and-drop system.
+        /// </summary>
+        public void RemovePlacedItem(Vector3 worldPosition)
+        {
+            LogUIPlacedItemsState("Before removing item");
+            if (_uiPlacedItems.ContainsKey(worldPosition))
+            {
+                string itemType = _uiPlacedItems[worldPosition];
+                Debug.Log($"Removed UI-placed item '{itemType}' at {worldPosition}");
+                _uiPlacedItems.Remove(worldPosition);
+                LogUIPlacedItemsState("After removing item");
+                
+                // Save the game immediately after removing a UI-placed item
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.SaveGame();
+                    Debug.Log($"Saved game after removing UI-placed item '{itemType}' at {worldPosition}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"Attempted to remove UI-placed item at {worldPosition} but none was found");
+            }
+        }
+
+        /// <summary>
+        /// Get save data for all placed buildings and UI-placed items
+        /// </summary>
+        public List<BuildingSaveData> GetSaveData()
+        {
+            var buildingsToSave = new List<BuildingSaveData>();
+            Debug.Log($"GetSaveData called - Saving {_placedBuildings.Count} tilemap buildings and {_uiPlacedItems.Count} UI-placed items.");
+            
+            // Save tilemap-based buildings
+            foreach (var kvp in _placedBuildings)
+            {
+                var building = kvp.Value.GetComponent<Building>();
+                if (building != null)
+                {
+                    buildingsToSave.Add(new BuildingSaveData
+                    {
+                        buildingType = building.BuildingName,
+                        positionX = kvp.Key.x,
+                        positionY = kvp.Key.y,
+                        positionZ = kvp.Key.z,
+                        worldX = null,
+                        worldY = null,
+                        worldZ = null
+                    });
+                    Debug.Log($"Saving tilemap building: {building.BuildingName} at {kvp.Key}");
+                }
+            }
+            
+            // Save UI-placed items
+            foreach (var kvp in _uiPlacedItems)
+            {
+                buildingsToSave.Add(new BuildingSaveData
+                {
+                    buildingType = kvp.Value,
+                    positionX = null,
+                    positionY = null,
+                    positionZ = null,
+                    worldX = kvp.Key.x,
+                    worldY = kvp.Key.y,
+                    worldZ = kvp.Key.z
+                });
+                Debug.Log($"Saving UI-placed item: {kvp.Value} at {kvp.Key}");
+            }
+            
+            Debug.Log($"GetSaveData returning {buildingsToSave.Count} total buildings to save");
+            return buildingsToSave;
+        }
+
+        /// <summary>
+        /// Load city from save data (supports both tilemap and UI-placed items)
+        /// </summary>
+        public void LoadCity(List<BuildingSaveData> savedBuildings)
+        {
+            // Clear existing buildings
+            foreach (var building in _placedBuildings.Values)
+            {
+                if (building != null)
+                    Destroy(building);
+            }
+            _placedBuildings.Clear();
+            LogUIPlacedItemsState("Before clearing UI items");
+            _uiPlacedItems.Clear();
+            LogUIPlacedItemsState("After clearing UI items");
+            Debug.Log($"Loading {savedBuildings.Count} buildings from save data.");
+            
+            // Ensure building container exists
+            if (buildingContainer == null)
+            {
+                Debug.LogError("Building container is null! Cannot restore buildings.");
+                return;
+            }
+            
+            // Place saved buildings
+            foreach (var buildingData in savedBuildings)
+            {
+                if (buildingData.positionX.HasValue && buildingData.positionY.HasValue && buildingData.positionZ.HasValue)
+                {
+                    // Tilemap-based
+                    var mapPos = new Vector3Int(buildingData.positionX.Value, buildingData.positionY.Value, buildingData.positionZ.Value);
+                    PlaceBuildingInWorld(buildingData.buildingType, mapPos);
+                }
+                else if (buildingData.worldX.HasValue && buildingData.worldY.HasValue && buildingData.worldZ.HasValue)
+                {
+                    // UI-placed
+                    Vector3 worldPos = new Vector3(buildingData.worldX.Value, buildingData.worldY.Value, buildingData.worldZ.Value);
+                    _uiPlacedItems[worldPos] = buildingData.buildingType;
+                    LogUIPlacedItemsState($"After adding {buildingData.buildingType}");
+
+                    Debug.Log($"Processing UI-placed building: {buildingData.buildingType} at {worldPos}");
+
+                    // --- Instantiate the UI-placed prefab here ---
+                    if (!_buildingTypeLookup.ContainsKey(buildingData.buildingType))
+                    {
+                        Debug.LogError($"Building type '{buildingData.buildingType}' not found in lookup dictionary during load!");
+                        Debug.Log($"Available building types: {string.Join(", ", _buildingTypeLookup.Keys)}");
+                        continue; // Skip this building and continue with others
+                    }
+                    
+                    var buildingTypeData = _buildingTypeLookup[buildingData.buildingType];
+                    var prefab = buildingTypeData.buildingPrefab;
+                    
+                    Debug.Log($"Building type data found: prefab={prefab != null}, sprite={buildingTypeData.buildingSprite != null}");
+                    
+                    if (prefab != null && buildingContainer != null)
+                    {
+                        GameObject placedItem = GameObject.Instantiate(prefab, buildingContainer);
+                        placedItem.transform.position = worldPos;
+                        placedItem.transform.localScale = Vector3.one;
+
+                        Debug.Log($"Instantiated placed item: {placedItem.name} at position {placedItem.transform.position}");
+
+                        // Check if the item is active and visible
+                        Debug.Log($"Item active: {placedItem.activeInHierarchy}, visible: {placedItem.activeSelf}");
+
+                        // Set the sprite from BuildingTypeData
+                        var placedItemUI = placedItem.GetComponent<PlacedItemUI>();
+                        if (placedItemUI != null && buildingTypeData.buildingSprite != null)
+                        {
+                            placedItemUI.SetSprite(buildingTypeData.buildingSprite);
+                            Debug.Log($"Set sprite for {buildingData.buildingType}");
+                            
+                            // Check if the sprite was actually set
+                            var sr = placedItem.GetComponent<SpriteRenderer>();
+                            if (sr != null)
+                            {
+                                Debug.Log($"SpriteRenderer sprite: {sr.sprite != null}");
+                            }
+                            
+                            var img = placedItem.GetComponent<UnityEngine.UI.Image>();
+                            if (img != null)
+                            {
+                                Debug.Log($"UI Image sprite: {img.sprite != null}");
+                            }
+                        }
+                        else if (placedItemUI != null)
+                        {
+                            Debug.LogWarning($"No sprite found for building type '{buildingData.buildingType}'");
+                        }
+                        else
+                        {
+                            Debug.LogError($"PlacedItemUI component not found on instantiated prefab for '{buildingData.buildingType}'");
+                        }
+                        
+                        Debug.Log($"Successfully restored UI-placed item '{buildingData.buildingType}' at {worldPos}");
+                    }
+                    else
+                    {
+                        Debug.LogError($"Failed to instantiate building '{buildingData.buildingType}': prefab={prefab != null}, container={buildingContainer != null}");
+                    }
+                }
+            }
+        }
+        // --- END: UI-based Placement Support ---
+
+        public static CityBuilder Instance { get; private set; } // This is a singleton instance that can be accessed globally; it allows other scripts to easily access the city builder functionality. 
         private void Awake()
         {
+            if (Instance != null && Instance != this) // If an instance already exists, destroy this one to enforce singleton pattern (only one instance of CityBuilder should exist at a time). 
+            {
+                Destroy(this.gameObject); // Destroy the duplicate instance to maintain a single instance of CityBuilder in the scene. 
+                return;
+            }
+
+            Instance = this; // Set the static instance to this instance, allowing other scripts to access it globally. 
+            
             // Build lookup dictionary
             foreach (var buildingType in buildingTypes)
             {
@@ -52,9 +276,23 @@ namespace LifeCraft.Core
             // Validate references
             if (tilemap == null)
                 tilemap = FindFirstObjectByType<Tilemap>();
-            
+
+            // Ensure building container exists
+            if (buildingContainer == null)
+            {
+                // Try to find a container in the scene
+                buildingContainer = GameObject.Find("PlacedCityItemsContainer")?.transform;
+                if (buildingContainer == null)
+                {
+                    // Create a container if none exists
+                    GameObject containerGO = new GameObject("PlacedCityItemsContainer");
+                    buildingContainer = containerGO.transform;
+                    Debug.Log("Created PlacedCityItemsContainer automatically");
+                }
+            }
+
             //if (unlockSystem == null)
-                //unlockSystem = UnlockSystem.Instance;
+            //unlockSystem = UnlockSystem.Instance;
         }
 
         /// <summary>
@@ -122,6 +360,14 @@ namespace LifeCraft.Core
             if (ResourceManager.Instance.SpendResources(buildingData.costResource, buildingData.costAmount))
             {
                 PlaceBuildingInWorld(buildingType, mapPos);
+                
+                // Save the game immediately after placing a building
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.SaveGame();
+                    Debug.Log($"Saved game after placing building '{buildingType}' at {mapPos}");
+                }
+                
                 return true;
             }
             else
@@ -168,6 +414,13 @@ namespace LifeCraft.Core
                 Destroy(building);
                 _placedBuildings.Remove(mapPos);
                 Debug.Log($"Removed building at {mapPos}");
+                
+                // Save the game immediately after removing a building
+                if (GameManager.Instance != null)
+                {
+                    GameManager.Instance.SaveGame();
+                    Debug.Log($"Saved game after removing building at {mapPos}");
+                }
             }
         }
 
@@ -188,49 +441,19 @@ namespace LifeCraft.Core
         }
 
         /// <summary>
-        /// Get save data for all placed buildings
+        /// Clear all placed buildings from the city and save the empty state (for developer testing)
         /// </summary>
-        public List<BuildingSaveData> GetSaveData()
+        public void ClearCity()
         {
-            var buildingsToSave = new List<BuildingSaveData>();
-            
-            foreach (var kvp in _placedBuildings)
-            {
-                var building = kvp.Value.GetComponent<Building>();
-                if (building != null)
-                {
-                    buildingsToSave.Add(new BuildingSaveData
-                    {
-                        buildingType = building.BuildingName,
-                        positionX = kvp.Key.x,
-                        positionY = kvp.Key.y,
-                        positionZ = kvp.Key.z
-                    });
-                }
-            }
-            
-            return buildingsToSave;
-        }
-
-        /// <summary>
-        /// Load city from save data
-        /// </summary>
-        public void LoadCity(List<BuildingSaveData> savedBuildings)
-        {
-            // Clear existing buildings
             foreach (var building in _placedBuildings.Values)
             {
                 if (building != null)
                     Destroy(building);
             }
             _placedBuildings.Clear();
-
-            // Place saved buildings
-            foreach (var buildingData in savedBuildings)
-            {
-                var mapPos = new Vector3Int(buildingData.positionX, buildingData.positionY, buildingData.positionZ);
-                PlaceBuildingInWorld(buildingData.buildingType, mapPos);
-            }
+            Debug.Log("City cleared. Saving empty city layout.");
+            if (LifeCraft.Core.GameManager.Instance != null)
+                LifeCraft.Core.GameManager.Instance.SaveGame();
         }
 
         /// <summary>
@@ -248,6 +471,25 @@ namespace LifeCraft.Core
         {
             return new List<string>(_buildingTypeLookup.Keys);
         }
+
+        /// <summary>
+        /// Find a placed item GameObject at a specific world position
+        /// </summary>
+        private GameObject FindPlacedItemAtPosition(Vector3 worldPosition)
+        {
+            if (buildingContainer == null) return null;
+            
+            // Search through all children of the building container
+            foreach (Transform child in buildingContainer)
+            {
+                if (Vector3.Distance(child.position, worldPosition) < 0.1f)
+                {
+                    return child.gameObject;
+                }
+            }
+            
+            return null;
+        }
     }
 
     /// <summary>
@@ -257,8 +499,11 @@ namespace LifeCraft.Core
     public class BuildingSaveData
     {
         public string buildingType;
-        public int positionX;
-        public int positionY;
-        public int positionZ;
+        public int? positionX;
+        public int? positionY;
+        public int? positionZ;
+        public float? worldX;
+        public float? worldY;
+        public float? worldZ;
     }
 } 

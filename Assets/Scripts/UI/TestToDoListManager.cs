@@ -1,2 +1,6 @@
 using UnityEngine;
-public class TestToDoListManager : MonoBehaviour {}
+
+namespace LifeCraft.UI
+{
+    public class TestToDoListManager : MonoBehaviour {}
+}
