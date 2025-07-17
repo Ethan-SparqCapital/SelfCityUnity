@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI; // For TextMeshPro and Image components. 
+using LifeCraft.UI; // For PrizePoolManager and other UI-related classes (like PrizePoolItemUI). 
 
 namespace LifeCraft.Shop
 {
@@ -8,7 +10,7 @@ namespace LifeCraft.Shop
         public PrizePoolManager prizePoolManager; // Assign in Inspector
         public Transform allPrizePoolContainer;   // Assign in Inspector
         public Transform premiumOnlyPrizePoolContainer; // Assign in Inspector
-        public GameObject prizePoolItemTextPrefab; // Assign in Inspector
+        public GameObject prizePoolItemPrefab; // Assign the PrizePoolItem prefab (renamed from prizePoolItemTextPrefab) 
 
         private void Start()
         {
@@ -40,15 +42,23 @@ namespace LifeCraft.Shop
             // Populate All pool
             foreach (var decor in prizePoolManager.currentFreeAndPremiumPool) // Loop through each decoration in the current free and premium prize pool. 
             {
-                var go = Instantiate(prizePoolItemTextPrefab, allPrizePoolContainer); // Instantiate a new GameObject from the prizePoolItemTextPrefab and parent it to the allPrizePoolContainer. 
-                go.GetComponent<TMP_Text>().text = decor; // Set the text of the instantiated GameObject to the decoration name. 
+                var go = Instantiate(prizePoolItemPrefab, allPrizePoolContainer); // Instantiate a new GameObject from the prizePoolItemPrefab and parent it to the allPrizePoolContainer. 
+                var ui = go.GetComponent<PrizePoolItemUI>();
+                if (ui != null)
+                {
+                    ui.Setup(decor); // Setup the UI with decoration name and sprite
+                }
             }
 
             // Populate Premium Only pool
             foreach (var decor in prizePoolManager.currentPremiumOnlyPool) // Loop through each decoration in the current premium only prize pool. 
             {
-                var go = Instantiate(prizePoolItemTextPrefab, premiumOnlyPrizePoolContainer); // Instantiate a new GameObject from the prizePoolItemTextPrefab and parent it to the premiumOnlyPrizePoolContainer.
-                go.GetComponent<TMP_Text>().text = decor; // Set the text of the instantiated GameObject to the decoration name.
+                var go = Instantiate(prizePoolItemPrefab, premiumOnlyPrizePoolContainer); // Instantiate a new GameObject from the prizePoolItemPrefab and parent it to the premiumOnlyPrizePoolContainer.
+                var ui = go.GetComponent<PrizePoolItemUI>();
+                if (ui != null)
+                {
+                    ui.Setup(decor); // Setup the UI with decoration name and sprite
+                }
             }
         }
     }

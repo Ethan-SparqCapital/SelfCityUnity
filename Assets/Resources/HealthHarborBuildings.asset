@@ -16,7 +16,7 @@ MonoBehaviour:
   - name: Wellness Clinic
     description: Basic health checkups and advice
     price: 20
-    icon: {fileID: 0}
+    icon: {fileID: -7159117152848585878, guid: f631158fd61010446823882ec2a32c15, type: 3}
   - name: Yoga Studio
     description: "Stretch, meditate, and find your center\t"
     price: 25

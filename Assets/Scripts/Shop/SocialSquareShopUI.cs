@@ -44,9 +44,21 @@ namespace LifeCraft.Shop
 
         void OnBuyClicked(BuildingShopItem item) // Called when a buy button is clicked in the shop. 
         {
+            // Get sprite from CityBuilder
+            Sprite buildingSprite = null;
+            if (LifeCraft.Core.CityBuilder.Instance != null)
+            {
+                var buildingData = LifeCraft.Core.CityBuilder.Instance.GetBuildingTypeData(item.name);
+                if (buildingData != null && buildingData.buildingSprite != null)
+                {
+                    buildingSprite = buildingData.buildingSprite;
+                }
+            }
+            
             confirmModal.Show(
                 $"Buy {item.name} for {item.price} Heart Tokens?",
-                () => TryPurchase(item)
+                () => TryPurchase(item),
+                buildingSprite // Pass the sprite from CityBuilder
             );
         }
 
@@ -60,7 +72,17 @@ namespace LifeCraft.Shop
                 InventoryManager.Instance.AddDecorationByName(item.name, "ShopPurchase", false, RegionType.SocialSquare);
                 if (rewardModal != null)
                 {
-                    rewardModal.Show($"You got a {item.name}! Congratulations!", item.icon);
+                    // Get sprite from CityBuilder
+                    Sprite buildingSprite = null;
+                    if (LifeCraft.Core.CityBuilder.Instance != null)
+                    {
+                        var buildingData = LifeCraft.Core.CityBuilder.Instance.GetBuildingTypeData(item.name);
+                        if (buildingData != null && buildingData.buildingSprite != null)
+                        {
+                            buildingSprite = buildingData.buildingSprite;
+                        }
+                    }
+                    rewardModal.Show($"You got a {item.name}! Congratulations!", buildingSprite);
                 }
                 // Optionally show a success modal or notification here (Done!)
             }

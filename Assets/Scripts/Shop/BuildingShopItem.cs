@@ -8,6 +8,6 @@ namespace LifeCraft.Shop // This namespace is for all shop-related classes.
         public string name; // The name of the building item. 
         public string description; // A description of the building item. 
         public int price; // The price of the building item in the shop. 
-        public Sprite icon; // The icon representing the building item in the shop. 
+        // Removed icon field - now gets sprite from CityBuilder
     }
 }

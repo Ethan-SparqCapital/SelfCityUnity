@@ -12,6 +12,15 @@ namespace LifeCraft.UI
     public class PlacedItemUI : MonoBehaviour, IPointerClickHandler
     {
         private DecorationItem _decorationItem;
+        
+        // Add debug component for troubleshooting
+        private void Start()
+        {
+            if (GetComponent<PlacedItemDebugger>() == null)
+            {
+                gameObject.AddComponent<PlacedItemDebugger>();
+            }
+        }
 
         /// <summary>
         /// Initialize the placed item with its DecorationItem data.
@@ -23,31 +32,15 @@ namespace LifeCraft.UI
         }
 
         /// <summary>
-        /// Sets the sprite for this item, using SpriteRenderer if present, otherwise UI Image.
-        /// Only one will be enabled at a time.
+        /// Sets the sprite for this item (legacy method - now handled by direct assignment).
         /// </summary>
         public void SetSprite(Sprite sprite)
         {
-            // Try SpriteRenderer first (for world objects)
-            var sr = GetComponent<SpriteRenderer>();
-            var img = GetComponent<Image>();
-
-            if (sr != null && sprite != null)
-            {
-                sr.sprite = sprite;
-                sr.enabled = true;
-                if (img != null) img.enabled = false; // Hide UI image if present
-            }
-            else if (img != null && sprite != null)
-            {
-                img.sprite = sprite;
-                img.enabled = true;
-                if (sr != null) sr.enabled = false; // Hide SpriteRenderer if present
-            }
-            else
-            {
-                Debug.LogWarning($"{gameObject.name}: No SpriteRenderer or UI Image found to set sprite!");
-            }
+            Debug.LogError($"=== LEGACY SETSPRITE CALLED ON {gameObject.name} ===");
+            Debug.LogError($"This method is deprecated - sprite assignment is now handled directly in DraggableInventoryItem");
+            
+            // This method is kept for compatibility but should not be used
+            // The actual sprite assignment now happens directly in DraggableInventoryItem.OnEndDrag()
         }
 
         /// <summary>

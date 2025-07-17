@@ -176,7 +176,7 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
             if (dailyQuestsButtonHandler.resourceBarManager != null)
             {
                 //dailyQuestsButtonHandler.resourceBarManager.AddBalanceTickets(1);
-                ResourceManager.Instance.AddResources(ResourceManager.ResourceType.BalanceTickets, 1); // Add 1 Balance Ticket to the player's resources using the ResourceManager. 
+                ResourceManager.Instance.AddResources(ResourceManager.ResourceType.BalanceTickets, 100); // Add 1 Balance Ticket to the player's resources using the ResourceManager. 
                 dailyQuestsButtonHandler.balanceTicketRewarded = true; // Mark as rewarded for this set
 
                 rewardModal.Show(

@@ -40,8 +40,19 @@ namespace LifeCraft.Shop
 
             if (iconImage != null)
             {
-                iconImage.sprite = data.icon; // Set the icon image to the building's icon, if it exists. 
-                iconImage.gameObject.SetActive(data.icon != null); // Ensure the icon is only active if it exists. 
+                // Get sprite from CityBuilder instead of BuildingShopItem
+                Sprite buildingSprite = null;
+                if (LifeCraft.Core.CityBuilder.Instance != null)
+                {
+                    var buildingData = LifeCraft.Core.CityBuilder.Instance.GetBuildingTypeData(data.name);
+                    if (buildingData != null && buildingData.buildingSprite != null)
+                    {
+                        buildingSprite = buildingData.buildingSprite;
+                    }
+                }
+                
+                iconImage.sprite = buildingSprite; // Set the icon image to the building's sprite from CityBuilder
+                iconImage.gameObject.SetActive(buildingSprite != null); // Ensure the icon is only active if it exists
             }
 
             if (buyButton != null)

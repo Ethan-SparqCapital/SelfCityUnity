@@ -95,11 +95,33 @@ namespace LifeCraft.UI
             // Set name
             if (nameText != null)
                 nameText.text = _decorationItem.displayName;
-            // Set icon (for now, just use a colored square)
+            // Set icon - try to get the real sprite from CityBuilder first
             if (iconImage != null)
             {
                 iconImage.color = GetRarityColor(_decorationItem.rarity);
-                iconImage.sprite = CreatePlaceholderSprite(); // Replace with real sprite later
+                
+                // Try to get the real sprite from CityBuilder
+                Sprite realSprite = null;
+                if (LifeCraft.Core.CityBuilder.Instance != null)
+                {
+                    var buildingData = LifeCraft.Core.CityBuilder.Instance.GetBuildingTypeData(_decorationItem.displayName);
+                    if (buildingData != null && buildingData.buildingSprite != null)
+                    {
+                        realSprite = buildingData.buildingSprite;
+                        Debug.Log($"Found real sprite '{realSprite.name}' for {_decorationItem.displayName} in inventory");
+                    }
+                }
+                
+                // Use real sprite if found, otherwise fall back to placeholder
+                if (realSprite != null)
+                {
+                    iconImage.sprite = realSprite;
+                }
+                else
+                {
+                    iconImage.sprite = CreatePlaceholderSprite();
+                    Debug.LogWarning($"No real sprite found for {_decorationItem.displayName}, using placeholder");
+                }
             }
             // Set rarity text
             if (rarityText != null)
@@ -236,34 +258,90 @@ namespace LifeCraft.UI
                         InventoryManager.Instance.RemoveDecoration(_decorationItem);
                     }
 
-                    // Instantiate the placed item prefab as a child of the grid cell:
+                    // Use the INVENTORY ITEM PREFAB approach - instantiate a modified version for placement
                     if (placedItemPrefab != null)
                     {
-                        GameObject placedItem = Instantiate(placedItemPrefab, placedCityItemsContainer); // Create a new placed item in the city grid container. 
-                        placedItem.transform.position = result.gameObject.transform.position; // Set position to the grid cell where it was dropped (and center it). 
-                        placedItem.transform.localScale = Vector3.one; // Reset scale to 1. 
-
-                        // Set icon and name on the placed item:
-                        var iconImage = placedItem.transform.Find("IconImage")?.GetComponent<Image>();
-                        if (iconImage != null && iconImage.sprite != null)
+                        GameObject placedItem = Instantiate(placedItemPrefab, placedCityItemsContainer); // Create a new placed item using the working inventory prefab
+                        placedItem.transform.position = result.gameObject.transform.position; // Set position to the grid cell where it was dropped
+                        placedItem.transform.localScale = Vector3.one; // Reset scale to 1
+                        
+                        // Get the grid cell size from the GridOverlay's Grid Layout Group and adjust the placed item size
+                        var gridOverlay = FindFirstObjectByType<GridPopulator>();
+                        if (gridOverlay != null)
                         {
-                            iconImage.sprite = this.iconImage.sprite; // Set the icon sprite from the draggable item. 
-                        }
-                        else if (iconImage != null)
-                        {
-                            iconImage.color = this.iconImage.color; // Set the icon color if no sprite is assigned (fallback for placeholder). 
+                            var gridLayoutGroup = gridOverlay.GetComponent<GridLayoutGroup>();
+                            if (gridLayoutGroup != null)
+                            {
+                                // Set the placed item's RectTransform to match the grid cell size
+                                var rectTransform = placedItem.GetComponent<RectTransform>();
+                                if (rectTransform != null)
+                                {
+                                    rectTransform.sizeDelta = gridLayoutGroup.cellSize;
+                                    Debug.Log($"Set placed item size to match grid cell: {gridLayoutGroup.cellSize}");
+                                }
+                            }
                         }
 
-                        var nameText = placedItem.transform.Find("Name")?.GetComponent<TMPro.TextMeshProUGUI>(); // Find the name TextMeshPro component in the placed item prefab. 
+                        // Remove the DraggableInventoryItem script from the placed item (we don't want it to be draggable again)
+                        var draggableScript = placedItem.GetComponent<DraggableInventoryItem>();
+                        if (draggableScript != null)
+                        {
+                            DestroyImmediate(draggableScript);
+                        }
+
+                        // Hide the name text since we don't want it on placed items
+                        var nameText = placedItem.transform.Find("Name");
                         if (nameText != null)
                         {
-                            nameText.text = _decorationItem.displayName; // Set the name text from the item. 
+                            nameText.gameObject.SetActive(false);
                         }
 
-                        // Pass the DecorationItem to the placed item for removal logic
+                        // Hide the premium badge since we don't want it on placed items
+                        var premiumBadge = placedItem.transform.Find("PremiumBadge");
+                        if (premiumBadge != null)
+                        {
+                            premiumBadge.gameObject.SetActive(false);
+                        }
+
+                        // Add the PlacedItemUI script for removal functionality
                         var placedItemUI = placedItem.GetComponent<PlacedItemUI>();
-                        if (placedItemUI != null)
-                            placedItemUI.Initialize(_decorationItem);
+                        if (placedItemUI == null)
+                        {
+                            placedItemUI = placedItem.AddComponent<PlacedItemUI>();
+                        }
+                        placedItemUI.Initialize(_decorationItem);
+
+                        // Use the PROVEN inventory approach - get the IconImage and set the sprite directly
+                        if (LifeCraft.Core.CityBuilder.Instance != null)
+                        {
+                            Debug.LogError($"Looking up building data for: {_decorationItem.displayName}");
+                            var buildingData = LifeCraft.Core.CityBuilder.Instance.GetBuildingTypeData(_decorationItem.displayName);
+                            
+                            if (buildingData != null && buildingData.buildingSprite != null)
+                            {
+                                // Use the EXACT same approach as UpdateVisuals() in DraggableInventoryItem
+                                var iconImage = placedItem.transform.Find("IconImage")?.GetComponent<Image>();
+                                if (iconImage != null)
+                                {
+                                    iconImage.sprite = buildingData.buildingSprite;
+                                    iconImage.enabled = true;
+                                    iconImage.color = Color.white;
+                                    Debug.LogError($"INVENTORY APPROACH: Set sprite '{buildingData.buildingSprite.name}' on IconImage for {_decorationItem.displayName}");
+                                }
+                                else
+                                {
+                                    Debug.LogError("IconImage child not found on placed item!");
+                                }
+                            }
+                            else
+                            {
+                                Debug.LogError($"No building data or sprite found for {_decorationItem.displayName}");
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogError("CityBuilder.Instance is NULL!");
+                        }
 
                         // --- NEW: Record the placed item in CityBuilder for persistent saving ---
                         if (LifeCraft.Core.CityBuilder.Instance != null)
@@ -330,5 +408,7 @@ namespace LifeCraft.UI
                 }
             }
         }
+        
+
     }
 } 

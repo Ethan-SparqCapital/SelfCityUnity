@@ -248,6 +248,50 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 ### 🎨 Visual Assets
 - **Isometric Art Style**: Consistent isometric visual design
 - **Building Sprites**: 141+ building sprites with regular and damaged states
+
+## 🆕 Recent Updates & New Features
+
+### 🖼️ Enhanced Sprite System
+- **Unified Sprite Management**: Consolidated sprite system where all sprites are stored in CityBuilder and referenced by Shop UI, eliminating duplication
+- **Automatic Sprite Assignment**: Shop UI now pulls sprites directly from CityBuilder instead of separate BuildingShopDatabase
+- **Consistent Sprite Display**: All UI elements (shop, inventory, modals) now use the same sprite source for consistency
+
+### 🎯 Improved Purchase Confirmation System
+- **Enhanced PurchaseConfirmModal**: Now displays item sprites in confirmation dialogs
+- **Visual Purchase Confirmation**: Players can see the item they're about to purchase before confirming
+- **Chest Confirmation**: Decor Chest and Premium Decor Chest buttons now show confirmation modals with chest sprites
+
+### 🎨 Chest System Enhancements
+- **Chest Button Sprites**: Decor Chest and Premium Decor Chest buttons now display their respective sprites
+- **Faded Button Design**: Chest button sprites are automatically faded (30% opacity) for better text readability
+- **Visual Chest Feedback**: Players can see which chest they're opening in both the button and confirmation modal
+
+### 🏗️ Grid Placement Improvements
+- **Automatic Grid Sizing**: Placed items automatically resize to match grid cell dimensions (100)
+- **Perfect Grid Alignment**: Items placed from inventory now fit exactly within grid cells without overlap
+- **Dynamic Sizing**: Grid cell size changes automatically adjust placed item sizes
+
+### 🎨 UI Layout Optimizations
+- **Shop Building Item Sizing**: Fixed oversized building icons in shop UI with proper layout controls
+- **Grid Layout Management**: Improved grid cell positioning and sizing controls
+- **Responsive UI Elements**: Better handling of UI element sizing and positioning
+
+### 🎯 Prize Pool Display System
+- **PrizePoolItemUI**: New system for displaying decoration items in prize pools with sprites
+- **Visual Prize Pool**: Prize pool now shows decoration sprites alongside names
+- **Consistent Sprite Display**: Prize pool items use the same sprite system as other UI elements
+
+### 🔧 Technical Improvements
+- **Code Consolidation**: Removed duplicate sprite fields from BuildingShopItem class
+- **Improved Error Handling**: Better null checks and error logging throughout the system
+- **Performance Optimizations**: More efficient sprite loading and UI updates
+- **Maintainability**: Single source of truth for all sprite management
+
+### 🎮 Enhanced User Experience
+- **Visual Feedback**: All UI elements now provide clear visual feedback with appropriate sprites
+- **Consistent Design**: Unified visual language across all game systems
+- **Improved Readability**: Better contrast and sizing for all UI elements
+- **Intuitive Interactions**: Clear visual cues for all user actions
 - **Vehicle Sprites**: 167+ vehicle sprites for city atmosphere
 - **Prop Sprites**: 38+ prop sprites for city decoration
 - **Vegetation**: 11+ vegetation sprites for environmental detail

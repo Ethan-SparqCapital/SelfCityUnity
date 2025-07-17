@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI; // For Button and Image components. 
 using LifeCraft.Core; // Reference to the Core namespace for ResourceManager, which deals with resources. 
 using LifeCraft.UI; // Add this to use RewardModal
 
@@ -14,6 +15,56 @@ namespace LifeCraft.Shop
 
         public PurchaseConfirmModal purchaseConfirmModal; // Reference to the PurchaseConfirmModal (assign in Inspector). 
 
+        [Header("ChestSprites")]        
+        public Sprite decorChestSprite; // Sprite for the Decor Chest button (assign in Inspector)
+        public Sprite premiumChestSprite; // Sprite for the Premium Decor Chest button (assign in Inspector)
+
+        [Header("Chest Button References")]             
+        public Button decorChestButton; // Reference to the Decor Chest button (assign in Inspector)
+        public Button premiumChestButton; // Reference to the Premium Decor Chest button (assign in Inspector)
+
+        private void Start()
+        {
+            // Set the chest button sprites
+            SetChestButtonSprites();
+        }
+
+        /// <summary>
+        /// Set the sprites for both chest buttons with faded appearance
+        /// </summary>
+        private void SetChestButtonSprites()
+        {
+            // Set Decor Chest button sprite with faded appearance
+            if (decorChestButton != null && decorChestSprite != null)
+            {
+                var decorImage = decorChestButton.GetComponent<Image>();
+                if (decorImage != null)
+                {
+                    decorImage.sprite = decorChestSprite;
+                    // Make the sprite more faded by reducing alpha
+                    Color fadedColor = decorImage.color;
+                    fadedColor.a = 0.3f; // 30% opacity - adjust this value (0.0f = invisible, 10f = fully opaque)
+                    decorImage.color = fadedColor;
+                    Debug.Log("Set Decor Chest button sprite with faded appearance");
+                }
+            }
+
+            // Set Premium Decor Chest button sprite with faded appearance
+            if (premiumChestButton != null && premiumChestSprite != null)
+            {
+                var premiumImage = premiumChestButton.GetComponent<Image>();
+                if (premiumImage != null)
+                {
+                    premiumImage.sprite = premiumChestSprite;
+                    // Make the sprite more faded by reducing alpha
+                    Color fadedColor = premiumImage.color;
+                    fadedColor.a = 0.3f; // 30% opacity - adjust this value (0.0f = invisible, 10f = fully opaque)
+                    premiumImage.color = fadedColor;
+                    Debug.Log("Set Premium Decor Chest button sprite with faded appearance");
+                }
+            }
+        }
+
         // Call this from the Decor Chest button (for free & premium players)
         public void OpenDecorChest()
         {
@@ -26,7 +77,8 @@ namespace LifeCraft.Shop
                     () => {
                         // This will be called if the player confirms
                         OpenDecorChestConfirmed();
-                    }
+                    },
+                    decorChestSprite // Pass the Decor Chest sprite
                 );
             }
             else
@@ -76,7 +128,18 @@ namespace LifeCraft.Shop
                         // The modal blocks interaction with the rest of the UI until closed
                         if (rewardModal != null)
                         {
-                            rewardModal.Show($"You got a {reward}! Congratulations!"); // Only message, no icon
+                            // Get the decoration sprite from CityBuilder
+                            Sprite decorationSprite = null;
+                            if (LifeCraft.Core.CityBuilder.Instance != null)
+                            {
+                                var buildingData = LifeCraft.Core.CityBuilder.Instance.GetBuildingTypeData(reward);
+                                if (buildingData != null && buildingData.buildingSprite != null)
+                                {
+                                    decorationSprite = buildingData.buildingSprite;
+                                }
+                            }
+                            
+                            rewardModal.Show($"You got a {reward}! Congratulations!", decorationSprite);
                         }
                         else
                         {
@@ -112,7 +175,8 @@ namespace LifeCraft.Shop
                     () => {
                         // This will be called if the player confirms
                         OpenPremiumDecorChestConfirmed();
-                    }
+                    },
+                    premiumChestSprite // Pass the Premium Decor Chest sprite
                 );
             }
             else
@@ -162,7 +226,18 @@ namespace LifeCraft.Shop
                         // The modal blocks interaction with the rest of the UI until closed
                         if (rewardModal != null)
                         {
-                            rewardModal.Show($"You got a {reward}! Congratulations!"); // Only message, no icon
+                            // Get the decoration sprite from CityBuilder
+                            Sprite decorationSprite = null;
+                            if (LifeCraft.Core.CityBuilder.Instance != null)
+                            {
+                                var buildingData = LifeCraft.Core.CityBuilder.Instance.GetBuildingTypeData(reward);
+                                if (buildingData != null && buildingData.buildingSprite != null)
+                                {
+                                    decorationSprite = buildingData.buildingSprite;
+                                }
+                            }
+                            
+                            rewardModal.Show($"You got a {reward}! Congratulations!", decorationSprite);
                         }
                         else
                         {

@@ -13,6 +13,7 @@ namespace LifeCraft.UI
         public Button yesButton;
         public Button noButton;
         public CanvasGroup canvasGroup;
+        public Image iconImage; // Add this field for the item sprite
 
         private System.Action onConfirm;
 
@@ -25,11 +26,23 @@ namespace LifeCraft.UI
             Hide();
         }
 
-        public void Show(string message, System.Action confirmCallback)
+        public void Show(string message, System.Action confirmCallback, Sprite itemSprite = null)
         {
             if (messageText != null)
                 messageText.text = message;
             onConfirm = confirmCallback;
+            
+            // Set the item sprite if provided
+            if (iconImage != null && itemSprite != null)
+            {
+                iconImage.sprite = itemSprite;
+                iconImage.enabled = true;
+            }
+            else if (iconImage != null)
+            {
+                iconImage.enabled = false;
+            }
+            
             if (canvasGroup != null)
             {
                 canvasGroup.alpha = 1;
