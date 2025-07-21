@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using LifeCraft.UI;
 using System.Collections.Generic;
+using System.Linq; // Added for .Select()
 
 namespace LifeCraft.Core
 {
@@ -15,17 +16,20 @@ namespace LifeCraft.Core
     {
         [Header("Game Systems")]
         [SerializeField] private CityBuilder cityBuilder;
-        [SerializeField] private UnlockSystem unlockSystem;
         [SerializeField] private QuestManager questManager;
+        [SerializeField] private AssessmentQuizManager assessmentQuizManager;
+        [SerializeField] private RegionUnlockSystem regionUnlockSystem;
     //    [SerializeField] private SelfCareManager selfCareManager;
     //    [SerializeField] private WeatherSystem weatherSystem;
 
         [Header("UI")]
         [SerializeField] private UIManager uiManager;
+        [SerializeField] private AssessmentQuizUI assessmentQuizUI;
 
         [Header("Game State")]
         [SerializeField] private GameState currentGameState = GameState.MainMenu;
         [SerializeField] private bool isGamePaused = false;
+        [SerializeField] private bool hasCompletedAssessment = false;
 
         // Events
         public System.Action<GameState> OnGameStateChanged;
@@ -48,9 +52,11 @@ namespace LifeCraft.Core
 
         private void Awake()
         {
+            Debug.Log($"GameManager Awake called. Instance: {(_instance == null ? "null" : "exists")}");
             // Singleton pattern
             if (_instance == null)
             {
+                Debug.Log("Setting this as the GameManager instance");
                 _instance = this;
                 DontDestroyOnLoad(gameObject);
                 InitializeGame();
@@ -62,6 +68,7 @@ namespace LifeCraft.Core
             }
             else if (_instance != this)
             {
+                Debug.Log("Destroying duplicate GameManager");
                 Destroy(gameObject);
             }
         }
@@ -82,20 +89,72 @@ namespace LifeCraft.Core
             SaveGame();
         }
 
+        private void OnDestroy()
+        {
+            // Clean up event subscriptions
+            if (assessmentQuizUI != null)
+            {
+                assessmentQuizUI.OnRegionSelected -= OnRegionSelected;
+            }
+            
+            if (regionUnlockSystem != null)
+            {
+                regionUnlockSystem.OnRegionUnlocked -= OnRegionUnlocked;
+            }
+        }
+
         /// <summary>
         /// Initialize all game systems
         /// </summary>
         private void InitializeGame()
         {
+            Debug.Log("=== INITIALIZING GAMEMANAGER ===");
+            Debug.Log("Initializing GameManager...");
+            
             // Find or create other systems
             if (cityBuilder == null)
                 cityBuilder = FindFirstObjectByType<CityBuilder>();
             
-            if (unlockSystem == null)
-                unlockSystem = FindFirstObjectByType<UnlockSystem>();
-            
             if (questManager == null)
                 questManager = FindFirstObjectByType<QuestManager>();
+            
+            // Note: AssessmentQuizManager and RegionUnlockSystem are ScriptableObjects
+            // They should be assigned in the Inspector, not found at runtime
+            if (assessmentQuizManager == null)
+            {
+                Debug.LogWarning("AssessmentQuizManager not assigned in Inspector - attempting to load from Resources...");
+                assessmentQuizManager = Resources.Load<AssessmentQuizManager>("MyAssessmentQuizManager");
+                if (assessmentQuizManager == null)
+                {
+                    Debug.LogError("AssessmentQuizManager not found in Resources folder!");
+                }
+                else
+                {
+                    Debug.Log("AssessmentQuizManager loaded from Resources successfully");
+                }
+            }
+            else
+            {
+                Debug.Log("AssessmentQuizManager found and assigned");
+            }
+            
+            if (regionUnlockSystem == null)
+            {
+                Debug.LogWarning("RegionUnlockSystem not assigned in Inspector - attempting to load from Resources...");
+                regionUnlockSystem = Resources.Load<RegionUnlockSystem>("RegionUnlockSystem");
+                if (regionUnlockSystem == null)
+                {
+                    Debug.LogError("RegionUnlockSystem not found in Resources folder!");
+                }
+                else
+                {
+                    Debug.Log("RegionUnlockSystem loaded from Resources successfully");
+                }
+            }
+            else
+            {
+                Debug.Log("RegionUnlockSystem found and assigned");
+            }
             
             //if (selfCareManager == null)
                 //selfCareManager = FindFirstObjectByType<SelfCareManager>();
@@ -106,6 +165,38 @@ namespace LifeCraft.Core
             // Find UI manager
             if (uiManager == null)
                 uiManager = FindFirstObjectByType<UIManager>();
+            
+            // CRITICAL: Ensure only ONE AssessmentQuizUI instance exists in the scene!
+            // Multiple instances will cause event subscription issues where GameManager
+            // subscribes to one instance but buttons call events on a different instance.
+            // This leads to "0 subscribers" errors and region unlocking failures.
+            if (assessmentQuizUI == null)
+            {
+                Debug.Log("AssessmentQuizUI is null, trying to find it...");
+                assessmentQuizUI = FindFirstObjectByType<AssessmentQuizUI>();
+                Debug.Log($"FindFirstObjectByType result: {(assessmentQuizUI != null ? "Found" : "Not found")}");
+            }
+            else
+            {
+                Debug.Log("AssessmentQuizUI already assigned");
+            }
+            
+            if (assessmentQuizUI != null)
+            {
+                Debug.Log("Found AssessmentQuizUI, subscribing to OnRegionSelected event...");
+                Debug.Log($"GameManager subscribing to AssessmentQuizUI instance: {assessmentQuizUI.GetInstanceID()}");
+                assessmentQuizUI.OnRegionSelected += OnRegionSelected; // Assign the OnRegionSelected event handler to the OnRegionSelected event of the AssessmentQuizUI. 
+                Debug.Log("AssessmentQuizUI found and event subscribed successfully"); 
+            }
+            else
+            {
+                Debug.LogError("AssessmentQuizUI not found!");
+            }
+            
+            // Note: Region unlock event subscription will be done after region selection
+            // to ensure the RegionUnlockSystem is properly initialized
+                
+            Debug.Log("GameManager initialization completed");
         }
 
         /// <summary>
@@ -113,19 +204,27 @@ namespace LifeCraft.Core
         /// </summary>
         private void StartGame()
         {
-            SetGameState(GameState.Playing);
-            
-            // Initialize systems
-            if (cityBuilder != null)
-                cityBuilder.enabled = true;
-            
-            if (questManager != null)
-                questManager.Initialize();
-            
-            //if (selfCareManager != null)
-                //selfCareManager.Initialize();
+            // Check if this is a new player who needs to take the assessment
+            if (!hasCompletedAssessment)
+            {
+                ShowAssessmentQuiz();
+            }
+            else
+            {
+                SetGameState(GameState.Playing);
+                
+                // Initialize systems
+                if (cityBuilder != null)
+                    cityBuilder.enabled = true;
+                
+                if (questManager != null)
+                    questManager.Initialize();
+                
+                //if (selfCareManager != null)
+                    //selfCareManager.Initialize();
 
-            Debug.Log("Game started successfully!");
+                Debug.Log("Game started successfully!");
+            }
         }
 
         /// <summary>
@@ -223,12 +322,23 @@ namespace LifeCraft.Core
                 }
 
                 // Save unlock data (progressed items and features)
-                if (unlockSystem != null)
+                if (regionUnlockSystem != null)
                 {
-                    var unlockData = unlockSystem.GetSaveData();
+                    var unlockData = regionUnlockSystem.GetSaveData();
                     string unlockJson = JsonUtility.ToJson(unlockData);
                     PlayerPrefs.SetString("UnlockData", unlockJson);
                 }
+
+                // Save region unlock data
+                if (regionUnlockSystem != null)
+                {
+                    var regionUnlockData = regionUnlockSystem.GetSaveData();
+                    string regionUnlockJson = JsonUtility.ToJson(regionUnlockData);
+                    PlayerPrefs.SetString("RegionUnlockData", regionUnlockJson);
+                }
+
+                // Save assessment completion status
+                PlayerPrefs.SetInt("HasCompletedAssessment", hasCompletedAssessment ? 1 : 0);
 
                 // Save quest data (daily quests, custom quests, progress)
                 if (questManager != null)
@@ -272,12 +382,28 @@ namespace LifeCraft.Core
         {
             try
             {
+                Debug.Log("Starting game load process...");
+
                 // Load resource data (player's currency and materials)
-                if (ResourceManager.Instance != null) ResourceManager.Instance.LoadResources();
+                if (ResourceManager.Instance != null) 
+                {
+                    ResourceManager.Instance.LoadResources();
+                    Debug.Log("Resources loaded successfully");
+                }
+                else
+                {
+                    Debug.LogWarning("ResourceManager.Instance is null - skipping resource load");
+                }
+
                 // --- Ensure the resource bar UI is updated after loading resources ---
                 if (UIManager.Instance != null)
                 {
                     UIManager.Instance.InitializeUI(); // This will refresh the resource bar and all UI elements
+                    Debug.Log("UI initialized successfully");
+                }
+                else
+                {
+                    Debug.LogWarning("UIManager.Instance is null - skipping UI initialization");
                 }
 
                 // Load city data (building positions, health, construction status)
@@ -301,29 +427,96 @@ namespace LifeCraft.Core
                     Debug.Log("No city data to load or cityBuilder is null");
                 }
 
-                // Load unlock data (progressed items and features)
-                if (unlockSystem != null && PlayerPrefs.HasKey("UnlockData"))
+                // Load unlock data
+                if (regionUnlockSystem != null && PlayerPrefs.HasKey("UnlockData"))
                 {
-                    string unlockJson = PlayerPrefs.GetString("UnlockData");
-                    var unlockData = JsonUtility.FromJson<LifeCraft.Systems.UnlockSaveData>(unlockJson);
-                    unlockSystem.LoadSaveData(unlockData);
+                    try
+                    {
+                        // Ensure RegionUnlockSystem is initialized before loading
+                        if (regionUnlockSystem.GetUnlockedRegions().Count == 0 && !PlayerPrefs.HasKey("RegionUnlockData"))
+                        {
+                            Debug.Log("RegionUnlockSystem not initialized, skipping unlock data load");
+                        }
+                        else
+                        {
+                            string unlockJson = PlayerPrefs.GetString("UnlockData");
+                            var unlockData = JsonUtility.FromJson<LifeCraft.Systems.RegionUnlockSaveData>(unlockJson);
+                            if (unlockData != null)
+                            {
+                                regionUnlockSystem.LoadSaveData(unlockData);
+                                Debug.Log("Unlock data loaded successfully");
+                            }
+                            else
+                            {
+                                Debug.LogWarning("Failed to parse unlock data JSON");
+                            }
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogWarning($"Failed to load unlock data: {e.Message}");
+                    }
                 }
+                else
+                {
+                    Debug.Log("No unlock data to load or regionUnlockSystem is null");
+                }
+
+                // Load region unlock data (this is the main region unlock system data)
+                if (regionUnlockSystem != null && PlayerPrefs.HasKey("RegionUnlockData"))
+                {
+                    try
+                    {
+                        string regionUnlockJson = PlayerPrefs.GetString("RegionUnlockData");
+                        var regionUnlockData = JsonUtility.FromJson<LifeCraft.Systems.RegionUnlockSaveData>(regionUnlockJson);
+                        if (regionUnlockData != null)
+                        {
+                            regionUnlockSystem.LoadSaveData(regionUnlockData);
+                            Debug.Log("Region unlock data loaded successfully");
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Failed to parse region unlock data JSON");
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogWarning($"Failed to load region unlock data: {e.Message}");
+                    }
+                }
+                else
+                {
+                    Debug.Log("No region unlock data to load or regionUnlockSystem is null");
+                }
+
+                // Load assessment completion status
+                hasCompletedAssessment = PlayerPrefs.GetInt("HasCompletedAssessment", 0) == 1;
+                Debug.Log($"Assessment completion status: {hasCompletedAssessment}");
 
                 // Load quest data (daily quests, custom quests, progress)
                 if (questManager != null)
+                {
                     questManager.LoadQuests();
+                    Debug.Log("Quest data loaded successfully");
+                }
+                else
+                {
+                    Debug.LogWarning("QuestManager is null - skipping quest load");
+                }
 
                 // Load game state and pause status
                 if (PlayerPrefs.HasKey("GameState"))
                 {
                     GameState savedState = (GameState)PlayerPrefs.GetInt("GameState");
                     SetGameState(savedState);
+                    Debug.Log($"Game state loaded: {savedState}");
                 }
                 
                 if (PlayerPrefs.HasKey("IsPaused"))
                 {
                     bool savedPause = PlayerPrefs.GetInt("IsPaused") == 1;
                     SetPaused(savedPause);
+                    Debug.Log($"Pause status loaded: {savedPause}");
                 }
 
                 Debug.Log("Game loaded successfully from local storage!");
@@ -334,9 +527,14 @@ namespace LifeCraft.Core
             catch (System.Exception e)
             {
                 Debug.LogError($"Failed to load game: {e.Message}");
+                Debug.LogError($"Stack trace: {e.StackTrace}");
+                
+                // Clear corrupted save data and start fresh
+                Debug.Log("Clearing corrupted save data and starting fresh...");
+                ClearSaveData();
                 
                 if (uiManager != null)
-                    uiManager.ShowNotification("Failed to load game!");
+                    uiManager.ShowNotification("Failed to load game! Starting fresh.");
             }
         }
 
@@ -373,6 +571,26 @@ namespace LifeCraft.Core
             {
                 Debug.Log("No saved game found, starting fresh...");
             }
+        }
+
+        /// <summary>
+        /// Clear all save data (useful for debugging or resetting the game)
+        /// </summary>
+        public void ClearSaveData()
+        {
+            PlayerPrefs.DeleteKey("CityData");
+            PlayerPrefs.DeleteKey("UnlockData");
+            PlayerPrefs.DeleteKey("RegionUnlockData");
+            PlayerPrefs.DeleteKey("HasCompletedAssessment");
+            PlayerPrefs.DeleteKey("GameState");
+            PlayerPrefs.DeleteKey("IsPaused");
+            PlayerPrefs.DeleteKey("LastSaveTime");
+            
+            // Note: ResourceManager and QuestManager don't have ClearSaveData methods
+            // Their data will be reset when the game restarts
+            
+            PlayerPrefs.Save();
+            Debug.Log("All save data cleared");
         }
 
         /// <summary>
@@ -416,7 +634,7 @@ namespace LifeCraft.Core
         /// <summary>
         /// Get unlock system
         /// </summary>
-        public UnlockSystem UnlockSystem => unlockSystem;
+        public RegionUnlockSystem RegionUnlockSystem => regionUnlockSystem;
 
         /// <summary>
         /// Get quest manager
@@ -432,6 +650,307 @@ namespace LifeCraft.Core
         /// Get UI manager
         /// </summary>
         public UIManager UIManager => uiManager;
+
+        /// <summary>
+        /// Get assessment quiz manager
+        /// </summary>
+        public AssessmentQuizManager AssessmentQuizManager => assessmentQuizManager;
+
+        /// <summary>
+        /// Get assessment quiz UI
+        /// </summary>
+        public AssessmentQuizUI AssessmentQuizUI => assessmentQuizUI;
+
+        /// <summary>
+        /// Show the assessment quiz for new players
+        /// </summary>
+        private void ShowAssessmentQuiz()
+        {
+            if (assessmentQuizUI != null)
+            {
+                assessmentQuizUI.OnRegionSelected += OnRegionSelected;
+                assessmentQuizUI.ShowQuiz();
+            }
+            else
+            {
+                Debug.LogWarning("AssessmentQuizUI not found! Starting with default region.");
+                OnRegionSelected(AssessmentQuizManager.RegionType.HealthHarbor);
+            }
+        }
+
+                        /// <summary>
+                /// Handle region selection from assessment quiz
+                /// </summary>
+                private void OnRegionSelected(AssessmentQuizManager.RegionType selectedRegion) // Event handler for region selection from the Assessment Quiz UI. 
+                {
+                    Debug.Log($"=== GAMEMANAGER ONREGIONSELECTED CALLED ===");
+                    Debug.Log($"OnRegionSelected called with region: {AssessmentQuizManager.GetRegionDisplayName(selectedRegion)}");
+                    
+                    // Set the starting region with quiz scores
+                    if (regionUnlockSystem != null && assessmentQuizManager != null)
+                    {
+                        var quizScores = assessmentQuizManager.GetRegionScores();
+                        Debug.Log($"Quiz scores: {string.Join(", ", quizScores.Select(kvp => $"{AssessmentQuizManager.GetRegionDisplayName(kvp.Key)}: {kvp.Value}"))}");
+                        
+                        Debug.Log("Calling SetStartingRegion...");
+                        regionUnlockSystem.SetStartingRegion(selectedRegion, quizScores); // The GameManager calls this method to set the starting region and unlock order based on the selected region and quiz scores. 
+                        Debug.Log("SetStartingRegion completed");
+                        
+                        // Force unlock the region as a backup
+                        Debug.Log("Force unlocking region as backup...");
+                        regionUnlockSystem.ForceUnlockRegion(selectedRegion);
+                        Debug.Log("Force unlock completed");
+                    }
+                    else
+                    {
+                        Debug.LogError("RegionUnlockSystem or AssessmentQuizManager is null!");
+                        Debug.LogError($"RegionUnlockSystem: {(regionUnlockSystem != null ? "not null" : "null")}");
+                        Debug.LogError($"AssessmentQuizManager: {(assessmentQuizManager != null ? "not null" : "null")}");
+                    }
+
+                    // Mark assessment as completed
+                    hasCompletedAssessment = true;
+                    Debug.Log("Assessment marked as completed");
+
+                    // Clean up event listener
+                    if (assessmentQuizUI != null)
+                    {
+                        assessmentQuizUI.OnRegionSelected -= OnRegionSelected;
+                        assessmentQuizUI.HideQuiz();
+                        Debug.Log("AssessmentQuizUI event listener cleaned up");
+                    }
+
+                    // Start the game normally
+                    SetGameState(GameState.Playing);
+                    Debug.Log("Game state set to Playing");
+                    
+                    // Initialize systems
+                    if (cityBuilder != null)
+                        cityBuilder.enabled = true;
+                    
+                    if (questManager != null)
+                        questManager.Initialize();
+
+                    // Refresh all UI components to reflect the unlocked region
+                    Debug.Log("Starting UI refresh...");
+                    RefreshUIAfterRegionUnlock();
+                    
+                    // Subscribe to region unlock events to refresh UI when regions are unlocked
+                    if (regionUnlockSystem != null)
+                    {
+                        Debug.Log("Subscribing to RegionUnlockSystem.OnRegionUnlocked event...");
+                        regionUnlockSystem.OnRegionUnlocked += OnRegionUnlocked;
+                        Debug.Log("RegionUnlockSystem.OnRegionUnlocked event subscribed successfully");
+                    }
+                    else
+                    {
+                        Debug.LogError("RegionUnlockSystem is null - cannot subscribe to unlock events!");
+                    }
+                    
+                    // Force refresh UI components after a short delay to ensure they're initialized
+                    StartCoroutine(RefreshUIAfterDelay());
+                    
+                    // Save the game immediately to persist the unlock state
+                    SaveGame();
+                    Debug.Log("Game saved after region selection");
+
+                    Debug.Log($"Game started with region: {AssessmentQuizManager.GetRegionDisplayName(selectedRegion)}");
+                }
+
+        /// <summary>
+        /// Handle region unlock events (called when a region is unlocked automatically)
+        /// </summary>
+        private void OnRegionUnlocked(AssessmentQuizManager.RegionType unlockedRegion)
+        {
+            Debug.Log($"=== REGION UNLOCKED EVENT ===");
+            Debug.Log($"Region unlocked: {AssessmentQuizManager.GetRegionDisplayName(unlockedRegion)}");
+            Debug.Log($"Event triggered at: {System.DateTime.Now}");
+            
+            // Start a coroutine to refresh UI after a short delay to ensure unlock is processed
+            StartCoroutine(RefreshUIAfterRegionUnlockDelayed());
+            
+            // Save the game to persist the unlock state
+            SaveGame();
+            
+            Debug.Log($"=== END REGION UNLOCKED EVENT ===");
+        }
+
+        /// <summary>
+        /// Refresh all UI components after a region is unlocked
+        /// </summary>
+        private void RefreshUIAfterRegionUnlock()
+        {
+            Debug.Log("Refreshing UI after region unlock...");
+            
+            // Refresh building panel
+            if (uiManager != null)
+            {
+                Debug.Log("Refreshing building panel...");
+                uiManager.RefreshBuildingPanel();
+            }
+            else
+            {
+                Debug.LogWarning("UIManager is null!");
+            }
+
+            // Refresh shop tabs
+            var shopTabManager = FindFirstObjectByType<ShopTabManager>(FindObjectsInactive.Include);
+            if (shopTabManager != null)
+            {
+                Debug.Log("Refreshing shop tab visibility...");
+                Debug.Log($"Found ShopTabManager: {shopTabManager.name} (Instance ID: {shopTabManager.GetInstanceID()}) - Active: {shopTabManager.gameObject.activeSelf}");
+                
+                // If the ShopTabManager GameObject is inactive, activate it
+                if (!shopTabManager.gameObject.activeSelf)
+                {
+                    Debug.Log("ShopTabManager GameObject was inactive, activating it...");
+                    shopTabManager.gameObject.SetActive(true);
+                }
+                
+                shopTabManager.RefreshTabVisibility();
+            }
+            else
+            {
+                Debug.LogError("ShopTabManager not found! Trying alternative search...");
+                // Try to find it in the scene by name
+                var allShopTabManagers = FindObjectsByType<ShopTabManager>(FindObjectsSortMode.None);
+                Debug.Log($"Found {allShopTabManagers.Length} ShopTabManager instances in scene");
+                foreach (var manager in allShopTabManagers)
+                {
+                    Debug.Log($"ShopTabManager: {manager.name} (Instance ID: {manager.GetInstanceID()}) - Active: {manager.gameObject.activeSelf}");
+                }
+            }
+
+            // Refresh region progress UI
+            var regionProgressUI = FindFirstObjectByType<RegionProgressUI>();
+            if (regionProgressUI != null)
+            {
+                Debug.Log("Refreshing region progress UI...");
+                regionProgressUI.ForceUpdateDisplay(); // Force update the display
+            }
+            else
+            {
+                Debug.LogWarning("RegionProgressUI not found!");
+            }
+            
+            // Refresh city map zoom controller
+            var cityMapZoomController = FindFirstObjectByType<CityMapZoomController>();
+            if (cityMapZoomController != null)
+            {
+                Debug.Log("Refreshing city map zoom controller...");
+                cityMapZoomController.ForceRefreshUnlockState();
+            }
+            else
+            {
+                Debug.LogWarning("CityMapZoomController not found!");
+            }
+
+            Debug.Log("UI refresh completed");
+        }
+
+        /// <summary>
+        /// Refresh UI components after a short delay to ensure they're properly initialized
+        /// </summary>
+        private System.Collections.IEnumerator RefreshUIAfterDelay()
+        {
+            yield return new WaitForSeconds(0.1f); // Wait for UI components to initialize
+            
+            Debug.Log("Delayed UI refresh starting...");
+            RefreshUIAfterRegionUnlock();
+            Debug.Log("Delayed UI refresh completed");
+        }
+
+        /// <summary>
+        /// Refresh UI components after a region unlock with a delay to ensure unlock is processed
+        /// </summary>
+        private System.Collections.IEnumerator RefreshUIAfterRegionUnlockDelayed()
+        {
+            yield return new WaitForSeconds(0.2f); // Wait for region unlock to be fully processed
+            
+            Debug.Log("=== DELAYED UI REFRESH AFTER REGION UNLOCK ===");
+            Debug.Log($"Refreshing UI after region unlock at: {System.DateTime.Now}");
+            RefreshUIAfterRegionUnlock();
+            Debug.Log("=== END DELAYED UI REFRESH ===");
+        }
+
+        /// <summary>
+        /// Reset all regions to locked state (for testing)
+        /// </summary>
+        [ContextMenu("Reset All Regions to Locked")]
+        public void ResetAllRegionsToLocked()
+        {
+            Debug.Log("=== RESETTING ALL REGIONS FROM GAMEMANAGER ===");
+            
+            if (regionUnlockSystem == null)
+            {
+                Debug.LogError("RegionUnlockSystem is null!");
+                return;
+            }
+            
+            regionUnlockSystem.ResetAllRegionsToLocked();
+            
+            Debug.Log("Refreshing UI after reset...");
+            RefreshUIAfterRegionUnlock();
+            
+            Debug.Log("=== END RESET ===");
+        }
+        
+        /// <summary>
+        /// Test method to unlock Health Harbor region (for debugging)
+        /// </summary>
+        [ContextMenu("Test Unlock Health Harbor")]
+        public void TestUnlockHealthHarbor()
+        {
+            Debug.Log("=== TESTING UNLOCK SYSTEM ===");
+            
+            if (regionUnlockSystem == null)
+            {
+                Debug.LogError("RegionUnlockSystem is null!");
+                return;
+            }
+            
+            Debug.Log("Calling TestUnlockRegion for HealthHarbor...");
+            regionUnlockSystem.TestUnlockRegion(AssessmentQuizManager.RegionType.HealthHarbor);
+            
+            Debug.Log("Refreshing UI after test unlock...");
+            RefreshUIAfterRegionUnlock();
+            
+            Debug.Log("=== END TEST ===");
+        }
+        
+        /// <summary>
+        /// Test method to unlock all regions (for debugging)
+        /// </summary>
+        [ContextMenu("Test Unlock All Regions")]
+        public void TestUnlockAllRegions()
+        {
+            Debug.Log("=== TESTING UNLOCK ALL REGIONS ===");
+            
+            if (regionUnlockSystem == null)
+            {
+                Debug.LogError("RegionUnlockSystem is null!");
+                return;
+            }
+            
+            var regions = new[]
+            {
+                AssessmentQuizManager.RegionType.HealthHarbor,
+                AssessmentQuizManager.RegionType.MindPalace,
+                AssessmentQuizManager.RegionType.CreativeCommons,
+                AssessmentQuizManager.RegionType.SocialSquare
+            };
+            
+            foreach (var region in regions)
+            {
+                Debug.Log($"Testing unlock for {region}...");
+                regionUnlockSystem.TestUnlockRegion(region);
+            }
+            
+            Debug.Log("Refreshing UI after test unlock...");
+            RefreshUIAfterRegionUnlock();
+            
+            Debug.Log("=== END TEST ===");
+        }
     }
 
     /// <summary>
@@ -473,7 +992,7 @@ namespace LifeCraft.Core
             {
                 resources = ResourceManager.Instance.GetAllResources(),
                 cityData = cityBuilder.GetSaveData(),
-                unlockData = unlockSystem.GetSaveData(),
+                regionUnlockData = regionUnlockSystem.GetSaveData(),
                 questData = questManager.GetSaveData(),
                 gameState = currentGameState,
                 isPaused = isGamePaused,
@@ -507,7 +1026,7 @@ namespace LifeCraft.Core
                 // Restore all game systems
                 ResourceManager.Instance.LoadFromData(gameData.resources);
                 cityBuilder.LoadCity(gameData.cityData);
-                unlockSystem.LoadSaveData(gameData.unlockData);
+                regionUnlockSystem.LoadSaveData(gameData.regionUnlockData);
                 questManager.LoadFromData(gameData.questData);
                 SetGameState(gameData.gameState);
                 SetPaused(gameData.isPaused);
@@ -531,7 +1050,7 @@ namespace LifeCraft.Core
     {
         public Dictionary<ResourceType, int> resources;
         public List<BuildingSaveData> cityData;
-        public UnlockSaveData unlockData;
+        public RegionUnlockSaveData regionUnlockData;
         public QuestSaveData questData;
         public GameState gameState;
         public bool isPaused;

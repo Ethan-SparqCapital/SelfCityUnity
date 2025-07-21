@@ -26,12 +26,20 @@ namespace LifeCraft.Core
         }
 
         [Header("Building Configuration")]
-        [SerializeField] private List<BuildingTypeData> buildingTypes = new List<BuildingTypeData>();
-        
-        [Header("References")]
-        [SerializeField] private Tilemap tilemap;
+        [SerializeField] private GameObject buildingPrefab;
         [SerializeField] private Transform buildingContainer;
-        [SerializeField] private UnlockSystem unlockSystem;
+        [SerializeField] private Grid grid;
+        [SerializeField] private Vector2Int gridSize = new Vector2Int(20, 20);
+        [SerializeField] private Vector3 gridOrigin = Vector3.zero;
+
+        [Header("Building Types")]
+        [SerializeField] private List<BuildingTypeData> availableBuildingTypes = new List<BuildingTypeData>();
+
+        [Header("UI")]
+        [SerializeField] private UIManager uiManager;
+
+        [Header("Systems")]
+        [SerializeField] private ResourceManager resourceManager;
 
         // Events (replacing Godot signals)
         [System.Serializable]
@@ -68,6 +76,14 @@ namespace LifeCraft.Core
             Debug.Log($"Recorded UI-placed item '{item.displayName}' at {worldPosition}");
             LogUIPlacedItemsState("After recording item");
             
+            // Update region unlock system using the actual region from the DecorationItem
+            var regionType = ConvertDecorationRegionToAssessmentRegion(item.region);
+            if (GameManager.Instance?.RegionUnlockSystem != null)
+            {
+                GameManager.Instance.RegionUnlockSystem.AddBuildingToRegion(regionType);
+                Debug.Log($"Added building '{item.displayName}' to region {regionType} (from DecorationItem.region: {item.region})");
+            }
+            
             // Save the game immediately after recording a UI-placed item
             if (GameManager.Instance != null)
             {
@@ -88,6 +104,15 @@ namespace LifeCraft.Core
                 Debug.Log($"Removed UI-placed item '{itemType}' at {worldPosition}");
                 _uiPlacedItems.Remove(worldPosition);
                 LogUIPlacedItemsState("After removing item");
+                
+                // Update region unlock system - we need to find the DecorationItem to get its region
+                // For now, we'll use the name pattern method as fallback
+                var regionType = GetRegionTypeForBuilding(itemType);
+                if (GameManager.Instance?.RegionUnlockSystem != null)
+                {
+                    GameManager.Instance.RegionUnlockSystem.RemoveBuildingFromRegion(regionType);
+                    Debug.Log($"Removed building '{itemType}' from region {regionType}");
+                }
                 
                 // Save the game immediately after removing a UI-placed item
                 if (GameManager.Instance != null)
@@ -268,14 +293,14 @@ namespace LifeCraft.Core
             Instance = this; // Set the static instance to this instance, allowing other scripts to access it globally. 
             
             // Build lookup dictionary
-            foreach (var buildingType in buildingTypes)
+            foreach (var buildingType in availableBuildingTypes)
             {
                 _buildingTypeLookup[buildingType.buildingName] = buildingType;
             }
 
             // Validate references
-            if (tilemap == null)
-                tilemap = FindFirstObjectByType<Tilemap>();
+            if (grid == null)
+                grid = FindFirstObjectByType<Grid>();
 
             // Ensure building container exists
             if (buildingContainer == null)
@@ -290,9 +315,6 @@ namespace LifeCraft.Core
                     Debug.Log("Created PlacedCityItemsContainer automatically");
                 }
             }
-
-            //if (unlockSystem == null)
-            //unlockSystem = UnlockSystem.Instance;
         }
 
         /// <summary>
@@ -300,7 +322,7 @@ namespace LifeCraft.Core
         /// </summary>
         public Vector3Int WorldToMap(Vector3 worldPos)
         {
-            return tilemap.WorldToCell(worldPos);
+            return grid.WorldToCell(worldPos);
         }
 
         /// <summary>
@@ -308,7 +330,7 @@ namespace LifeCraft.Core
         /// </summary>
         public Vector3 MapToWorld(Vector3Int mapPos)
         {
-            return tilemap.GetCellCenterWorld(mapPos);
+            return grid.GetCellCenterWorld(mapPos);
         }
 
         /// <summary>
@@ -320,8 +342,8 @@ namespace LifeCraft.Core
             if (_placedBuildings.ContainsKey(mapPos))
                 return false;
 
-            // Check if tile exists in tilemap
-            if (!tilemap.HasTile(mapPos))
+            // Check if position is within grid bounds
+            if (mapPos.x < 0 || mapPos.x >= gridSize.x || mapPos.y < 0 || mapPos.y >= gridSize.y)
                 return false;
 
             // TODO: Add additional validation rules (e.g., district restrictions, adjacency rules)
@@ -333,16 +355,10 @@ namespace LifeCraft.Core
         /// </summary>
         public bool AttemptToPlaceBuilding(string buildingType, Vector3 worldPos)
         {
+            // Check if building type exists
             if (!_buildingTypeLookup.ContainsKey(buildingType))
             {
                 Debug.LogWarning($"Building type '{buildingType}' does not exist.");
-                return false;
-            }
-
-            // Check if building is unlocked
-            if (unlockSystem != null && !unlockSystem.IsBuildingUnlocked(buildingType))
-            {
-                Debug.LogWarning($"Building '{buildingType}' is not unlocked yet.");
                 return false;
             }
 
@@ -398,6 +414,9 @@ namespace LifeCraft.Core
             // Record building placement
             _placedBuildings[mapPos] = buildingInstance;
 
+            // Update region unlock system
+            UpdateRegionUnlockSystem(buildingType, true);
+
             // Trigger event
             OnBuildingPlaced?.Invoke(buildingType, mapPos);
             
@@ -411,8 +430,23 @@ namespace LifeCraft.Core
         {
             if (_placedBuildings.TryGetValue(mapPos, out GameObject building))
             {
+                // Get building type before destroying
+                string buildingType = "";
+                var buildingComponent = building.GetComponent<Building>();
+                if (buildingComponent != null)
+                {
+                    buildingType = buildingComponent.BuildingName;
+                }
+
                 Destroy(building);
                 _placedBuildings.Remove(mapPos);
+                
+                // Update region unlock system
+                if (!string.IsNullOrEmpty(buildingType))
+                {
+                    UpdateRegionUnlockSystem(buildingType, false);
+                }
+                
                 Debug.Log($"Removed building at {mapPos}");
                 
                 // Save the game immediately after removing a building
@@ -489,6 +523,93 @@ namespace LifeCraft.Core
             }
             
             return null;
+        }
+
+        /// <summary>
+        /// Update the region unlock system when buildings are placed or removed
+        /// </summary>
+        private void UpdateRegionUnlockSystem(string buildingType, bool isPlacing)
+        {
+            if (GameManager.Instance?.RegionUnlockSystem == null)
+                return;
+
+            // Determine which region this building belongs to
+            var regionType = GetRegionTypeForBuilding(buildingType);
+            
+            if (isPlacing)
+            {
+                GameManager.Instance.RegionUnlockSystem.AddBuildingToRegion(regionType);
+            }
+            else
+            {
+                GameManager.Instance.RegionUnlockSystem.RemoveBuildingFromRegion(regionType);
+            }
+        }
+
+        /// <summary>
+        /// Convert DecorationItem.RegionType to AssessmentQuizManager.RegionType
+        /// </summary>
+        private AssessmentQuizManager.RegionType ConvertDecorationRegionToAssessmentRegion(RegionType decorationRegion)
+        {
+            switch (decorationRegion)
+            {
+                case RegionType.HealthHarbor: return AssessmentQuizManager.RegionType.HealthHarbor;
+                case RegionType.MindPalace: return AssessmentQuizManager.RegionType.MindPalace;
+                case RegionType.CreativeCommons: return AssessmentQuizManager.RegionType.CreativeCommons;
+                case RegionType.SocialSquare: return AssessmentQuizManager.RegionType.SocialSquare;
+                case RegionType.Decoration: 
+                default: return AssessmentQuizManager.RegionType.HealthHarbor; // Default to Health Harbor for decorations
+            }
+        }
+
+        /// <summary>
+        /// Get the region type for a building based on its name
+        /// </summary>
+        private AssessmentQuizManager.RegionType GetRegionTypeForBuilding(string buildingType)
+        {
+            // Check building name patterns to determine region
+            if (buildingType.Contains("Wellness") || buildingType.Contains("Yoga") || 
+                buildingType.Contains("Juice") || buildingType.Contains("Sleep") || 
+                buildingType.Contains("Nutrition") || buildingType.Contains("Spa") || 
+                buildingType.Contains("Running") || buildingType.Contains("Therapy") || 
+                buildingType.Contains("Biohacking") || buildingType.Contains("Aquatic") || 
+                buildingType.Contains("Hydration") || buildingType.Contains("Fresh Air"))
+            {
+                return AssessmentQuizManager.RegionType.HealthHarbor;
+            }
+            else if (buildingType.Contains("Meditation") || buildingType.Contains("Therapy") || 
+                     buildingType.Contains("Gratitude") || buildingType.Contains("Boundary") || 
+                     buildingType.Contains("Calm") || buildingType.Contains("Reflection") || 
+                     buildingType.Contains("Monument") || buildingType.Contains("Tower") || 
+                     buildingType.Contains("Maze") || buildingType.Contains("Library") || 
+                     buildingType.Contains("Dream") || buildingType.Contains("Focus") || 
+                     buildingType.Contains("Resilience"))
+            {
+                return AssessmentQuizManager.RegionType.MindPalace;
+            }
+            else if (buildingType.Contains("Writer") || buildingType.Contains("Art") || 
+                     buildingType.Contains("Expression") || buildingType.Contains("Amphitheater") || 
+                     buildingType.Contains("Innovation") || buildingType.Contains("Style") || 
+                     buildingType.Contains("Music") || buildingType.Contains("Maker") || 
+                     buildingType.Contains("Inspiration") || buildingType.Contains("Animation") || 
+                     buildingType.Contains("Design") || buildingType.Contains("Sculpture") || 
+                     buildingType.Contains("Film"))
+            {
+                return AssessmentQuizManager.RegionType.CreativeCommons;
+            }
+            else if (buildingType.Contains("Friendship") || buildingType.Contains("Kindness") || 
+                     buildingType.Contains("Community") || buildingType.Contains("Cultural") || 
+                     buildingType.Contains("Game") || buildingType.Contains("Coffee") || 
+                     buildingType.Contains("Family") || buildingType.Contains("Support") || 
+                     buildingType.Contains("Stage") || buildingType.Contains("Volunteer") || 
+                     buildingType.Contains("Celebration") || buildingType.Contains("Pet") || 
+                     buildingType.Contains("Teamwork"))
+            {
+                return AssessmentQuizManager.RegionType.SocialSquare;
+            }
+
+            // Default to Health Harbor if no match found
+            return AssessmentQuizManager.RegionType.HealthHarbor;
         }
     }
 

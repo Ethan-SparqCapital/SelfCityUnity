@@ -1,4 +1,5 @@
 using UnityEngine; // We need UnityEngine for MonoBehaviour and ScriptableObject. 
+using LifeCraft.Systems;
 
 namespace LifeCraft.UI
 {
@@ -11,9 +12,29 @@ namespace LifeCraft.UI
         public GameObject creativeCommonsShopPanel; // Panel for Creative Commons building items. 
         public GameObject socialSquareShopPanel; // Panel for Social Square building items. 
 
+        [Header("Region Tab Buttons")]
+        public UnityEngine.UI.Button healthHarborTabButton;
+        public UnityEngine.UI.Button mindPalaceTabButton;
+        public UnityEngine.UI.Button creativeCommonsTabButton;
+        public UnityEngine.UI.Button socialSquareTabButton;
+
         private void Start() // Unity's Start method, called when the script instance is being loaded. 
         {
             ShowTodayContent(); // Show today's content by default when the game starts. 
+            UpdateRegionTabVisibility(); // Update which region tabs are visible based on unlocks
+            
+            // Force refresh after a short delay to ensure GameManager is initialized
+            StartCoroutine(RefreshAfterDelay());
+        }
+        
+        /// <summary>
+        /// Refresh tab visibility after a delay to ensure GameManager is initialized
+        /// </summary>
+        private System.Collections.IEnumerator RefreshAfterDelay()
+        {
+            yield return new WaitForSeconds(0.2f);
+            Debug.Log("ShopTabManager: Forcing refresh after delay");
+            UpdateRegionTabVisibility();
         }
 
         public void ShowTodayContent() // Method to show today's decor items. 
@@ -69,6 +90,100 @@ namespace LifeCraft.UI
             if (mindPalaceShopPanel != null) mindPalaceShopPanel.SetActive(false);
             if (creativeCommonsShopPanel != null) creativeCommonsShopPanel.SetActive(false); 
             if (socialSquareShopPanel != null) socialSquareShopPanel.SetActive(false); 
+        }
+
+        /// <summary>
+        /// Update which region tab buttons are visible based on unlocked regions
+        /// </summary>
+        public void UpdateRegionTabVisibility()
+        {
+            Debug.Log("=== SHOP TAB VISIBILITY UPDATE ===");
+            Debug.Log($"UpdateRegionTabVisibility called at: {System.DateTime.Now}");
+            
+            var unlockSystem = LifeCraft.Systems.RegionUnlockSystem.Instance;
+            if (unlockSystem == null)
+            {
+                Debug.LogWarning("RegionUnlockSystem.Instance is null in UpdateRegionTabVisibility");
+                return;
+            }
+
+            var unlockedRegions = unlockSystem.GetUnlockedRegions();
+            Debug.Log($"Unlocked regions for shop tabs: {string.Join(", ", unlockedRegions.ConvertAll(r => AssessmentQuizManager.GetRegionDisplayName(r)))}");
+
+            // Check button references
+            Debug.Log($"Button references - Health Harbor: {(healthHarborTabButton != null ? "FOUND" : "NULL")}");
+            Debug.Log($"Button references - Mind Palace: {(mindPalaceTabButton != null ? "FOUND" : "NULL")}");
+            Debug.Log($"Button references - Creative Commons: {(creativeCommonsTabButton != null ? "FOUND" : "NULL")}");
+            Debug.Log($"Button references - Social Square: {(socialSquareTabButton != null ? "FOUND" : "NULL")}");
+
+            // Update Health Harbor tab
+            if (healthHarborTabButton != null)
+            {
+                bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.HealthHarbor);
+                bool wasActive = healthHarborTabButton.gameObject.activeSelf;
+                healthHarborTabButton.gameObject.SetActive(isUnlocked);
+                healthHarborTabButton.interactable = isUnlocked;
+                Debug.Log($"Health Harbor tab: was {(wasActive ? "ACTIVE" : "INACTIVE")}, now {(isUnlocked ? "SHOWN" : "HIDDEN")}");
+            }
+            else
+            {
+                Debug.LogError("Health Harbor tab button is null!");
+            }
+
+            // Update Mind Palace tab
+            if (mindPalaceTabButton != null)
+            {
+                bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.MindPalace);
+                bool wasActive = mindPalaceTabButton.gameObject.activeSelf;
+                mindPalaceTabButton.gameObject.SetActive(isUnlocked);
+                mindPalaceTabButton.interactable = isUnlocked;
+                Debug.Log($"Mind Palace tab: was {(wasActive ? "ACTIVE" : "INACTIVE")}, now {(isUnlocked ? "SHOWN" : "HIDDEN")}");
+            }
+            else
+            {
+                Debug.LogError("Mind Palace tab button is null!");
+            }
+
+            // Update Creative Commons tab
+            if (creativeCommonsTabButton != null)
+            {
+                bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.CreativeCommons);
+                bool wasActive = creativeCommonsTabButton.gameObject.activeSelf;
+                creativeCommonsTabButton.gameObject.SetActive(isUnlocked);
+                creativeCommonsTabButton.interactable = isUnlocked;
+                Debug.Log($"Creative Commons tab: was {(wasActive ? "ACTIVE" : "INACTIVE")}, now {(isUnlocked ? "SHOWN" : "HIDDEN")}");
+            }
+            else
+            {
+                Debug.LogError("Creative Commons tab button is null!");
+            }
+
+            // Update Social Square tab
+            if (socialSquareTabButton != null)
+            {
+                bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.SocialSquare);
+                bool wasActive = socialSquareTabButton.gameObject.activeSelf;
+                socialSquareTabButton.gameObject.SetActive(isUnlocked);
+                socialSquareTabButton.interactable = isUnlocked;
+                Debug.Log($"Social Square tab: was {(wasActive ? "ACTIVE" : "INACTIVE")}, now {(isUnlocked ? "SHOWN" : "HIDDEN")}");
+            }
+            else
+            {
+                Debug.LogError("Social Square tab button is null!");
+            }
+            
+            Debug.Log("=== END SHOP TAB VISIBILITY UPDATE ===");
+        }
+
+        /// <summary>
+        /// Refresh the shop tab visibility (call this when regions are unlocked)
+        /// </summary>
+        public void RefreshTabVisibility()
+        {
+            Debug.Log("=== SHOP TAB REFRESH CALLED ===");
+            Debug.Log($"RefreshTabVisibility called at: {System.DateTime.Now}");
+            UpdateRegionTabVisibility();
+            Debug.Log("=== END SHOP TAB REFRESH ===");
         }
     }
 }
