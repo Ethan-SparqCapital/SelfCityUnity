@@ -520,5 +520,5 @@ This project uses various asset packs with their respective licenses. Please ref
 ---
 
 *Last Updated: July 2025*
-*Developed by: 
+*Developed by:* 
 *Development Status: Active Development - Core Systems Complete with Level-Up Integration* 
