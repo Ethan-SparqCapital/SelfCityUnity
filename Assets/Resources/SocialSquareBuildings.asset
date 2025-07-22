@@ -13,29 +13,69 @@ MonoBehaviour:
   m_Name: SocialSquareBuildings
   m_EditorClassIdentifier: 
   buildings:
-  - name: Friendship Fountain
-    description: Central gathering spot for friends
-    price: 20
-    icon: {fileID: 0}
   - name: Kindness Kiosk
     description: Spread positivity and encouragement
     price: 10
     icon: {fileID: 0}
-  - name: Community Center
-    description: Volunteer, help others, and connect
-    price: 25
+  - name: Positivity Plaza
+    description: Uplifting art and messages everywhere
+    price: 15
     icon: {fileID: 0}
-  - name: Cultural Pavilion
-    description: Celebrate diverse traditions and events
-    price: 30
+  - name: Compliment Carousel
+    description: Give and receive compliments in a fun way
+    price: 15
+    icon: {fileID: 0}
+  - name: Coffee Corner
+    description: Chat pods for quick check-ins
+    price: 15
+    icon: {fileID: 0}
+  - name: Kindness Garden
+    description: Plant seeds of kindness and watch them grow
+    price: 20
+    icon: {fileID: 0}
+  - name: Friendship Fountain
+    description: Central gathering spot for friends
+    price: 20
     icon: {fileID: 0}
   - name: Game Arcade
     description: Cooperative play and casual meet-ups
     price: 20
     icon: {fileID: 0}
-  - name: Coffee Corner
-    description: Chat pods for quick check-ins
-    price: 15
+  - name: Pet Park
+    description: Meet up with furry friends and their owners
+    price: 20
+    icon: {fileID: 0}
+  - name: Empathy Exchange
+    description: Share stories and learn from others
+    price: 20
+    icon: {fileID: 0}
+  - name: "Connection Caf\xE9"
+    description: Meet new people and make friends
+    price: 20
+    icon: {fileID: 0}
+  - name: Community Center
+    description: Volunteer, help others, and connect
+    price: 25
+    icon: {fileID: 0}
+  - name: Social Stage
+    description: Open mic, talent shows, and group fun
+    price: 25
+    icon: {fileID: 0}
+  - name: Social Skate Rink
+    description: Roller skating and group activities
+    price: 25
+    icon: {fileID: 0}
+  - name: Volunteer Village
+    description: Spaces for helping others and giving back
+    price: 30
+    icon: {fileID: 0}
+  - name: Cultural Pavilion
+    description: Celebrate diverse traditions and events
+    price: 30
+    icon: {fileID: 0}
+  - name: Teamwork Tower
+    description: Group challenges and collaborative games
+    price: 35
     icon: {fileID: 0}
   - name: Family Fortress
     description: Warm, inviting area for family relationships
@@ -45,51 +85,11 @@ MonoBehaviour:
     description: Connect all social buildings and friends
     price: 40
     icon: {fileID: 0}
-  - name: Social Stage
-    description: Open mic, talent shows, and group fun
-    price: 25
-    icon: {fileID: 0}
-  - name: Volunteer Village
-    description: Spaces for helping others and giving back
-    price: 30
-    icon: {fileID: 0}
-  - name: Celebration Square
-    description: Host parties, festivals, and milestones
-    price: 50
-    icon: {fileID: 0}
-  - name: Pet Park
-    description: Meet up with furry friends and their owners
-    price: 20
-    icon: {fileID: 0}
-  - name: Teamwork Tower
-    description: Group challenges and collaborative games
-    price: 35
-    icon: {fileID: 0}
-  - name: Compliment Carousel
-    description: Give and receive compliments in a fun way
-    price: 15
-    icon: {fileID: 0}
-  - name: Empathy Exchange
-    description: Share stories and learn from others
-    price: 20
-    icon: {fileID: 0}
-  - name: Social Skate Rink
-    description: Roller skating and group activities
-    price: 25
-    icon: {fileID: 0}
-  - name: Kindness Garden
-    description: Plant seeds of kindness and watch them grow
-    price: 20
-    icon: {fileID: 0}
   - name: Festival Field
     description: Outdoor concerts and seasonal events
     price: 45
     icon: {fileID: 0}
-  - name: "Connection Caf\xE9"
-    description: Meet new people and make friends
-    price: 20
-    icon: {fileID: 0}
-  - name: Positivity Plaza
-    description: Uplifting art and messages everywhere
-    price: 15
+  - name: Celebration Square
+    description: Host parties, festivals, and milestones
+    price: 50
     icon: {fileID: 0}

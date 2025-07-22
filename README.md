@@ -299,6 +299,17 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 
 ## 🚀 Latest Major Updates (Since Last GitHub Push)
 
+### 🎯 Level-Up UI Integration System (Phase 5D)
+- **PlayerLevelManager**: Comprehensive player progression system with level-based building unlocks
+- **EXPProgressBarManager**: Real-time EXP progress bar with smooth animations and visual feedback
+- **EXPPopupManager**: Floating EXP number system with difficulty-based color coding
+- **LevelUpManager**: Level-up celebrations and building unlock notifications
+- **Dynamic Building Unlocks**: Buildings unlock based on player level and region unlock sequence
+- **EXP Reward System**: Hybrid difficulty-based EXP calculation for quests and building placement
+- **Visual Feedback**: Color-coded EXP popups (Green=Easy, Yellow=Medium, Orange=Hard, Red=Expert)
+- **Building Unlock Notifications**: Real-time notifications when new buildings become available
+- **Region Unlock System**: Automatic region unlocking when first building of a region becomes available
+
 ### 🤖 AI-Powered UI System
 - **AIUIGenerator**: Revolutionary AI-driven UI generation system that creates dynamic, context-aware user interfaces
 - **AIUIIntegrationNoDOTween**: Seamless integration of AI-generated UI elements without external dependencies
@@ -310,6 +321,10 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **MyAssessmentQuizManager**: Personalized assessment tracking with detailed analytics
 - **Advanced Quest Logic**: Improved quest generation and completion tracking
 - **Progress Analytics**: Detailed tracking of player progress across all regions and activities
+- **Hybrid EXP System**: Dynamic EXP calculation based on quest difficulty and type
+- **Quest Difficulty Detection**: Automatic difficulty classification for all quest types
+- **EXP Popup Animations**: Visual feedback for EXP gains with difficulty-based colors
+- **Daily Quest Completion Rewards**: Balance Ticket rewards for completing all daily quests
 
 ### 🎨 Advanced Chest & Reward System
 - **Enhanced Chest Mechanics**: Improved chest opening animations and reward distribution
@@ -322,6 +337,10 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **RegionUnlockSystem**: Comprehensive region unlocking mechanics with progress tracking
 - **Enhanced Building Placement**: Improved grid-based building placement with better visual feedback
 - **Building Categories**: Better organization of buildings by region and type
+- **Level-Based Building Unlocks**: Buildings unlock progressively based on player level (1-40)
+- **Region Unlock Sequence**: Dynamic region unlocking based on assessment results
+- **Building Unlock Levels**: Each building has a specific unlock level calculated from region sequence
+- **EXP Rewards for Building Placement**: Placing buildings rewards EXP based on their unlock level
 
 ### 🎮 Enhanced Game Management
 - **CityMapZoomController**: Smooth zoom and pan controls for city navigation
@@ -334,12 +353,20 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Responsive Layout**: Better responsive design for different screen sizes
 - **Visual Polish**: Enhanced visual effects and animations throughout the game
 - **Accessibility Features**: Improved accessibility with better contrast and text sizing
+- **EXP Progress Bar**: Real-time visual progress bar showing level progression
+- **Level-Up Celebrations**: Animated level-up celebrations with fade effects
+- **Unlock Notifications**: Floating notifications for building and region unlocks
+- **Dynamic UI Updates**: All UI elements update automatically based on player progress
 
 ### 🔧 Technical Enhancements
 - **Code Architecture**: Improved code organization and architecture for better maintainability
 - **Error Handling**: Enhanced error handling and debugging capabilities
 - **Performance Monitoring**: Better performance monitoring and optimization
 - **Memory Management**: Improved memory usage and garbage collection
+- **Event-Driven Architecture**: Level-up system uses events for loose coupling
+- **Singleton Pattern**: Manager classes use singleton pattern for easy access
+- **Debug Tools**: LevelUpDebugger script for testing level-up and unlock systems
+- **Modular Design**: All level-up components are modular and extensible
 
 ### 📊 Data Management
 - **Enhanced Save System**: Improved save/load system with better data integrity
@@ -359,6 +386,8 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **BatchAssignSprites**: Automated sprite assignment for UI elements
 - **CityBuilderAutoPopulateEditor**: Automated population of building types from text files
 - **DecorationlistImporter**: Automated import of decoration lists and assets
+- **LevelUpDebugger**: Debug script for testing level-up and building unlock systems
+- **Phase 5D Setup Instructions**: Comprehensive setup guide for level-up UI integration
 
 ### 📱 Mobile Optimization
 - **Touch Controls**: Enhanced touch controls for mobile devices
@@ -381,6 +410,10 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **QuestManager**: Handles quest generation, tracking, and rewards
 - **UIManager**: Centralized UI management and updates
 - **BuildingShopDatabase**: Shop system and item purchasing
+- **PlayerLevelManager**: Player progression and level-based building unlocks
+- **LevelUpManager**: Level-up celebrations and unlock notifications
+- **EXPProgressBarManager**: EXP progress bar with real-time updates
+- **EXPPopupManager**: Floating EXP number system with animations
 
 ### Data Persistence
 - **JSON Serialization**: Save data stored in JSON format
@@ -409,6 +442,15 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - [x] Enhanced camera controls
 - [x] Mobile optimization
 - [x] Performance improvements
+- [x] Level-up UI integration system (Phase 5D)
+- [x] Player progression with EXP system
+- [x] Dynamic building unlocks based on level
+- [x] Real-time EXP progress bar
+- [x] Floating EXP popup animations
+- [x] Level-up celebrations and notifications
+- [x] Hybrid difficulty-based EXP calculation
+- [x] Building unlock notifications
+- [x] Region unlock system integration
 
 ### 🔄 Recent Improvements
 - **Save/Load Reliability**: Fixed issues with buildings disappearing after reload
@@ -421,6 +463,11 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Chest System**: Enhanced chest mechanics and reward distribution
 - **District System**: New district unlocking and management system
 - **Performance**: Significant performance improvements across all systems
+- **Level-Up System**: Complete player progression system with EXP and building unlocks
+- **EXP Progress Bar**: Real-time visual feedback for player progression
+- **Building Unlock Logic**: Dynamic building unlocks based on player level and region sequence
+- **EXP Popup System**: Visual feedback for all EXP gains with difficulty-based colors
+- **Notification System**: Real-time notifications for building and region unlocks
 
 ### 🚧 Current Development Focus
 - **Performance Optimization**: Improving save/load performance
@@ -430,6 +477,9 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **AI System Enhancement**: Further development of AI-powered features
 - **Mobile Optimization**: Continued mobile platform optimization
 - **User Experience**: Ongoing UX improvements and refinements
+- **Level-Up System Polish**: Fine-tuning EXP calculations and unlock timing
+- **Notification System**: Enhancing visual feedback for unlocks and achievements
+- **Progression Balance**: Balancing EXP rewards and building unlock progression
 
 ## Getting Started
 
@@ -470,4 +520,5 @@ This project uses various asset packs with their respective licenses. Please ref
 ---
 
 *Last Updated: July 2025*
-*Development Status: Active Development - Core Systems Complete with AI Integration* 
+*Developed by: 
+*Development Status: Active Development - Core Systems Complete with Level-Up Integration* 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using LifeCraft.Core;
 using LifeCraft.UI;
+using LifeCraft.Systems; // Needed for PlayerLevelManager. 
 
 namespace LifeCraft.Shop
 {
@@ -24,7 +25,27 @@ namespace LifeCraft.Shop
 
         private void Start()
         {
-            PopulateShop();
+            PopulateShop(); // Populate the shop with items based on the current player level and unlocked buildings. 
+
+            // Subscribe to level up events to refresh the shop (dynamic refresh):
+            if (PlayerLevelManager.Instance != null)
+            {
+                PlayerLevelManager.Instance.OnLevelUp += OnPlayerLevelUp; // Subscribe to level up event. 
+            }
+        }
+
+        private void OnPlayerLevelUp(int newLevel) // Called when the player levels up. 
+        {
+            PopulateShop(); // Refresh the shop items based on the new level. 
+        }
+
+        private void OnDestroy()
+        {
+            // Unsubscribe from level up events to prevent memory leaks. 
+            if (PlayerLevelManager.Instance != null)
+            {
+                PlayerLevelManager.Instance.OnLevelUp -= OnPlayerLevelUp; // Unsubscribe from level up event. 
+            }
         }
 
         void PopulateShop()
@@ -33,12 +54,16 @@ namespace LifeCraft.Shop
             foreach (Transform child in shopGrid)
                 Destroy(child.gameObject);
 
-            // Add new items
+            // Add new items (ONLY unlocked buildings) 
             foreach (var item in buildingDatabase.buildings)
             {
-                var go = Instantiate(shopItemPrefab, shopGrid);
-                var ui = go.GetComponent<ShopBuildingItemUI>();
-                ui.Setup(item, OnBuyClicked, resourceIcon); // Pass the resource icon to the Setup method. 
+                // Check if this building is unlocked at the current player level:
+                if (PlayerLevelManager.Instance.IsBuildingUnlocked(item.name))
+                {
+                    var go = Instantiate(shopItemPrefab, shopGrid);
+                    var ui = go.GetComponent<ShopBuildingItemUI>();
+                    ui.Setup(item, OnBuyClicked, resourceIcon); // Pass the resource icon to the Setup method. 
+                }
             }
         }
 

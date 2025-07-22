@@ -7,6 +7,14 @@ using LifeCraft.UI; // we are using LifeCraft.UI for the ResourceBarManager, whi
 using LifeCraft.Systems; // we are using LifeCraft.Systems for the QuestManager, which manages the quests in the game. 
 using LifeCraft.Core; // we are using LifeCraft.Core for the ResourceManager, which manages the player's resources.
 
+public enum QuestDifficulty
+{
+    Easy,      // 5 EXP
+    Medium,    // 10 EXP  
+    Hard,      // 15 EXP
+    Expert     // 20 EXP
+}
+
 public class ToDoListManager : MonoBehaviour // this class manages the to-do list UI and functionality 
 {
     [Header("Assign in Inspector")] // this header is used to group the variables in the inspector for better organization. 
@@ -128,11 +136,210 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
     public Sprite defaultSprite; // Assign in Inspector: the default sprite for regions that don't have a specific sprite assigned. 
 
     /// <summary>
+    /// Enhanced difficulty detection that covers ALL quests in QuestManager
+    /// </summary>
+    private QuestDifficulty DetermineQuestDifficulty(string questText)
+    {
+        string lowerText = questText.ToLower();
+        
+        // EASY: Short duration, simple actions, quick tasks
+        if (lowerText.Contains("5 minute") || lowerText.Contains("2 minute") || 
+            lowerText.Contains("quick") || lowerText.Contains("simple") || 
+            lowerText.Contains("small") || lowerText.Contains("just") || 
+            lowerText.Contains("even if") || lowerText.Contains("30 second") ||
+            lowerText.Contains("three deep breath") || lowerText.Contains("1 minute") ||
+            lowerText.Contains("try a new") || lowerText.Contains("replace") ||
+            lowerText.Contains("swap") || lowerText.Contains("take a") ||
+            lowerText.Contains("do a quick") || lowerText.Contains("spend 10 minute") ||
+            lowerText.Contains("do 10") || lowerText.Contains("do 20") ||
+            lowerText.Contains("write down three") || lowerText.Contains("meditate for 5") ||
+            lowerText.Contains("practice mindful") || lowerText.Contains("draw or doodle") ||
+            lowerText.Contains("list five") || lowerText.Contains("spend 5 minute") ||
+            lowerText.Contains("set a small goal") || lowerText.Contains("write down a positive") ||
+            lowerText.Contains("take a break") || lowerText.Contains("listen to instrumental") ||
+            lowerText.Contains("send a message") || lowerText.Contains("compliment") ||
+            lowerText.Contains("share a funny") || lowerText.Contains("ask someone how") ||
+            lowerText.Contains("smile at") || lowerText.Contains("tell a joke") ||
+            lowerText.Contains("draw or sketch") || lowerText.Contains("take a photo") ||
+            lowerText.Contains("write a haiku") || lowerText.Contains("listen to a new genre") ||
+            lowerText.Contains("try a new dance") || lowerText.Contains("create a doodle") ||
+            lowerText.Contains("try a new creative"))
+            return QuestDifficulty.Easy;
+        
+        // MEDIUM: Moderate duration, practice/learn actions
+        if (lowerText.Contains("10 minute") || lowerText.Contains("15 minute") ||
+            lowerText.Contains("try") || lowerText.Contains("practice") ||
+            lowerText.Contains("listen") || lowerText.Contains("write down") ||
+            lowerText.Contains("read a") || lowerText.Contains("watch a") ||
+            lowerText.Contains("learn") || lowerText.Contains("organize") ||
+            lowerText.Contains("prepare") || lowerText.Contains("make a") ||
+            lowerText.Contains("create") || lowerText.Contains("design") ||
+            lowerText.Contains("paint") || lowerText.Contains("color") ||
+            lowerText.Contains("call or video") || lowerText.Contains("write a thank-you") ||
+            lowerText.Contains("offer to help") || lowerText.Contains("share something") ||
+            lowerText.Contains("invite someone") || lowerText.Contains("leave a positive") ||
+            lowerText.Contains("tell someone why") || lowerText.Contains("share a favorite") ||
+            lowerText.Contains("recommend") || lowerText.Contains("ask a family member") ||
+            lowerText.Contains("play an online") || lowerText.Contains("share a photo") ||
+            lowerText.Contains("thank someone") || lowerText.Contains("offer words") ||
+            lowerText.Contains("ask someone about") || lowerText.Contains("share a motivational") ||
+            lowerText.Contains("make a new connection") || lowerText.Contains("check in on") ||
+            lowerText.Contains("try a new recipe") || lowerText.Contains("make a collage") ||
+            lowerText.Contains("write a song") || lowerText.Contains("try origami") ||
+            lowerText.Contains("take a creative photo") || lowerText.Contains("make a vision board") ||
+            lowerText.Contains("try a new art app") || lowerText.Contains("write a letter in") ||
+            lowerText.Contains("make up a new recipe") || lowerText.Contains("record a short video") ||
+            lowerText.Contains("build something"))
+            return QuestDifficulty.Medium;
+        
+        // HARD: Longer duration, complete/organize actions
+        if (lowerText.Contains("20 minute") || lowerText.Contains("30 minute") ||
+            lowerText.Contains("complete") || lowerText.Contains("go for a") ||
+            lowerText.Contains("drink 8 glass") || lowerText.Contains("get at least 30 minute") ||
+            lowerText.Contains("track your") || lowerText.Contains("do a set of") ||
+            lowerText.Contains("take the stairs") || lowerText.Contains("prepare a balanced") ||
+            lowerText.Contains("go to bed without") || lowerText.Contains("write down a 'worry list'") ||
+            lowerText.Contains("unfollow social media") || lowerText.Contains("listen to a podcast") ||
+            lowerText.Contains("spend 15 minute") || lowerText.Contains("read a chapter") ||
+            lowerText.Contains("try a new journaling") || lowerText.Contains("do a crossword") ||
+            lowerText.Contains("write down your goal") || lowerText.Contains("spend 5 minute visualizing") ||
+            lowerText.Contains("give a genuine") || lowerText.Contains("schedule a call") ||
+            lowerText.Contains("write a thank-you note") || lowerText.Contains("do a small favor") ||
+            lowerText.Contains("share something positive") || lowerText.Contains("invite a friend") ||
+            lowerText.Contains("ask someone about their day") || lowerText.Contains("reconnect with") ||
+            lowerText.Contains("help someone") || lowerText.Contains("share a story") ||
+            lowerText.Contains("write a short") || lowerText.Contains("create a new music") ||
+            lowerText.Contains("try a new hairstyle") || lowerText.Contains("rearrange a small") ||
+            lowerText.Contains("draw a picture") || lowerText.Contains("write a poem") ||
+            lowerText.Contains("make a simple craft") || lowerText.Contains("design a new logo"))
+            return QuestDifficulty.Hard;
+        
+        // EXPERT: Week-long, planning, tracking, substantial activities
+        if (lowerText.Contains("week") || lowerText.Contains("schedule") ||
+            lowerText.Contains("plan") || lowerText.Contains("track") ||
+            lowerText.Contains("goal") || lowerText.Contains("research") ||
+            lowerText.Contains("write down your sleep schedule") || lowerText.Contains("go to bed 30 minute") ||
+            lowerText.Contains("take a power nap") || lowerText.Contains("write a letter to your future") ||
+            lowerText.Contains("research a topic") || lowerText.Contains("write a short story") ||
+            lowerText.Contains("decorate your workspace") || lowerText.Contains("paint or color a scene"))
+            return QuestDifficulty.Expert;
+        
+        return QuestDifficulty.Medium; // Default fallback
+    }
+
+    /// <summary>
+    /// New method: Calculates EXP using hybrid difficulty system
+    /// </summary>
+    private int CalculateQuestEXP(string questText, bool isDailyQuest, bool isCustomQuest)
+    {
+        QuestDifficulty difficulty = DetermineQuestDifficulty(questText);
+        
+        // Base EXP by difficulty
+        int baseEXP = difficulty switch
+        {
+            QuestDifficulty.Easy => 5,
+            QuestDifficulty.Medium => 10,
+            QuestDifficulty.Hard => 15,
+            QuestDifficulty.Expert => 20,
+            _ => 10
+        };
+        
+        // Bonus for quest type
+        if (isDailyQuest) baseEXP += 2;      // Daily quests get +2 bonus
+        if (isCustomQuest) baseEXP += 1;     // Custom quests get +1 bonus
+        
+        Debug.Log($"Quest: '{questText}' | Difficulty: {difficulty} | Base EXP: {baseEXP - (isDailyQuest ? 2 : 0) - (isCustomQuest ? 1 : 0)} | Type Bonus: +{(isDailyQuest ? 2 : 0) + (isCustomQuest ? 1 : 0)} | Total: {baseEXP}");
+        
+        return baseEXP;
+    }
+
+    /// <summary>
+    /// Checks if a quest is from the region quest lists
+    /// </summary>
+    private bool IsRegionQuest(string questText)
+    {
+        // Check if it matches any of the standard region quest patterns from QuestManager
+        string[] regionQuestPatterns = {
+            "Go for a 20-minute brisk walk",
+            "Try a new healthy recipe",
+            "Do 15 minutes of stretching",
+            "Drink 8 glasses of water",
+            "Get at least 30 minutes of sunlight",
+            "Track your sleep hours",
+            "Do a set of 10 push-ups",
+            "Take the stairs instead",
+            "Prepare a balanced breakfast",
+            "Go to bed without any screens",
+            "Practice 10 minutes of focused breathing",
+            "Write down a 'worry list'",
+            "Unfollow social media accounts",
+            "Listen to a podcast about mental wellness",
+            "Spend 15 minutes in a quiet space",
+            "Read a chapter from a self-help book",
+            "Try a new journaling prompt",
+            "Do a crossword or sudoku puzzle",
+            "Write down your goals for the week",
+            "Spend 5 minutes visualizing",
+            "Give a genuine compliment",
+            "Schedule a call or video chat",
+            "Write a thank-you note to someone",
+            "Do a small favor for a family member",
+            "Share something positive or interesting",
+            "Invite a friend to join you",
+            "Ask someone about their day",
+            "Reconnect with an old friend",
+            "Help someone with a task",
+            "Share a story from your childhood",
+            "Take a photo of something interesting",
+            "Write a short, one-paragraph story",
+            "Create a new music playlist",
+            "Try a new hairstyle or accessory",
+            "Rearrange a small part of your room",
+            "Draw a picture of your favorite animal",
+            "Write a poem about your day",
+            "Make a simple craft using recycled materials",
+            "Design a new logo for a fictional company",
+            "Paint or color a scene from your favorite movie"
+        };
+        
+        foreach (string pattern in regionQuestPatterns)
+        {
+            if (questText.Contains(pattern))
+                return true;
+        }
+        
+        return false;
+    }
+
+    /// <summary>
+    /// Show a summary of completed tasks and total EXP gained
+    /// </summary>
+    private void ShowCompletionSummary(int completedTasks, int totalEXP)
+    {
+        // Show a brief summary in the console for now
+        Debug.Log($"🎉 Completed {completedTasks} task(s) for a total of {totalEXP} EXP!");
+        
+        // TODO: In the future, this could show a more elaborate UI popup
+        // For now, we'll use the existing reward modal if available
+        if (rewardModal != null)
+        {
+            string message = completedTasks == 1 
+                ? $"Task completed! You gained {totalEXP} EXP!" 
+                : $"Completed {completedTasks} tasks! You gained {totalEXP} EXP!";
+            
+            rewardModal.Show(message, defaultSprite);
+        }
+    }
+
+    /// <summary>
     /// Removes all checked (completed) tasks and gives a currency reward for each.
     /// Call this from the Complete Task(s) button.
     /// </summary>
     public void CompleteSelectedTasks()
     {
+        int totalEXP = 0;
+        int completedTasks = 0;
+        
         for (int i = toDoListContainer.childCount - 1; i >= 0; i--)
         {
             Transform item = toDoListContainer.GetChild(i); // Get the child item at index i from the to-do list container, starting from the last item to avoid index issues when removing items (remember how arrays work if you remove an item). 
@@ -157,9 +364,39 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
                 if (metaReward != null)
                     rewardAmount = metaReward.rewardAmount;
                 GiveCurrencyReward(questText, rewardAmount); // Give the dynamic reward amount for this quest.
+
+                // Reward EXP for completing the quest/task:
+                if (PlayerLevelManager.Instance != null) // Check if the PlayerLevelManager instance exists. 
+                {
+                    // Determine quest type for EXP calculation
+                    bool isDailyQuest = meta?.isFromDailyQuest ?? false;
+                    bool isCustomQuest = !isDailyQuest && !IsRegionQuest(questText);
+                    
+                    int expReward = CalculateQuestEXP(questText, isDailyQuest, isCustomQuest); // Calculate the EXP reward using hybrid difficulty system
+                    PlayerLevelManager.Instance.AddEXP(expReward); // Add the calculated EXP to the player's level manager. 
+                    
+                    // Track total EXP and completed tasks
+                    totalEXP += expReward;
+                    completedTasks++;
+                    
+                    // Show EXP popup animation
+                    QuestDifficulty difficulty = DetermineQuestDifficulty(questText);
+                    if (EXPPopupManager.Instance != null)
+                    {
+                        EXPPopupManager.Instance.ShowEXPPopupCenter(expReward, difficulty);
+                    }
+                }
+                
                 Destroy(item.gameObject); // Destroy the item after giving the reward. 
             }
         }
+        
+        // Show completion summary if tasks were completed
+        if (completedTasks > 0)
+        {
+            ShowCompletionSummary(completedTasks, totalEXP);
+        }
+        
         // FIX: Only reward a Balance Ticket if daily quests have been generated and not already rewarded for the current set.
         StartCoroutine(CheckAndRewardDailyQuestCompletion());
     }

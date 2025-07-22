@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI; // For Image component. Make sure to add this if you use UI images.
 using LifeCraft.Core; // For InventoryManager and DecorationItem
+using LifeCraft.Systems; // For RegionEditManager and PlayerLevelManager. 
 
 namespace LifeCraft.UI
 {
@@ -12,6 +13,11 @@ namespace LifeCraft.UI
     public class PlacedItemUI : MonoBehaviour, IPointerClickHandler
     {
         private DecorationItem _decorationItem;
+
+        [Header("EXP Reward Configuration")]
+        [SerializeField] public int baseBuildingEXP = 10; // Base EXP for placing a building. 
+        [SerializeField] public int decorationEXP = 5; // EXP for placing a decoration. 
+        [SerializeField] public float expMultiplier = 1.2f; // Multiplier for EXP based on unlock level. 
         
         // Add debug component for troubleshooting
         private void Start()
@@ -29,6 +35,40 @@ namespace LifeCraft.UI
         public void Initialize(DecorationItem item)
         {
             _decorationItem = item;
+
+            // Get the type for the item (decoration or region, and specific region):
+            var itemType = _decorationItem.region;
+
+            // Reward 5 EXP if placing a decoration:
+            if (itemType == RegionType.Decoration && PlayerLevelManager.Instance != null)
+            {
+                PlayerLevelManager.Instance.AddEXP(decorationEXP); // Reward 5 EXP (decorationEXP) for placing a decoration. 
+                
+                // Show EXP popup animation
+                if (EXPPopupManager.Instance != null)
+                {
+                    Vector3 buildingPosition = transform.position;
+                    EXPPopupManager.Instance.ShowEXPPopup(decorationEXP, buildingPosition, QuestDifficulty.Easy);
+                }
+            }
+
+            // Calculate and reward EXP based on unlock level if placing a building:
+            if (itemType == RegionType.HealthHarbor || itemType == RegionType.MindPalace ||
+                itemType == RegionType.CreativeCommons || itemType == RegionType.SocialSquare && 
+                PlayerLevelManager.Instance != null)
+            {
+                // Calculate EXP based on the unlock level: EXP = baseBuildingEXP * (expMultiplier ^ (unlockLevel - 1))
+                int expReward = baseBuildingEXP * Mathf.RoundToInt(Mathf.Pow(expMultiplier, PlayerLevelManager.Instance.GetBuildingUnlockLevel(_decorationItem.displayName) - 1)); // DecorationItem has displayName for the building name. 
+
+                PlayerLevelManager.Instance.AddEXP(expReward); // Reward calculated EXP for placing a building. 
+                
+                // Show EXP popup animation
+                if (EXPPopupManager.Instance != null)
+                {
+                    Vector3 buildingPosition = transform.position;
+                    EXPPopupManager.Instance.ShowEXPPopup(expReward, buildingPosition, QuestDifficulty.Medium);
+                }
+            }
         }
 
         /// <summary>
