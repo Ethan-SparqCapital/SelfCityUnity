@@ -340,6 +340,37 @@ namespace LifeCraft.Core
                 // Save assessment completion status
                 PlayerPrefs.SetInt("HasCompletedAssessment", hasCompletedAssessment ? 1 : 0);
 
+                // CRITICAL FIX: Save quiz scores and selected region for building unlock system re-initialization
+                // PROBLEM: When the game loads from a saved state, the building unlock system needs to be re-initialized
+                // with the original quiz scores and region selection to restore the correct building unlock levels.
+                // Without this data, the buildings won't appear in the shop even though the save data exists.
+                if (assessmentQuizManager != null)
+                {
+                    var quizScores = assessmentQuizManager.GetRegionScores();
+                    if (quizScores != null && quizScores.Count > 0)
+                    {
+                        // Convert Dictionary to serializable list (Unity JsonUtility doesn't serialize dictionaries directly)
+                        var quizScoresWrapper = new QuizScoresWrapper();
+                        foreach (var kvp in quizScores)
+                        {
+                            quizScoresWrapper.scores.Add(new QuizScoreEntry 
+                            { 
+                                regionType = kvp.Key,  // Region type (HealthHarbor, MindPalace, etc.)
+                                score = kvp.Value      // Quiz score for that region
+                            });
+                        }
+                        
+                        // Save quiz scores as JSON string
+                        string quizScoresJson = JsonUtility.ToJson(quizScoresWrapper);
+                        PlayerPrefs.SetString("QuizScores", quizScoresJson);
+                        
+                        // Save the selected starting region
+                        PlayerPrefs.SetInt("SelectedRegion", (int)regionUnlockSystem.GetStartingRegion());
+                        
+                        Debug.Log("Quiz scores and selected region saved for building unlock system re-initialization");
+                    }
+                }
+
                 // Save quest data (daily quests, custom quests, progress)
                 if (questManager != null)
                     questManager.SaveQuests();
@@ -347,20 +378,29 @@ namespace LifeCraft.Core
                 // Save current game state and pause status
                 PlayerPrefs.SetInt("GameState", (int)currentGameState);
                 PlayerPrefs.SetInt("IsPaused", isGamePaused ? 1 : 0);
-                
+
                 // Save timestamp for tracking when the game was last saved
                 PlayerPrefs.SetString("LastSaveTime", System.DateTime.UtcNow.ToString("O"));
-                
+
                 PlayerPrefs.Save(); // Force write to device storage
                 Debug.Log("Game saved successfully to local storage!");
-                
+
                 if (uiManager != null)
                     uiManager.ShowNotification("Game saved!");
+
+                // Save building unlock data
+                if (PlayerLevelManager.Instance != null)
+                {
+                    var buildingUnlockData = PlayerLevelManager.Instance.GetSaveData(); // Save the current variables from the PlayerLevelManager Instance. 
+                    string buildingUnlockJson = JsonUtility.ToJson(buildingUnlockData); // Using JSON for saving. 
+                    PlayerPrefs.SetString("BuildingUnlockData", buildingUnlockJson); // Save the JSON to PlayerPrefs. 
+                    Debug.Log("Building unlock data saved");
+                }
             }
             catch (System.Exception e)
             {
                 Debug.LogError($"Failed to save game: {e.Message}");
-                
+
                 if (uiManager != null)
                     uiManager.ShowNotification("Failed to save game!");
             }
@@ -385,7 +425,7 @@ namespace LifeCraft.Core
                 Debug.Log("Starting game load process...");
 
                 // Load resource data (player's currency and materials)
-                if (ResourceManager.Instance != null) 
+                if (ResourceManager.Instance != null)
                 {
                     ResourceManager.Instance.LoadResources();
                     Debug.Log("Resources loaded successfully");
@@ -511,7 +551,7 @@ namespace LifeCraft.Core
                     SetGameState(savedState);
                     Debug.Log($"Game state loaded: {savedState}");
                 }
-                
+
                 if (PlayerPrefs.HasKey("IsPaused"))
                 {
                     bool savedPause = PlayerPrefs.GetInt("IsPaused") == 1;
@@ -520,19 +560,104 @@ namespace LifeCraft.Core
                 }
 
                 Debug.Log("Game loaded successfully from local storage!");
-                
+
                 if (uiManager != null)
                     uiManager.ShowNotification("Game loaded!");
+
+                // Load building unlock data
+                if (PlayerLevelManager.Instance != null && PlayerPrefs.HasKey("BuildingUnlockData")) // If PlayerPrefs has saved data for BuildingUnlockData, 
+                {
+                    try
+                    {
+                        string buildingUnlockJson = PlayerPrefs.GetString("BuildingUnlockData"); // Get the JSON from PlayerPrefs. 
+                        Debug.Log($"Building unlock JSON: {buildingUnlockJson}");
+                        
+                        var buildingUnlockData = JsonUtility.FromJson<BuildingUnlockSaveData>(buildingUnlockJson); // Retrieve the building unlock data from the JSON. 
+                        if (buildingUnlockData != null)
+                        {
+                            Debug.Log($"Building unlock data deserialized successfully. Building count: {buildingUnlockData.buildingUnlockLevels?.Count ?? 0}, Region count: {buildingUnlockData.regionBuildings?.Count ?? 0}");
+                            
+                            PlayerLevelManager.Instance.LoadSaveData(buildingUnlockData); // If no building unlock data exists in the JSON, get it from the PlayerLevelManager instance. 
+                            Debug.Log("Building unlock data loaded successfully");
+
+                            RefreshUIAfterRegionUnlock(); // Refresh Shop UI after loading building unlock data. 
+
+                            // Delayed refresh to ensure UI is ready:
+                            StartCoroutine(RefreshUIAfterLoadDelay()); 
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Building unlock data deserialized to null");
+                        }
+                    }
+                    catch (System.Exception e) // Catch the error if we cannot load building unlock data.
+                    {
+                        Debug.LogWarning($"Failed to load building unlock data: {e.Message}"); 
+                        Debug.LogWarning($"Stack trace: {e.StackTrace}");
+                    }
+                }
+
+                // CRITICAL FIX: Re-initialize building unlock system with saved quiz scores and selected region
+                // LOGIC FLOW EXPLANATION:
+                // 1. During first play: Assessment Quiz → OnRegionSelected → InitializeBuildingUnlockSystem → Buildings get unlock levels assigned
+                // 2. During game load: Data loads successfully, but InitializeBuildingUnlockSystem was never called again
+                // 3. RESULT: PlayerLevelManager had saved data, but building unlock levels were never re-assigned
+                // 4. SOLUTION: Re-initialize the building unlock system using saved quiz scores and region selection
+                if (hasCompletedAssessment && PlayerPrefs.HasKey("QuizScores") && PlayerPrefs.HasKey("SelectedRegion"))
+                {
+                    try
+                    {
+                        // STEP 1: Load the saved quiz scores from PlayerPrefs
+                        string quizScoresJson = PlayerPrefs.GetString("QuizScores");
+                        var quizScoresWrapper = JsonUtility.FromJson<QuizScoresWrapper>(quizScoresJson);
+                        
+                        if (quizScoresWrapper != null && quizScoresWrapper.scores != null)
+                        {
+                            // STEP 2: Convert the serialized list back to a dictionary for easier use
+                            var quizScores = new Dictionary<AssessmentQuizManager.RegionType, int>();
+                            foreach (var entry in quizScoresWrapper.scores)
+                            {
+                                quizScores[entry.regionType] = entry.score; // Rebuild the original quiz scores dictionary
+                            }
+
+                            // STEP 3: Load the saved selected region
+                            var selectedRegion = (AssessmentQuizManager.RegionType)PlayerPrefs.GetInt("SelectedRegion");
+                            
+                            Debug.Log($"Re-initializing building unlock system with region: {AssessmentQuizManager.GetRegionDisplayName(selectedRegion)}");
+                            Debug.Log($"Quiz scores: {string.Join(", ", quizScores.Select(kvp => $"{AssessmentQuizManager.GetRegionDisplayName(kvp.Key)}: {kvp.Value}"))}");
+
+                            // STEP 4: Re-initialize the RegionUnlockSystem with the original data
+                            // This sets up the correct region unlock order based on quiz scores
+                            if (regionUnlockSystem != null)
+                            {
+                                regionUnlockSystem.SetStartingRegion(selectedRegion, quizScores);
+                            }
+                            
+                            // STEP 5: Re-initialize the PlayerLevelManager building unlock system
+                            // This re-assigns unlock levels to all buildings based on the original quiz scores and region selection
+                            if (PlayerLevelManager.Instance != null)
+                            {
+                                PlayerLevelManager.Instance.InitializeBuildingUnlockSystem(selectedRegion, quizScores);
+                            }
+
+                            Debug.Log("Building unlock system re-initialized successfully - buildings should now appear in shop!");
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogWarning($"Failed to re-initialize building unlock system: {e.Message}");
+                    }
+                }
             }
             catch (System.Exception e)
             {
                 Debug.LogError($"Failed to load game: {e.Message}");
                 Debug.LogError($"Stack trace: {e.StackTrace}");
-                
+
                 // Clear corrupted save data and start fresh
                 Debug.Log("Clearing corrupted save data and starting fresh...");
                 ClearSaveData();
-                
+
                 if (uiManager != null)
                     uiManager.ShowNotification("Failed to load game! Starting fresh.");
             }
@@ -585,10 +710,13 @@ namespace LifeCraft.Core
             PlayerPrefs.DeleteKey("GameState");
             PlayerPrefs.DeleteKey("IsPaused");
             PlayerPrefs.DeleteKey("LastSaveTime");
+            PlayerPrefs.DeleteKey("BuildingUnlockData"); // Clear the data from the PlayerPrefs BuildingUnlockData key. 
+            PlayerPrefs.DeleteKey("QuizScores"); // Clear quiz scores (part of the building unlock system fix)
+            PlayerPrefs.DeleteKey("SelectedRegion"); // Clear selected region (part of the building unlock system fix)
             
             // Note: ResourceManager and QuestManager don't have ClearSaveData methods
             // Their data will be reset when the game restarts
-            
+
             PlayerPrefs.Save();
             Debug.Log("All save data cleared");
         }
@@ -873,6 +1001,13 @@ namespace LifeCraft.Core
             Debug.Log("=== END DELAYED UI REFRESH ===");
         }
 
+        private System.Collections.IEnumerator RefreshUIAfterLoadDelay()
+        {
+            yield return new WaitForSeconds(1.0f); // Wait for UI to be fully initialized. 
+            Debug.Log("Performing delayed UI refresh after loading building unlock data...");
+            RefreshUIAfterRegionUnlock(); 
+        }
+
         /// <summary>
         /// Reset all regions to locked state (for testing)
         /// </summary>
@@ -972,6 +1107,31 @@ namespace LifeCraft.Core
     public class CitySaveWrapper
     {
         public List<BuildingSaveData> buildings;
+    }
+
+    /// <summary>
+    /// CRITICAL FIX: Wrapper class for serializing quiz scores to PlayerPrefs
+    /// 
+    /// PROBLEM: Unity's JsonUtility cannot serialize Dictionary objects directly.
+    /// SOLUTION: Convert Dictionary to a serializable List of QuizScoreEntry objects.
+    /// 
+    /// This allows us to save and load quiz scores for building unlock system re-initialization.
+    /// </summary>
+    [System.Serializable]
+    public class QuizScoresWrapper
+    {
+        public List<QuizScoreEntry> scores = new List<QuizScoreEntry>(); // List of quiz score entries for each region
+    }
+
+    /// <summary>
+    /// Individual quiz score entry for serialization
+    /// Contains the region type and its corresponding quiz score
+    /// </summary>
+    [System.Serializable]
+    public class QuizScoreEntry
+    {
+        public AssessmentQuizManager.RegionType regionType; // The region (HealthHarbor, MindPalace, etc.)
+        public int score; // The quiz score for this region
     }
 
     /*

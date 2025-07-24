@@ -3,9 +3,21 @@ using UnityEngine;
 using LifeCraft.Core;
 using LifeCraft.Systems;
 using LifeCraft.Shop; // Import the Shop namespace to access BuildingShopItem and BuildingShopDatabase. 
+using LifeCraft.UI; // Import the UI namespace to access AssessmentQuizUI and AssessmentQuizManager. 
 
 namespace LifeCraft.Systems
 {
+
+    [System.Serializable]
+    public class BuildingUnlockSaveData
+    {
+        public Dictionary<string, int> buildingUnlockLevels; // Dictionary to hold building names and their corresponding unlock levels: (Key = building name, Value = unlock level).
+        public Dictionary<AssessmentQuizManager.RegionType, List<string>> regionBuildings; // Dictionary to hold region type and each of their corresponding buildings: (Key = region type, Value = list of building names).
+        public int currentLevel; // Current player level. 
+        public int currentEXP; // Current player EXP. 
+        public string saveVersion = "1.0"; // Version of the save data format (for future compatibility). 
+    }
+
     /// <summary>
     /// Manages player leveling, EXP, and building unlocks based on level and region unlock sequence.
     /// </summary>
@@ -14,23 +26,23 @@ namespace LifeCraft.Systems
         [Header("Level Configuration")]
         [SerializeField] private int currentLevel = 1;
         [SerializeField] private int currentEXP = 0;
-        
+
         [Header("EXP Configuration")]
         [SerializeField] private int baseEXPPerLevel = 100;
         [SerializeField] private float expMultiplier = 1.5f; // Exponential progression
-        
+
         // Events
         public System.Action<int> OnLevelUp;
         public System.Action<int> OnEXPChanged;
         public System.Action<string> OnBuildingUnlocked;
         public System.Action<AssessmentQuizManager.RegionType> OnRegionUnlocked;
-        
+
         // Building unlock data
+        // Dictionary to hold building names and their corresponding unlock levels: (Key = building name, Value = unlock level)
         private Dictionary<string, int> _buildingUnlockLevels = new Dictionary<string, int>();
-        // Dictionary to hold region type and each of their corresponding buildings:
+        // Dictionary to hold region type and each of their corresponding buildings: (Key = region type, Value = list of building names)
         private Dictionary<AssessmentQuizManager.RegionType, List<string>> _regionBuildings = new Dictionary<AssessmentQuizManager.RegionType, List<string>>();
-        private List<string> _allBuildingsInOrder = new List<string>();
-        
+
         // Singleton
         private static PlayerLevelManager _instance;
         public static PlayerLevelManager Instance
@@ -49,33 +61,68 @@ namespace LifeCraft.Systems
                 return _instance;
             }
         }
-        
+
         private void Awake()
         {
             if (_instance == null)
             {
                 _instance = this;
                 DontDestroyOnLoad(gameObject);
-                InitializeBuildingUnlockSystem();
+
+                if (AssessmentQuizUI.Instance != null) // If the AssessmentQuizUI instance exists, 
+                {
+                    AssessmentQuizUI.Instance.OnRegionSelected += InitializeBuildingUnlockSystem; // Subscribe to the on-region-selected event to initialize the building unlock system (the initialization method would be called AFTER the player clicks on their desired starting region). 
+                }
             }
             else if (_instance != this)
             {
                 Destroy(gameObject);
             }
         }
-        
+
+        private void OnDestroy()
+        {
+            if (AssessmentQuizUI.Instance != null) // If the AssessmentQuizUI instance exists, 
+            {
+                AssessmentQuizUI.Instance.OnRegionSelected -= InitializeBuildingUnlockSystem; // Unsubscribe from the on-region-selected event to avoid memory leaks. 
+            }
+        }
+
         /// <summary>
         /// Initialize the building unlock system based on region unlock sequence
         /// </summary>
-        private void InitializeBuildingUnlockSystem()
+                /// <summary>
+        /// Initialize the building unlock system based on region unlock sequence
+        /// This is the original method called during normal gameplay (after assessment quiz completion)
+        /// </summary>
+        /// <param name="selectedRegion">The region the player selected from the assessment quiz</param>
+        public void InitializeBuildingUnlockSystem(AssessmentQuizManager.RegionType selectedRegion) // The RegionType parameter is the SELECTED REGION (the region the player clicks) from the AssessmentQuizManager, which is used to determine the player's starting region.
         {
-            // (1) Get the player's region unlock sequence from AssessmentQuizManager
-            // (2) Sort all buildings from all regions based on region unlock sequence and excitement level
-            // (3) Assign unlock levels to buildings (1-40)
+            // Get quiz scores from AssessmentQuizManager for normal initialization
+            // This method is called during normal gameplay when the assessment quiz is completed
+            var quizScores = AssessmentQuizManager.Instance.GetRegionScores();
+            InitializeBuildingUnlockSystem(selectedRegion, quizScores);
+        }
 
-            // 1. Get the player's region unlock sequence:
+        /// <summary>
+        /// CRITICAL FIX: Overloaded version that accepts quiz scores as parameter for re-initialization during game load
+        /// 
+        /// PROBLEM SOLVED: During game load, the AssessmentQuizManager might not have the quiz scores loaded,
+        /// so we need to pass them as parameters instead of trying to get them from the AssessmentQuizManager instance.
+        /// 
+        /// This method is called during game load to re-initialize the building unlock system with saved quiz scores
+        /// and region selection, ensuring that buildings appear correctly in the shop after loading a saved game.
+        /// </summary>
+        /// <param name="selectedRegion">The region the player originally selected from the assessment quiz</param>
+        /// <param name="quizScores">The quiz scores that determine the region unlock order</param>
+        public void InitializeBuildingUnlockSystem(AssessmentQuizManager.RegionType selectedRegion, Dictionary<AssessmentQuizManager.RegionType, int> quizScores) // Overloaded version that accepts quiz scores as parameter for re-initialization during game load.
+        {
+            // STEP 1: Clear existing data to avoid duplicates and start fresh
+            _buildingUnlockLevels.Clear(); // Clear the existing building unlock levels Dictionary to start fresh. (Key = building name, Value = unlock level)
+            _regionBuildings.Clear(); // Clear the existing region buildings Dictionary to start fresh. (Key = region type, Value = list of building names) 
+
+            // STEP 2: Get the RegionUnlockSystem instance to manage region unlocking
             var regionUnlockSystem = RegionUnlockSystem.Instance; // Get the instance of RegionUnlockSystem to get the correct unlock sequence. 
-            var unlockOrder = regionUnlockSystem.GetUnlockOrder(); // Call the "GetUnlockOrder" method from the RegionUnlockSystem file to get the correct unlock order of regions. 
 
             if (regionUnlockSystem == null)
             {
@@ -83,19 +130,35 @@ namespace LifeCraft.Systems
                 return; // Exit if the region unlock system is not initialized. 
             }
 
-            if (unlockOrder == null || unlockOrder.Count == 0)
+            // STEP 3: Validate quiz scores (can be null during game load if no quiz was taken)
+            if (quizScores == null || quizScores.Count == 0)
             {
-                Debug.LogError("No unlock order found in RegionUnlockSystem!");
-                return; // Exit if the unlock order is null or empty. 
+                Debug.LogWarning("No quiz scores available - using default unlock order.");
+                // No need to return here, as we can still proceed with the default unlock order. 
             }
-            
-            // 2. Sort buildings based on region unlock sequence and excitement level:
-                var sortedBuildings = SortBuildingsByUnlockSequence(unlockOrder); // Parameters are the unlock order, and the list of all buildings. 
 
-            // 3. Assign unlock levels to buildings (1-40):
+            // STEP 4: Set the starting region and determine unlock order based on quiz scores
+            // This is the key step that determines which regions unlock in what order
+            regionUnlockSystem.SetStartingRegion(selectedRegion, quizScores); // Set the starting region based on the player's selection and quiz scores. This will also determine the unlock order of regions based on the quiz scores.  
+            var unlockOrder = regionUnlockSystem.GetUnlockOrder(); // Call the "GetUnlockOrder" method from the RegionUnlockSystem file to get the correct unlock order of regions. 
+
+            Debug.Log($"THE PROPER Region unlock order: {string.Join(", ", unlockOrder)}"); // Log the unlock order for debugging purposes.
+
+            // STEP 5: Sort all buildings from all regions based on the unlock sequence and excitement level
+            // Buildings from regions that unlock first will be available at lower levels
+            var sortedBuildings = SortBuildingsByUnlockSequence(unlockOrder); // Parameters are the unlock order, and the list of all buildings. 
+
+            // STEP 6: Assign unlock levels to buildings (1-40) based on their position in the sorted list
+            // This is what determines when each building becomes available in the shop
             AssignUnlockLevelsToBuildings(sortedBuildings); // Assign levels to buildings based on their position in the sorted list.  
-            
-            Debug.Log("Building unlock system initialized");
+
+            Debug.Log("Building unlock system initialized successfully");
+
+            // STEP 7: Save the game to persist the building unlock data
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.SaveGame();
+            }
         }
 
         // Helper Function (2): Sort buildings based on region unlock sequence and excitement level
@@ -206,7 +269,7 @@ namespace LifeCraft.Systems
                 Debug.Log($"Building '{sortedBuildings[i].name}' unlocks at level {unlockLevel}"); // Log the building name and its unlock level for debugging purposes. 
             }
         }
-        
+
         /// <summary>
         /// Add EXP to the player
         /// </summary>
@@ -218,31 +281,31 @@ namespace LifeCraft.Systems
             // Check for level up
             CheckForLevelUp();
         }
-        
+
         /// <summary>
         /// Check if player should level up
         /// </summary>
         private void CheckForLevelUp()
         {
             int expRequiredForNextLevel = GetEXPRequiredForLevel(currentLevel + 1);
-            
+
             while (currentEXP >= expRequiredForNextLevel)
             {
                 currentEXP -= expRequiredForNextLevel;
                 currentLevel++;
-                
+
                 OnLevelUp?.Invoke(currentLevel);
-                
+
                 // Check for building unlocks
                 CheckForBuildingUnlocks();
-                
+
                 // Check for region unlocks
                 CheckForRegionUnlocks();
-                
+
                 expRequiredForNextLevel = GetEXPRequiredForLevel(currentLevel + 1);
             }
         }
-        
+
         /// <summary>
         /// Calculate EXP required for a specific level (exponential progression)
         /// </summary>
@@ -261,7 +324,7 @@ namespace LifeCraft.Systems
             // Level 2 to Level 3 in Code Format: 
             // Mathf.RoundToInt(100 * Mathf.Pow(1.5f, 2 - 1)) = Mathf.RoundToInt(100 * 1.5^1) = 150 
             int expRequiredForNextLevel = Mathf.RoundToInt(baseEXPPerLevel * Mathf.Pow(expMultiplier, level - 1));
-            return expRequiredForNextLevel; 
+            return expRequiredForNextLevel;
         }
 
         /// <summary>
@@ -320,7 +383,7 @@ namespace LifeCraft.Systems
                 }
             }
         }
-        
+
         /// <summary>
         /// Get the unlock level for a specific building
         /// </summary>
@@ -332,7 +395,7 @@ namespace LifeCraft.Systems
             }
             return -1; // Building not found
         }
-        
+
         /// <summary>
         /// Check if a building is unlocked at current level
         /// </summary>
@@ -341,7 +404,7 @@ namespace LifeCraft.Systems
             int unlockLevel = GetBuildingUnlockLevel(buildingName);
             return unlockLevel > 0 && currentLevel >= unlockLevel;
         }
-        
+
         /// <summary>
         /// Get current level
         /// </summary>
@@ -349,7 +412,7 @@ namespace LifeCraft.Systems
         {
             return currentLevel;
         }
-        
+
         /// <summary>
         /// Get current EXP
         /// </summary>
@@ -357,7 +420,7 @@ namespace LifeCraft.Systems
         {
             return currentEXP;
         }
-        
+
         /// <summary>
         /// Get EXP required for next level
         /// </summary>
@@ -365,14 +428,14 @@ namespace LifeCraft.Systems
         {
             return GetEXPRequiredForLevel(currentLevel + 1);
         }
-        
+
         /// <summary>
         /// Get all unlocked buildings at current level
         /// </summary>
         public List<string> GetUnlockedBuildings()
         {
             List<string> unlockedBuildings = new List<string>();
-            
+
             foreach (var building in _buildingUnlockLevels)
             {
                 if (currentLevel >= building.Value)
@@ -380,8 +443,126 @@ namespace LifeCraft.Systems
                     unlockedBuildings.Add(building.Key);
                 }
             }
-            
+
             return unlockedBuildings;
+        }
+
+        public BuildingUnlockSaveData GetSaveData()
+        {
+            return new BuildingUnlockSaveData
+            {
+                buildingUnlockLevels = _buildingUnlockLevels != null 
+                    ? new Dictionary<string, int>(_buildingUnlockLevels) 
+                    : new Dictionary<string, int>(), // Create a copy of the building unlock levels dictionary. 
+                regionBuildings = _regionBuildings != null 
+                    ? new Dictionary<AssessmentQuizManager.RegionType, List<string>>(_regionBuildings) 
+                    : new Dictionary<AssessmentQuizManager.RegionType, List<string>>(), // Create a copy of the region buildings dictionary. 
+                currentLevel = currentLevel, // Save the current player level. 
+                currentEXP = currentEXP // Save the current player EXP. 
+            };
+        }
+
+        public void LoadSaveData(BuildingUnlockSaveData saveData)
+        {
+            if (saveData == null) return;
+
+            // Safely load building unlock levels - handle null dictionaries
+            _buildingUnlockLevels = saveData.buildingUnlockLevels != null 
+                ? new Dictionary<string, int>(saveData.buildingUnlockLevels) 
+                : new Dictionary<string, int>();
+
+            // Safely load region buildings - handle null dictionaries
+            _regionBuildings = saveData.regionBuildings != null 
+                ? new Dictionary<AssessmentQuizManager.RegionType, List<string>>(saveData.regionBuildings) 
+                : new Dictionary<AssessmentQuizManager.RegionType, List<string>>();
+
+            currentLevel = saveData.currentLevel; // Re-load the saved current player level. 
+            currentEXP = saveData.currentEXP; // Re-load the saved current EXP. 
+        }
+
+        /// <summary>
+        /// Reset all building unlocks and player level (for testing)
+        /// </summary>
+        [ContextMenu("Reset All Building Unlocks and Player Level")]
+        public void ResetAllBuildingUnlocks()
+        {
+            Debug.Log("=== RESETTING ALL BUILDING UNLOCKS AND PLAYER LEVEL ===");
+
+            // Clear building unlock data
+            _buildingUnlockLevels.Clear();
+            _regionBuildings.Clear();
+
+            // Reset player level and EXP
+            currentLevel = 1;
+            currentEXP = 0;
+
+            // Clear saved data from PlayerPrefs
+            PlayerPrefs.DeleteKey("BuildingUnlockData");
+            PlayerPrefs.Save();
+
+            Debug.Log("All building unlocks and player level reset to default");
+            Debug.Log("=== END RESET ===");
+        }
+
+        /// <summary>
+        /// Reset player level and EXP only (for testing)
+        /// </summary>
+        [ContextMenu("Reset Player Level")]
+        public void ResetPlayerLevel()
+        {
+            Debug.Log("=== RESETTING PLAYER LEVEL ===");
+
+            // Reset player level and EXP
+            currentLevel = 1;
+            currentEXP = 0;
+
+            // Clear saved data from PlayerPrefs
+            PlayerPrefs.DeleteKey("BuildingUnlockData");
+            PlayerPrefs.Save();
+
+            Debug.Log("Player level reset to 1, EXP reset to 0");
+            Debug.Log("=== END RESET ===");
+        }
+
+        /// <summary>
+        /// Reset building unlock data only (for testing)
+        /// </summary>
+        [ContextMenu("Reset Building Unlock Data")]
+        public void ResetBuildingUnlockData()
+        {
+            Debug.Log("=== RESETTING BUILDING UNLOCK DATA ===");
+
+            // Clear building unlock data
+            _buildingUnlockLevels.Clear();
+            _regionBuildings.Clear();
+
+            // Clear saved data from PlayerPrefs
+            PlayerPrefs.DeleteKey("BuildingUnlockData");
+            PlayerPrefs.Save();
+
+            Debug.Log("Building unlock data cleared");
+            Debug.Log("=== END RESET ===");
+        }
+        
+        /// <summary>
+        /// Reset everything: regions, buildings, and player level (for testing)
+        /// </summary>
+        [ContextMenu("Reset Everything")]
+        public void ResetEverything()
+        {
+            Debug.Log("=== RESETTING EVERYTHING ===");
+            
+            // Reset building unlocks and player level
+            ResetAllBuildingUnlocks();
+            
+            // Reset regions (if GameManager is available)
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.ResetAllRegionsToLocked();
+            }
+            
+            Debug.Log("Everything reset to default state");
+            Debug.Log("=== END RESET ===");
         }
     }
 } 

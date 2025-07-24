@@ -11,6 +11,25 @@ namespace LifeCraft.UI
     /// </summary>
     public class AssessmentQuizUI : MonoBehaviour
     {
+        // Singleton Instance (to ensure only one instance of the class exists)
+        private static AssessmentQuizUI _instance; // Create a private static instance of the class. 
+        public static AssessmentQuizUI Instance // Create a public static instance of the class that can be accessed from other scripts. 
+        {
+            get 
+            {
+                if (_instance == null)
+                {
+                    _instance = FindFirstObjectByType<AssessmentQuizUI>();
+                    if (_instance == null)
+                    {
+                        GameObject go = new GameObject("AssessmentQuizUI");
+                        _instance = go.AddComponent<AssessmentQuizUI>();
+                    }
+                }
+                return _instance;
+            }
+        }
+
         [Header("Quiz Manager")]
         [SerializeField] private AssessmentQuizManager quizManager;
 

@@ -152,7 +152,7 @@ namespace LifeCraft.Systems
             if (quizScores != null)
             {
                 Debug.Log("Setting unlock order from quiz scores...");
-                SetUnlockOrderFromQuizScores(quizScores);
+                SetUnlockOrderFromQuizScores(quizScores, region); // Send the parameters "quizScores" and "region" (the selected starting region) to the SetUnlockOrderFromQuizScores method to set the correct unlock order based on quiz scores and the selected starting region. 
             }
             else
             {
@@ -342,6 +342,8 @@ namespace LifeCraft.Systems
                     unlocked.Add(kvp.Key);
                 }
             }
+
+            Debug.Log($"IMPORTANT: Region unlock order is: {string.Join(", ", _regionData.Keys)}");
             return unlocked;
         }
 
@@ -427,15 +429,22 @@ namespace LifeCraft.Systems
         }
 
         /// <summary>
-        /// Set unlock order based on quiz scores (highest to lowest)
+        /// Set unlock order based on quiz scores (highest to lowest) and based on the selected starting region
         /// </summary>
-        private void SetUnlockOrderFromQuizScores(Dictionary<AssessmentQuizManager.RegionType, int> quizScores)
+        private void SetUnlockOrderFromQuizScores(Dictionary<AssessmentQuizManager.RegionType, int> quizScores, AssessmentQuizManager.RegionType selectedRegion)
         {
             _unlockOrder.Clear();
             
             // Sort regions by quiz score (highest to lowest)
             var sortedRegions = new List<AssessmentQuizManager.RegionType>(quizScores.Keys);
             sortedRegions.Sort((a, b) => quizScores[b].CompareTo(quizScores[a])); // Descending order
+
+            // Ensure the selected starting region is first in the order:
+            if (sortedRegions.Contains(selectedRegion))
+            {
+                sortedRegions.Remove(selectedRegion); // Remove the selected starting region from the list.
+                sortedRegions.Insert(0, selectedRegion); // Then re-insert it back into the list, placed at the start of the list (index 0).
+            }
             
             _unlockOrder.AddRange(sortedRegions);
         }
@@ -529,12 +538,16 @@ namespace LifeCraft.Systems
             _unlockOrder = new List<AssessmentQuizManager.RegionType>(saveData.unlockOrder ?? new List<AssessmentQuizManager.RegionType>());
             _currentUnlockIndex = saveData.currentUnlockIndex;
 
-            foreach (var kvp in saveData.regionStates)
+            // Safely load region states - handle null dictionary
+            if (saveData.regionStates != null)
             {
-                if (_regionData.TryGetValue(kvp.Key, out var data))
+                foreach (var kvp in saveData.regionStates)
                 {
-                    data.isUnlocked = kvp.Value.isUnlocked;
-                    data.currentBuildingCount = kvp.Value.currentBuildingCount;
+                    if (_regionData.TryGetValue(kvp.Key, out var data))
+                    {
+                        data.isUnlocked = kvp.Value.isUnlocked;
+                        data.currentBuildingCount = kvp.Value.currentBuildingCount;
+                    }
                 }
             }
 

@@ -11,6 +11,27 @@ namespace LifeCraft.Systems
     [CreateAssetMenu(fileName = "AssessmentQuizManager", menuName = "LifeCraft/Assessment Quiz Manager")]
     public class AssessmentQuizManager : ScriptableObject
     {
+
+        // Singleton Instance (to ensure only one instance of the class exists)
+        private static AssessmentQuizManager _instance; // Create a private static instance of the class. 
+        public static AssessmentQuizManager Instance // Create a public static instance of the class that can be accessed from other scripts. 
+        {
+            get 
+            {
+                if (_instance == null) // If the instance is null, create a new instance of the class. 
+                {
+                    _instance = Resources.Load<AssessmentQuizManager>("MyAssessmentQuizManager"); // Load the AssessmentQuizManager asset from the Assets/Resources/ folder on Unity Editor. 
+                    
+                    if (_instance == null) // If the instance is STILL null, throw an error. 
+                    {
+                        Debug.LogError("MyAssessmentQuizManager not found in Resources folder on Unity Editor!"); 
+                    }
+                }
+
+                return _instance; // Return the instance of the class. 
+            }
+        }
+
         [System.Serializable]
         public class QuizQuestion
         {

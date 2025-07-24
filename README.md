@@ -297,6 +297,23 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Vegetation**: 11+ vegetation sprites for environmental detail
 - **People Sprites**: 23+ character sprites for city population
 
+### 🎨 Visual Asset Expansion
+- **Comprehensive Sprite Library**: Over 500+ sprites across all categories
+- **Building Sprites**: 141+ building sprites with regular and damaged states
+- **Ground & Road Sprites**: 109+ ground and road sprites for city infrastructure
+- **Vehicle Sprites**: 167+ vehicle sprites for city atmosphere
+- **Prop Sprites**: 38+ prop sprites for city decoration
+- **Vegetation Sprites**: 11+ vegetation sprites for environmental detail
+- **People Sprites**: 23+ character sprites for city population
+- **Icon Sprites**: 24+ icon sprites for UI elements
+
+### 🔧 Advanced Development Tools
+- **BatchAssignPrefab**: Automated prefab assignment for building types
+- **BatchAssignSprites**: Automated sprite assignment for UI elements
+- **CityBuilderAutoPopulateEditor**: Automated population of building types from text files
+- **DecorationlistImporter**: Automated import of decoration lists and assets
+- **LevelUpDebugger**: Debug script for testing level-up and building unlock systems
+
 ## 🚀 Latest Major Updates (Since Last GitHub Push)
 
 ### 🎯 Level-Up UI Integration System (Phase 5D)
@@ -309,6 +326,27 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Visual Feedback**: Color-coded EXP popups (Green=Easy, Yellow=Medium, Orange=Hard, Red=Expert)
 - **Building Unlock Notifications**: Real-time notifications when new buildings become available
 - **Region Unlock System**: Automatic region unlocking when first building of a region becomes available
+
+### 🖼️ Unified Sprite Management System
+- **Centralized Sprite Storage**: All sprites now stored in CityBuilder for single source of truth
+- **Automatic Sprite Assignment**: Shop UI automatically pulls sprites from CityBuilder
+- **Consistent Visual Experience**: All UI elements use the same sprite source
+- **Eliminated Duplication**: Removed duplicate sprite fields from BuildingShopItem class
+- **Enhanced Visual Feedback**: All UI elements now display appropriate sprites
+
+### 🎨 Enhanced Purchase & Chest Systems
+- **Visual Purchase Confirmations**: Players can see items before purchasing
+- **Chest Button Sprites**: Decor and Premium chest buttons display their respective sprites
+- **Faded Button Design**: Chest sprites automatically faded for better text readability
+- **Prize Pool Visualization**: Prize pools now show decoration sprites alongside names
+- **Improved User Experience**: Clear visual feedback for all interactions
+
+### 🏗️ Advanced Grid Placement System
+- **Automatic Grid Sizing**: Items automatically resize to match grid cell dimensions
+- **Perfect Grid Alignment**: Items fit exactly within grid cells without overlap
+- **Dynamic Sizing**: Grid cell size changes automatically adjust placed item sizes
+- **Shop Item Sizing**: Fixed oversized building icons with proper layout controls
+- **Responsive Layout**: Better handling of UI element sizing and positioning
 
 ### 🤖 AI-Powered UI System
 - **AIUIGenerator**: Revolutionary AI-driven UI generation system that creates dynamic, context-aware user interfaces
@@ -468,6 +506,13 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Building Unlock Logic**: Dynamic building unlocks based on player level and region sequence
 - **EXP Popup System**: Visual feedback for all EXP gains with difficulty-based colors
 - **Notification System**: Real-time notifications for building and region unlocks
+- **Unified Sprite System**: Consolidated sprite management eliminating duplication
+- **Visual Purchase Confirmations**: Enhanced purchase dialogs with item sprites
+- **Chest Button Sprites**: Visual chest buttons with automatic fading
+- **Grid Placement Optimization**: Perfect grid alignment and automatic sizing
+- **UI Layout Improvements**: Better responsive design and element sizing
+- **Prize Pool Visualization**: Visual prize pools with decoration sprites
+- **Code Consolidation**: Removed duplicate sprite fields and improved maintainability
 
 ### 🚧 Current Development Focus
 - **Performance Optimization**: Improving save/load performance
@@ -480,6 +525,10 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Level-Up System Polish**: Fine-tuning EXP calculations and unlock timing
 - **Notification System**: Enhancing visual feedback for unlocks and achievements
 - **Progression Balance**: Balancing EXP rewards and building unlock progression
+- **Sprite System Optimization**: Further improvements to unified sprite management
+- **Visual Consistency**: Ensuring consistent visual experience across all UI elements
+- **Grid System Enhancement**: Advanced grid placement features and optimizations
+- **Chest System Polish**: Enhanced chest mechanics and reward visualization
 
 ## Getting Started
 
@@ -519,6 +568,6 @@ This project uses various asset packs with their respective licenses. Please ref
 
 ---
 
-*Last Updated: July 2025*
+*Last Updated: January 2025*
 *Developed by:* 
-*Development Status: Active Development - Core Systems Complete with Level-Up Integration* 
+*Development Status: Active Development - Core Systems Complete with Level-Up Integration and Enhanced Visual Systems* 
