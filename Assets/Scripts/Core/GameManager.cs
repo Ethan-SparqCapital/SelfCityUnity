@@ -630,7 +630,9 @@ namespace LifeCraft.Core
                             // This sets up the correct region unlock order based on quiz scores
                             if (regionUnlockSystem != null)
                             {
-                                regionUnlockSystem.SetStartingRegion(selectedRegion, quizScores);
+                                // Do NOT call SetStartingRegion here - it resets the unlock states!
+                                // Instad, just set the unlock order without changing unlock states. 
+                                regionUnlockSystem.SetUnlockOrderOnly(selectedRegion, quizScores);
                             }
                             
                             // STEP 5: Re-initialize the PlayerLevelManager building unlock system

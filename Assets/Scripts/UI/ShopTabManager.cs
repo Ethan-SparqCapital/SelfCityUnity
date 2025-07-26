@@ -18,13 +18,46 @@ namespace LifeCraft.UI
         public UnityEngine.UI.Button creativeCommonsTabButton;
         public UnityEngine.UI.Button socialSquareTabButton;
 
+        [Header("Level System Integration")]
+        [SerializeField] private PlayerLevelManager playerLevelManager; 
+
         private void Start() // Unity's Start method, called when the script instance is being loaded. 
         {
             ShowTodayContent(); // Show today's content by default when the game starts. 
             UpdateRegionTabVisibility(); // Update which region tabs are visible based on unlocks
-            
+
+            // Subscribe to PlayerLevelManager events for real-time updates
+            if (PlayerLevelManager.Instance != null) // If the PlayerLevelManager instance exists, 
+            {
+                PlayerLevelManager.Instance.OnRegionUnlocked += OnRegionUnlocked; // then have ShopTabManager's OnRegionUnlocked method (to handle the region unlock events) subscribe to PlayerLevelManager's OnRegionUnlocked (AssessmentQuizManager.RegionType) event to listen for when PlayerLevelManager initiates a region-unlock. 
+                playerLevelManager = PlayerLevelManager.Instance; // Place the PlayerLevelManager instance into the playerLevelManager variable. 
+            }
+            else
+            {
+                Debug.LogWarning("PlayerLevelManager.Instance is null in ShopTabManager");
+            }
+
             // Force refresh after a short delay to ensure GameManager is initialized
             StartCoroutine(RefreshAfterDelay());
+        }
+
+        private void OnDestroy()
+        {
+            // Unsubscribe from events to prevent memory leaks
+            if (PlayerLevelManager.Instance != null)
+            {
+                PlayerLevelManager.Instance.OnRegionUnlocked -= OnRegionUnlocked;
+            }
+        }
+
+        /// <summary>
+        /// Called when a region is unlocked by PlayerLevelManager
+        /// </summary>
+        private void OnRegionUnlocked(AssessmentQuizManager.RegionType region)
+        {
+            Debug.Log($"ShopTabManager: Region {AssessmentQuizManager.GetRegionDisplayName(region)} unlocked!");
+            // Force refresh the tab visibility to show the new region
+            UpdateRegionTabVisibility();
         }
         
         /// <summary>

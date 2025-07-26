@@ -500,19 +500,19 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Assessment System**: Comprehensive assessment and progress tracking
 - **Chest System**: Enhanced chest mechanics and reward distribution
 - **District System**: New district unlocking and management system
-- **Performance**: Significant performance improvements across all systems
-- **Level-Up System**: Complete player progression system with EXP and building unlocks
-- **EXP Progress Bar**: Real-time visual feedback for player progression
-- **Building Unlock Logic**: Dynamic building unlocks based on player level and region sequence
-- **EXP Popup System**: Visual feedback for all EXP gains with difficulty-based colors
-- **Notification System**: Real-time notifications for building and region unlocks
-- **Unified Sprite System**: Consolidated sprite management eliminating duplication
-- **Visual Purchase Confirmations**: Enhanced purchase dialogs with item sprites
-- **Chest Button Sprites**: Visual chest buttons with automatic fading
-- **Grid Placement Optimization**: Perfect grid alignment and automatic sizing
-- **UI Layout Improvements**: Better responsive design and element sizing
-- **Prize Pool Visualization**: Visual prize pools with decoration sprites
-- **Code Consolidation**: Removed duplicate sprite fields and improved maintainability
+- [x] Performance: Significant performance improvements across all systems
+- [x] Level-Up System: Complete player progression system with EXP and building unlocks
+- [x] EXP Progress Bar: Real-time visual feedback for player progression
+- [x] Building Unlock Logic: Dynamic building unlocks based on player level and region sequence
+- [x] EXP Popup System: Visual feedback for all EXP gains with difficulty-based colors
+- [x] Notification System: Real-time notifications for building and region unlocks
+- [x] Unified Sprite System: Consolidated sprite management eliminating duplication
+- [x] Visual Purchase Confirmations: Enhanced purchase dialogs with item sprites
+- [x] Chest Button Sprites: Visual chest buttons with automatic fading
+- [x] Grid Placement Optimization: Perfect grid alignment and automatic sizing
+- [x] UI Layout Improvements: Better responsive design and element sizing
+- [x] Prize Pool Visualization: Visual prize pools with decoration sprites
+- [x] Code Consolidation: Removed duplicate sprite fields and improved maintainability
 
 ### 🚧 Current Development Focus
 - **Performance Optimization**: Improving save/load performance
@@ -571,3 +571,129 @@ This project uses various asset packs with their respective licenses. Please ref
 *Last Updated: January 2025*
 *Developed by:* 
 *Development Status: Active Development - Core Systems Complete with Level-Up Integration and Enhanced Visual Systems* 
+
+---
+
+# 🚀 Recent Major Updates (Since Last GitHub Push)
+
+## 🎯 Comprehensive Level-Up System Implementation (Phase 5D)
+
+### 🏆 Player Progression System
+- **PlayerLevelManager**: Complete player progression system with exponential EXP scaling (1.5x multiplier per level)
+- **Level-Based Building Unlocks**: All 80+ buildings unlock progressively from levels 1-40 based on region unlock sequence
+- **Dynamic Region Unlocking**: Regions unlock automatically when their first building becomes available at the player's current level
+- **Assessment-Based Progression**: Building unlock order determined by player's assessment quiz results and starting region choice
+
+### 📊 Real-Time EXP & Level UI
+- **EXPProgressBarManager**: Animated progress bar with smooth fill animations and level-up flashing effects
+- **EXP Popup System**: Floating EXP numbers with difficulty-based color coding (Green=Easy, Yellow=Medium, Orange=Hard, Red=Expert)
+- **LevelUpManager**: Celebratory level-up animations with fade effects and unlock notifications
+- **Visual Feedback**: Color-coded progress indicators and real-time UI updates
+
+### 🏪 Shop System Integration with Level-Up
+- **Dynamic Shop Population**: All region shops (Health Harbor, Mind Palace, Creative Commons, Social Square) now only display buildings unlocked at the current player level
+- **Real-Time Shop Updates**: Shops automatically refresh when player levels up, showing newly unlocked buildings
+- **Level-Based Filtering**: `PlayerLevelManager.IsBuildingUnlocked()` ensures only appropriate buildings are available
+- **Event-Driven Updates**: Shops subscribe to `PlayerLevelManager.OnLevelUp` events for instant refresh
+
+### 🏗️ City Building Integration
+- **Level-Based Building Placement**: City page now respects building unlock levels - only unlocked buildings can be placed
+- **EXP Rewards for Building Placement**: 
+  - Decorations: 5 EXP (Easy difficulty)
+  - Buildings: Variable EXP based on unlock level using formula: `baseBuildingEXP * (expMultiplier ^ (unlockLevel - 1))`
+- **Visual EXP Feedback**: Building placement shows floating EXP numbers with appropriate difficulty colors
+- **Region Lock System**: City map shows locked regions with level requirements and progress indicators
+
+### 🎮 Enhanced Quest & Assessment Integration
+- **Hybrid EXP Calculation**: Quest completion rewards EXP based on difficulty detection:
+  - Easy Quests: 5 EXP (Green popup)
+  - Medium Quests: 10 EXP (Yellow popup)  
+  - Hard Quests: 15 EXP (Orange popup)
+  - Expert Quests: 20 EXP (Red popup)
+- **Quest Difficulty Detection**: Automatic classification of quests based on content analysis
+- **Daily Quest Completion Rewards**: Balance Ticket rewards for completing all daily quests
+- **Assessment-Driven Progression**: Player's assessment results determine region unlock sequence and building availability
+
+### 🔧 Advanced Region Unlock System
+- **RegionUnlockSystem**: Comprehensive region management with progress tracking and save/load functionality
+- **Dynamic Unlock Sequence**: Region unlock order determined by assessment quiz scores and player's starting region choice
+- **Building Count Tracking**: Tracks buildings placed in each region for unlock requirements
+- **Visual Progress Indicators**: Shows unlock progress and requirements for each region
+- **Automatic Region Unlocking**: Regions unlock when their first building becomes available at the current player level
+
+### 🎨 Enhanced Visual Systems
+- **Unified Sprite Management**: All sprites now stored centrally in CityBuilder, eliminating duplication
+- **Visual Purchase Confirmations**: Shop purchase dialogs now show building sprites from CityBuilder
+- **Chest Button Sprites**: Decor and Premium chest buttons display their respective sprites with automatic fading
+- **Prize Pool Visualization**: Prize pools show decoration sprites alongside names
+- **Grid Placement Optimization**: Perfect grid alignment with automatic sizing for placed items
+
+### 🛠️ Technical Improvements
+- **Event-Driven Architecture**: All level-up components use events for loose coupling
+- **Singleton Pattern**: Manager classes use singleton pattern for easy access
+- **Comprehensive Save/Load**: Level-up data persists across game sessions
+- **Debug Tools**: LevelUpDebugger script for testing level-up and unlock systems
+- **Performance Optimization**: Efficient sprite loading and UI updates
+- **Memory Management**: Proper event subscription/unsubscription to prevent memory leaks
+
+### 📱 UI/UX Enhancements
+- **Responsive Level Display**: Real-time level and EXP display with smooth animations
+- **Unlock Notifications**: Floating notifications for building and region unlocks
+- **Progress Visualization**: Clear visual feedback for all progression milestones
+- **Accessibility Features**: Better contrast and text sizing for all UI elements
+- **Mobile Optimization**: Touch-friendly controls and responsive design
+
+### 🎯 Key Implementation Details
+
+#### Building Unlock Logic
+- **80+ Buildings**: All buildings from 4 regions (Health Harbor, Mind Palace, Creative Commons, Social Square)
+- **Level Distribution**: Buildings unlock across levels 1-40 using formula: `1 + (i * 40) / totalBuildings`
+- **Region Priority**: Buildings from regions that unlock first become available at lower levels
+- **Excitement Level**: Within each region, buildings unlock from least to most exciting
+
+#### EXP Calculation System
+- **Exponential Progression**: Base 100 EXP per level with 1.5x multiplier
+- **Quest Rewards**: 5-20 EXP based on difficulty detection
+- **Building Placement**: Variable EXP based on building unlock level
+- **Decoration Placement**: Fixed 5 EXP for all decorations
+
+#### Region Unlock Sequence
+- **Assessment-Based**: Unlock order determined by quiz scores and starting region
+- **Dynamic Progression**: Regions unlock when first building becomes available
+- **Visual Feedback**: Locked regions show level requirements and progress
+- **Save Persistence**: Region unlock state saved and restored between sessions
+
+### 🔄 Integration Points
+
+#### Shop Pages Updated
+- **HealthHarborShopUI**: Now filters buildings by `PlayerLevelManager.IsBuildingUnlocked()`
+- **MindPalaceShopUI**: Subscribes to level-up events for real-time refresh
+- **CreativeCommonsShopUI**: Shows only buildings available at current level
+- **SocialSquareShopUI**: Dynamic population based on player progression
+
+#### City Page Updated
+- **CityMapZoomController**: Shows locked regions with level requirements
+- **PlacedItemUI**: Rewards EXP for building placement with visual feedback
+- **Building Placement**: Respects unlock levels and shows appropriate feedback
+- **Region Progress**: Real-time updates based on player level and unlocks
+
+#### Quest System Enhanced
+- **ToDoListManager**: Calculates EXP rewards using hybrid difficulty system
+- **Quest Completion**: Shows difficulty-based EXP popups
+- **Daily Quest Rewards**: Balance Ticket rewards for completion
+- **Assessment Integration**: Quest difficulty affects progression speed
+
+### 📊 Performance & Optimization
+- **Efficient Event System**: Minimal performance impact from level-up events
+- **Optimized UI Updates**: Only necessary UI elements update on level changes
+- **Memory Management**: Proper cleanup of event subscriptions
+- **Save/Load Optimization**: Efficient serialization of level-up data
+- **Sprite Management**: Centralized sprite storage reduces memory usage
+
+### 🧪 Testing & Debug Features
+- **LevelUpDebugger**: Comprehensive testing tools for level-up system
+- **Debug Logging**: Detailed logging for troubleshooting progression issues
+- **Force Reset Functions**: Developer tools for testing unlock systems
+- **Visual Debugging**: Clear visual indicators for all unlock states
+
+This comprehensive level-up system transforms SelfCity from a simple city-building game into a rich progression-based experience where every action contributes to player advancement, with the City and Shop pages now fully integrated with the progression system to provide a cohesive and engaging gameplay experience. 

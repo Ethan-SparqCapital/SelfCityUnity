@@ -2765,8 +2765,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6aae0a27b7257de4b99b80d751256429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: 1
-  currentEXP: 0
+  currentLevel: 10
+  currentEXP: 5730
   baseEXPPerLevel: 100
   expMultiplier: 1.5
 --- !u!4 &168474744
@@ -3334,8 +3334,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 407775242}
   m_HandleRect: {fileID: 407775241}
   m_Direction: 2
-  m_Value: -0.000000630203
-  m_Size: 0.49554843
+  m_Value: 0
+  m_Size: 0.49553
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5070,7 +5070,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000017166138, y: 1937.0012}
+  m_AnchoredPosition: {x: 0.000017166138, y: 1937.0001}
   m_SizeDelta: {x: 0.000009536743, y: 3840}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &297440294
@@ -5161,8 +5161,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 515050188}
   m_HandleRect: {fileID: 515050186}
   m_Direction: 2
-  m_Value: -0.000000630203
-  m_Size: 0.49554843
+  m_Value: 0
+  m_Size: 0.49553
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -15089,7 +15089,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000017166138, y: 1937.0012}
+  m_AnchoredPosition: {x: 0.000017166138, y: 1937.0001}
   m_SizeDelta: {x: 0.000009536743, y: 3840}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &637185778
@@ -27661,6 +27661,7 @@ MonoBehaviour:
   lockedRegionPopup: {fileID: 429154657}
   lockedRegionText: {fileID: 1488690360}
   closeLockedRegionPopupButton: {fileID: 1054359160}
+  playerLevelManager: {fileID: 0}
   regions:
   - regionName: Health Harbor
     anchoredPosition: {x: 735, y: -700}

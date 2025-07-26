@@ -139,7 +139,7 @@ namespace LifeCraft.Systems
 
             // STEP 4: Set the starting region and determine unlock order based on quiz scores
             // This is the key step that determines which regions unlock in what order
-            regionUnlockSystem.SetStartingRegion(selectedRegion, quizScores); // Set the starting region based on the player's selection and quiz scores. This will also determine the unlock order of regions based on the quiz scores.  
+            regionUnlockSystem.SetUnlockOrderOnly(selectedRegion, quizScores); // Set the REGION UNLOCK ORDER based on the player's selection for starting region and quiz scores. This will also determine the unlock order of regions based on the quiz scores.  
             var unlockOrder = regionUnlockSystem.GetUnlockOrder(); // Call the "GetUnlockOrder" method from the RegionUnlockSystem file to get the correct unlock order of regions. 
 
             Debug.Log($"THE PROPER Region unlock order: {string.Join(", ", unlockOrder)}"); // Log the unlock order for debugging purposes.
@@ -373,14 +373,20 @@ namespace LifeCraft.Systems
                     string firstBuilding = _regionBuildings[region][0]; // Get the first building name for this region at index 0. 
 
                     // Check if this first building unlocks at the current player level:
-                    if (_buildingUnlockLevels.ContainsKey(firstBuilding) && _buildingUnlockLevels[firstBuilding] == currentLevel) // If the first building exists in the _buildingUnlockLevels dictionary and its unlock level matches the current player level, 
+                    if (_buildingUnlockLevels.ContainsKey(firstBuilding) && _buildingUnlockLevels[firstBuilding] <= currentLevel) // If the first building exists in the _buildingUnlockLevels dictionary and its unlock level matches the current player level, 
                     {
                         // Unlock the region:
-                        regionUnlockSystem.ForceUnlockRegion(region); // Call the ForceUnlockRegion method from the RegionUnlockSystem to unlock the region. 
+                        regionUnlockSystem.UnlockRegionByLevel(region); // Call the UnlockRegionByLevel method from the RegionUnlockSystem to unlock the region if the player has reached the required level. 
                         OnRegionUnlocked?.Invoke(region); // Trigger the OnRegionUnlocked event with the region type in order to notify other systems that the region has been unlocked. 
                         Debug.Log($"Region {region} unlocked at level {currentLevel}!"); // Log the region name and current level for debugging purposes. 
                     }
                 }
+            }
+
+            // Save the game to persist the unlock state
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.SaveGame();
             }
         }
 
@@ -447,15 +453,25 @@ namespace LifeCraft.Systems
             return unlockedBuildings;
         }
 
+        public List<string> GetRegionBuildings(AssessmentQuizManager.RegionType region)
+        {
+            if (_regionBuildings.TryGetValue(region, out var buildings)) // Try to get the list of buildings from the _regionBuildings Dictionary for the specified region. 
+            {
+                return new List<string>(buildings); // Return a new list with the building names of that specified region. 
+            }
+
+            return null; // Otherwise, return nothing. 
+        }
+
         public BuildingUnlockSaveData GetSaveData()
         {
             return new BuildingUnlockSaveData
             {
-                buildingUnlockLevels = _buildingUnlockLevels != null 
-                    ? new Dictionary<string, int>(_buildingUnlockLevels) 
+                buildingUnlockLevels = _buildingUnlockLevels != null
+                    ? new Dictionary<string, int>(_buildingUnlockLevels)
                     : new Dictionary<string, int>(), // Create a copy of the building unlock levels dictionary. 
-                regionBuildings = _regionBuildings != null 
-                    ? new Dictionary<AssessmentQuizManager.RegionType, List<string>>(_regionBuildings) 
+                regionBuildings = _regionBuildings != null
+                    ? new Dictionary<AssessmentQuizManager.RegionType, List<string>>(_regionBuildings)
                     : new Dictionary<AssessmentQuizManager.RegionType, List<string>>(), // Create a copy of the region buildings dictionary. 
                 currentLevel = currentLevel, // Save the current player level. 
                 currentEXP = currentEXP // Save the current player EXP. 

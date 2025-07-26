@@ -25,12 +25,15 @@ namespace LifeCraft.UI
         [SerializeField] private bool showOnStart = true;
         [SerializeField] private float updateInterval = 1f; // How often to update the display
 
+        [Header("Level System Integration")]
+        [SerializeField] private PlayerLevelManager playerLevelManager;
+
         private float _lastUpdateTime;
 
         private void Start()
         {
             Debug.Log("RegionProgressUI Start() called");
-            
+
             if (closeButton != null)
             {
                 closeButton.onClick.AddListener(HideProgressPanel);
@@ -41,15 +44,18 @@ namespace LifeCraft.UI
                 Debug.LogWarning("Close button is null!");
             }
 
-            // Subscribe to building count changes to update progress immediately
-            if (GameManager.Instance?.RegionUnlockSystem != null)
+            // Subscribe to PlayerLevelManager events for real-time updates
+            if (PlayerLevelManager.Instance != null)
             {
-                GameManager.Instance.RegionUnlockSystem.OnBuildingCountChanged += OnBuildingCountChanged;
-                Debug.Log("Subscribed to RegionUnlockSystem.OnBuildingCountChanged event");
+                PlayerLevelManager.Instance.OnRegionUnlocked += OnRegionUnlocked; // Listen for when regions are unlocked. 
+                PlayerLevelManager.Instance.OnLevelUp += OnLevelUp; // Listen for when the player levels up.
+                playerLevelManager = PlayerLevelManager.Instance; // Assign the PlayerLevelManager instance to the variable. 
+                Debug.Log("Subscribed to PlayerLevelManager events");
             }
-
-            // Note: toggleButton listener is set up in the scene file, so we don't add it here
-            // to avoid duplicate calls
+            else
+            {
+                Debug.LogWarning("PlayerLevelManager.Instance is null in RegionProgressUI");
+            }
 
             if (showOnStart)
                 ShowProgressPanel();
@@ -57,6 +63,17 @@ namespace LifeCraft.UI
                 HideProgressPanel();
         }
 
+        /// <summary>
+        /// Called when a region is unlocked by PlayerLevelManager
+        /// </summary>
+        private void OnRegionUnlocked(AssessmentQuizManager.RegionType region)
+        {
+            Debug.Log($"RegionProgressUI: Region {AssessmentQuizManager.GetRegionDisplayName(region)} unlocked!");
+            // Force refresh the progress display
+            UpdateProgressDisplay();
+        }
+
+        /*
         private void Update()
         {
             // Only update if the panel is visible and enough time has passed
@@ -66,6 +83,7 @@ namespace LifeCraft.UI
                 _lastUpdateTime = Time.time;
             }
         }
+        */
 
         /// <summary>
         /// Show the progress panel
@@ -74,7 +92,7 @@ namespace LifeCraft.UI
         {
             if (progressPanel != null)
                 progressPanel.SetActive(true);
-            
+
             UpdateProgressDisplay();
         }
 
@@ -101,15 +119,15 @@ namespace LifeCraft.UI
         public void ToggleProgressPanel()
         {
             Debug.Log("ToggleProgressPanel called");
-            
+
             if (progressPanel != null)
             {
                 bool isActive = progressPanel.activeSelf;
                 Debug.Log($"Progress panel is currently {(isActive ? "active" : "inactive")}");
-                
+
                 progressPanel.SetActive(!isActive);
                 Debug.Log($"Progress panel set to {(isActive ? "inactive" : "active")}");
-                
+
                 if (!isActive)
                 {
                     UpdateProgressDisplay(); // Refresh data when showing
@@ -122,7 +140,7 @@ namespace LifeCraft.UI
         }
 
         /// <summary>
-        /// Update the progress display with current unlock information
+        /// Update the progress display with current level-based unlock information
         /// </summary>
         private void UpdateProgressDisplay()
         {
@@ -147,26 +165,40 @@ namespace LifeCraft.UI
             {
                 var startingRegion = unlockSystem.GetStartingRegion();
                 
-                var startingRegionData = unlockSystem.GetRegionData(startingRegion);
-                if (startingRegionData == null)
-                {
-                    Debug.LogError($"Starting region data is null for {AssessmentQuizManager.GetRegionDisplayName(startingRegion)}!");
-                    return;
-                }
-                
-                Debug.Log($"Starting region data: {startingRegionData.regionName}, Buildings: {startingRegionData.currentBuildingCount}/{startingRegionData.buildingsRequiredToUnlock}");
-                
                 if (progressTitleText != null)
                     progressTitleText.text = $"Complete {AssessmentQuizManager.GetRegionDisplayName(startingRegion)}";
                 
                 if (progressDescriptionText != null)
-                    progressDescriptionText.text = $"Place buildings in {AssessmentQuizManager.GetRegionDisplayName(startingRegion)} to unlock the next region";
+                    progressDescriptionText.text = $"Reach the required level to unlock the next region";
+                
+                // Show level-based progress for starting region
+                int requiredLevel = GetRequiredLevelForRegion(startingRegion);
+                int currentLevel = PlayerLevelManager.Instance != null ? PlayerLevelManager.Instance.GetCurrentLevel() : 1;
                 
                 if (progressBar != null)
-                    progressBar.value = unlockSystem.GetUnlockProgress(startingRegion);
+                {
+                    if (requiredLevel > 0)
+                    {
+                        float progress = currentLevel >= requiredLevel ? 1f : (float)currentLevel / requiredLevel;
+                        progressBar.value = Mathf.Clamp01(progress);
+                    }
+                    else
+                    {
+                        progressBar.value = 0f;
+                    }
+                }
                 
                 if (progressText != null)
-                    progressText.text = $"{startingRegionData.currentBuildingCount} / {startingRegionData.buildingsRequiredToUnlock} buildings";
+                {
+                    if (requiredLevel > 0)
+                    {
+                        progressText.text = $"Level {currentLevel} / {requiredLevel}";
+                    }
+                    else
+                    {
+                        progressText.text = "Level requirement not found";
+                    }
+                }
                 
                 return;
             }
@@ -190,113 +222,80 @@ namespace LifeCraft.UI
             }
 
             // Show progress for next region to unlock
-            var nextRegionData = unlockSystem.GetRegionData(nextRegion.Value);
-            if (nextRegionData == null)
-            {
-                Debug.LogError($"Next region data is null for {AssessmentQuizManager.GetRegionDisplayName(nextRegion.Value)}!");
-                return;
-            }
-
-            // Update title
             if (progressTitleText != null)
                 progressTitleText.text = $"Unlock {AssessmentQuizManager.GetRegionDisplayName(nextRegion.Value)}";
 
-            // Find the region that needs to be completed to unlock the next region
-            var regionToComplete = GetRegionToCompleteForNextUnlock(unlockSystem, nextRegion.Value);
-            
-            // Update description
+            // Get level requirements for the next region
+            int nextRegionRequiredLevel = GetRequiredLevelForRegion(nextRegion.Value);
+            int currentPlayerLevel = PlayerLevelManager.Instance != null ? PlayerLevelManager.Instance.GetCurrentLevel() : 1;
+
+            // Update description with level requirement
             if (progressDescriptionText != null)
             {
-                if (regionToComplete.HasValue)
+                if (nextRegionRequiredLevel > 0)
                 {
-                    var regionToCompleteData = unlockSystem.GetRegionData(regionToComplete.Value);
-                    if (regionToCompleteData != null)
-                    {
-                        progressDescriptionText.text = $"Complete {AssessmentQuizManager.GetRegionDisplayName(regionToComplete.Value)} to unlock {AssessmentQuizManager.GetRegionDisplayName(nextRegion.Value)}";
-                    }
-                    else
-                    {
-                        progressDescriptionText.text = $"Place buildings to unlock {AssessmentQuizManager.GetRegionDisplayName(nextRegion.Value)}";
-                    }
+                    progressDescriptionText.text = $"Reach Level {nextRegionRequiredLevel} to unlock {AssessmentQuizManager.GetRegionDisplayName(nextRegion.Value)}";
                 }
                 else
                 {
-                    progressDescriptionText.text = $"Place buildings to unlock {AssessmentQuizManager.GetRegionDisplayName(nextRegion.Value)}";
+                    progressDescriptionText.text = $"Complete requirements to unlock {AssessmentQuizManager.GetRegionDisplayName(nextRegion.Value)}";
                 }
             }
 
-            // Update progress bar and text
-            var progress = unlockSystem.GetUnlockProgress(nextRegion.Value);
-            
+            // Calculate level-based progress
             if (progressBar != null)
-                progressBar.value = progress;
-            
+            {
+                if (nextRegionRequiredLevel > 0)
+                {
+                    float progress = 0f;
+                    if (currentPlayerLevel >= nextRegionRequiredLevel)
+                    {
+                        progress = 1f; // Fully unlocked
+                    }
+                    else
+                    {
+                        // Calculate progress towards the required level
+                        int previousLevel = nextRegionRequiredLevel - 1;
+                        int levelsNeeded = nextRegionRequiredLevel - previousLevel;
+                        int levelsGained = currentPlayerLevel - previousLevel;
+                        progress = Mathf.Clamp01((float)levelsGained / levelsNeeded);
+                    }
+                    progressBar.value = progress;
+                }
+                else
+                {
+                    progressBar.value = 0f;
+                }
+            }
+
+            // Update progress text
             if (progressText != null)
             {
-                if (regionToComplete.HasValue)
+                if (nextRegionRequiredLevel > 0)
                 {
-                    var regionToCompleteData = unlockSystem.GetRegionData(regionToComplete.Value);
-                    if (regionToCompleteData != null)
+                    if (currentPlayerLevel >= nextRegionRequiredLevel)
                     {
-                        progressText.text = $"{regionToCompleteData.currentBuildingCount} / {regionToCompleteData.buildingsRequiredToUnlock} buildings";
+                        progressText.text = $"Ready to unlock! (Level {currentPlayerLevel})";
                     }
                     else
                     {
-                        progressText.text = $"{nextRegionData.currentBuildingCount} / {nextRegionData.buildingsRequiredToUnlock} buildings";
+                        int levelsNeeded = nextRegionRequiredLevel - currentPlayerLevel;
+                        progressText.text = $"Level {currentPlayerLevel} / {nextRegionRequiredLevel} ({levelsNeeded} more level{(levelsNeeded == 1 ? "" : "s")} needed)";
                     }
                 }
                 else
                 {
-                    progressText.text = $"{nextRegionData.currentBuildingCount} / {nextRegionData.buildingsRequiredToUnlock} buildings";
+                    progressText.text = "Level requirement not found";
                 }
             }
         }
 
         /// <summary>
-        /// Get the region that needs to be completed to unlock the next region
+        /// Handle level changes (called when player levels up)
         /// </summary>
-        private AssessmentQuizManager.RegionType? GetRegionToCompleteForNextUnlock(RegionUnlockSystem unlockSystem, AssessmentQuizManager.RegionType nextRegion)
+        private void OnLevelUp(int newLevel)
         {
-            var unlockOrder = unlockSystem.GetUnlockOrder();
-            if (unlockOrder == null || unlockOrder.Count == 0) return null;
-
-            // Get the starting region to exclude it from consideration
-            var startingRegion = unlockSystem.GetStartingRegion();
-            
-            // Create a filtered unlock order that excludes the starting region
-            var filteredUnlockOrder = new List<AssessmentQuizManager.RegionType>();
-            foreach (var region in unlockOrder)
-            {
-                if (region != startingRegion)
-                {
-                    filteredUnlockOrder.Add(region);
-                }
-            }
-
-            // Find the next region in the filtered unlock order
-            int nextRegionIndex = -1;
-            for (int i = 0; i < filteredUnlockOrder.Count; i++)
-            {
-                if (filteredUnlockOrder[i] == nextRegion)
-                {
-                    nextRegionIndex = i;
-                    break;
-                }
-            }
-
-            // If next region is not found or is the first region in filtered order, no prerequisite
-            if (nextRegionIndex <= 0) return null;
-
-            // Return the region that comes before the next region in filtered unlock order
-            return filteredUnlockOrder[nextRegionIndex - 1];
-        }
-
-        /// <summary>
-        /// Handle building count changes (called when buildings are placed or removed)
-        /// </summary>
-        private void OnBuildingCountChanged(AssessmentQuizManager.RegionType region, int newCount)
-        {
-            Debug.Log($"Building count changed for {AssessmentQuizManager.GetRegionDisplayName(region)}: {newCount}");
+            Debug.Log($"Player reached level {newLevel}");
             
             // Only update if the progress panel is visible
             if (progressPanel != null && progressPanel.activeSelf)
@@ -307,16 +306,30 @@ namespace LifeCraft.UI
 
         private void OnDestroy()
         {
-            if (closeButton != null)
-                closeButton.onClick.RemoveListener(HideProgressPanel);
-            
-            // Unsubscribe from events to prevent memory leaks
-            if (GameManager.Instance?.RegionUnlockSystem != null)
+            // Unsubscribe from PlayerLevelManager events to prevent memory leaks
+            if (PlayerLevelManager.Instance != null)
             {
-                GameManager.Instance.RegionUnlockSystem.OnBuildingCountChanged -= OnBuildingCountChanged;
+                PlayerLevelManager.Instance.OnRegionUnlocked -= OnRegionUnlocked;
+                PlayerLevelManager.Instance.OnLevelUp -= OnLevelUp;
+            }
+        }
+        
+        /// <summary>
+        /// Get the required level to unlock a specific region
+        /// </summary>
+        private int GetRequiredLevelForRegion(AssessmentQuizManager.RegionType region)
+        {
+            if (PlayerLevelManager.Instance == null)
+                return -1;
+            
+            var regionBuildings = PlayerLevelManager.Instance.GetRegionBuildings(region); // Get the list of building names for this specific region. 
+            if (regionBuildings != null && regionBuildings.Count > 0)
+            {
+                string firstBuilding = regionBuildings[0]; // Get the first building of this specific region (at index 0 of the list).
+                return PlayerLevelManager.Instance.GetBuildingUnlockLevel(firstBuilding);
             }
             
-            // No need to remove toggleButton listener here as it's set up in the scene file
+            return -1;
         }
     }
 } 

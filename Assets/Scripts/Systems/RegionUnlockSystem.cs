@@ -263,7 +263,7 @@ namespace LifeCraft.Systems
         }
 
         /// <summary>
-        /// Add a building to a region and check for unlocks
+        /// Add a building to a region
         /// </summary>
         public void AddBuildingToRegion(AssessmentQuizManager.RegionType region)
         {
@@ -274,13 +274,58 @@ namespace LifeCraft.Systems
             data.currentBuildingCount++;
             OnBuildingCountChanged?.Invoke(region, data.currentBuildingCount);
 
-            // Check if this region has enough buildings to unlock the next region
-            if (data.currentBuildingCount >= data.buildingsRequiredToUnlock)
+            Debug.Log($"Added building to {data.regionName}. Count: {data.currentBuildingCount}/{data.buildingsRequiredToUnlock}");
+        }
+
+        /// <summary>
+        ///  Unlock a region when called by PlayerLevelManager (PlayerLevelManager is the controller).
+        /// This is called when the first building of a region becomes available at the current level. 
+        /// </summary>
+        /// <param name="region"></param>
+        public void UnlockRegionByLevel(AssessmentQuizManager.RegionType region)
+        {
+            EnsureInitialized();
+
+            // _regionData is a Dictionary that stores: Key = RegionType, Value = RegionUnlockData
+            if (!_regionData.TryGetValue(region, out var data)) // If the region cannot be found in the existing region data, 
             {
-                UnlockNextRegion();
+                Debug.LogError($"Region {region} not found in unlock system");
+                return;
             }
 
-            Debug.Log($"Added building to {data.regionName}. Count: {data.currentBuildingCount}/{data.buildingsRequiredToUnlock}");
+            // "data" variable now contains the RegionUnlockData object for "region" (Health Harbor, Mind Palace, etc.)
+            // It now contains information about "region":
+            // regionType, regionName, isUnlocked flag, buildingsRequiredToUnlock, currentBuildingCount, regionIcon, regionColor. 
+
+            if (data.isUnlocked) // If the region's unlock flag is already set as true, (boolean property of RegionUnlockDatato indicate unlock status)
+            {
+                Debug.LogWarning($"Region {region} is already unlocked!");
+                return;
+            }
+
+            // Otherwise, unlock the region:
+            data.isUnlocked = true; // Set the region's unlock flag as true. 
+
+            // Update the current unlock index to point to the next region in the unlock order:
+            for (int i = 0; i < _unlockOrder.Count; i++)
+            {
+                if (_unlockOrder[i] == region)
+                {
+                    _currentUnlockIndex = i + 1; // Move to the next region in the unlock order. (Increment the current unlock index to the next region to be unlocked)
+                    break;
+                } // This is needed so that methods like GetNextRegionToUnlock() know what is the next region to unlock and how many are left. It also keeps the system maintained for unlocking regions in the correct order. 
+            }
+
+            // Trigger events:
+            OnRegionUnlocked?.Invoke(region); // Alerts systems that a region has been unlocked so that the UI only needs to update when this alert happens. 
+
+            // Save the game to persist the unlock state
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.SaveGame();
+            }
+
+            Debug.Log($"Region {AssessmentQuizManager.GetRegionDisplayName(region)} unlocked by level progression!");
         }
 
         /// <summary>
@@ -496,6 +541,32 @@ namespace LifeCraft.Systems
                 
                 Debug.Log($"Unlocked new region: {AssessmentQuizManager.GetRegionDisplayName(nextRegion.Value)}");
             }
+        }
+
+        /// <summary>
+        /// Set unlock order without resetting unlock states (for load-time re-initialization)
+        /// </summary>
+        public void SetUnlockOrderOnly(AssessmentQuizManager.RegionType region, Dictionary<AssessmentQuizManager.RegionType, int> quizScores = null)
+        {
+            Debug.Log($"Setting unlock order only for region: {region}");
+            
+            EnsureInitialized();
+            
+            _startingRegion = region; // Assign the selected starting region to the variable. 
+            
+            // Set up unlock order based on quiz scores
+            if (quizScores != null)
+            {
+                SetUnlockOrderFromQuizScores(quizScores, region);
+            }
+            else
+            {
+                SetDefaultUnlockOrder(region);
+            }
+            
+            // DON'T reset unlock states - preserve existing unlocked regions
+            Debug.Log($"Unlock order set. Starting region: {AssessmentQuizManager.GetRegionDisplayName(region)}");
+            Debug.Log($"Unlock order: {string.Join(" -> ", _unlockOrder.ConvertAll(r => AssessmentQuizManager.GetRegionDisplayName(r)))}");
         }
 
         /// <summary>

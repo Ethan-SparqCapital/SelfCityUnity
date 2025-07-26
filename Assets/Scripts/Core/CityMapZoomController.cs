@@ -20,6 +20,9 @@ namespace LifeCraft.Core
         [SerializeField] private TMP_Text lockedRegionText;
         [SerializeField] private Button closeLockedRegionPopupButton;
 
+        [Header("Level System Integration")]
+        [SerializeField] private PlayerLevelManager playerLevelManager; 
+
         // Define target positions and scales for each region (customize as needed)
         [System.Serializable]
         public struct RegionZoomData
@@ -60,9 +63,39 @@ namespace LifeCraft.Core
             // Hide popup initially
             if (lockedRegionPopup != null)
                 lockedRegionPopup.SetActive(false);
+
+            // Subscribe to PlayerLevelManager events for real-time updates:
+            if (PlayerLevelManager.Instance != null) // If the PlayerLevelManager instance exists, 
+            {
+                PlayerLevelManager.Instance.OnRegionUnlocked += OnRegionUnlocked; // then have CityMapZoomController's OnRegionUnlocked method (to handle the region unlock events) subscribe to PlayerLevelManager's OnRegionUnlocked (AssessmentQuizManager.RegionType) event to listen for when PlayerLevelManager initiates a region-unlock. 
+                playerLevelManager = PlayerLevelManager.Instance; // Place the PlayerLevelManager instance into the playerLevelManager variable. 
+            }
+
+            else
+            {
+                Debug.LogWarning("PlayerLevelManager.Instance is null in CityMapZoomController");
+            }
                 
             // Force refresh unlock state after a delay to ensure GameManager is initialized
-            StartCoroutine(RefreshUnlockStateAfterDelay());
+                StartCoroutine(RefreshUnlockStateAfterDelay());
+        }
+
+        private void OnDestroy()
+        {
+            if (PlayerLevelManager.Instance != null)
+            {
+                PlayerLevelManager.Instance.OnRegionUnlocked -= OnRegionUnlocked; // Unsubscribe from the PlayerLevelManager's OnRegionUnlocked event. 
+            }
+        }
+
+        /// <summary>
+        /// Called when a region is unlocked by PlayerLevelManager.
+        /// </summary>
+        private void OnRegionUnlocked(AssessmentQuizManager.RegionType region)
+        {
+            Debug.Log($"CityMapZoomController: Region {AssessmentQuizManager.GetRegionDisplayName(region)} unlocked!");
+            // Force refresh the unlock state to update the UI:
+            ForceRefreshUnlockState();
         }
         
         /// <summary>
@@ -71,7 +104,7 @@ namespace LifeCraft.Core
         public void ForceRefreshUnlockState()
         {
             Debug.Log("CityMapZoomController: Force refreshing unlock state");
-            
+
             var unlockSystem = LifeCraft.Systems.RegionUnlockSystem.Instance;
             if (unlockSystem != null)
             {
@@ -220,78 +253,55 @@ namespace LifeCraft.Core
             if (lockedRegionPopup == null || lockedRegionText == null)
                 return;
 
-            var regionType = GetRegionTypeFromName(regionName);
-            var unlockSystem = LifeCraft.Systems.RegionUnlockSystem.Instance;
-            
-            if (unlockSystem != null)
+            var regionType = GetRegionTypeFromName(regionName); // Get the region. 
+
+            // Get the level requirement from the PlayerLevelManager:
+            int requiredLevel = GetRequiredLevelForRegion(regionType); // Call the function to get the unlock level for this region. 
+            int currentLevel = PlayerLevelManager.Instance != null ? PlayerLevelManager.Instance.GetCurrentLevel() : 1; // If the PlayerLevelManager instance exists, get the current player level. Otherwise, default the player level to 1. 
+
+            if (requiredLevel > 0)
             {
-                // Find the prerequisite region that needs to be completed first
-                var prerequisiteRegion = GetPrerequisiteRegion(regionType);
-                if (prerequisiteRegion.HasValue)
+                string message = $"<b>{regionName} is locked!</b>\n\n";
+                message += $"To unlock {regionName}, you must reach <color=#FFD700>Level {requiredLevel}</color>.\n\n";
+                message += $"Current Level: <color=#00FF00>{currentLevel}</color>\n";
+
+                if (currentLevel < requiredLevel)
                 {
-                    var prerequisiteRegionData = unlockSystem.GetRegionData(prerequisiteRegion.Value);
-                    
-                    string message = $"<b>{regionName} is locked!</b>\n\n";
-                    message += $"To unlock {regionName}, you must place {prerequisiteRegionData.buildingsRequiredToUnlock} {AssessmentQuizManager.GetRegionDisplayName(prerequisiteRegion.Value)} buildings.\n\n";
-                    message += $"Current progress in {AssessmentQuizManager.GetRegionDisplayName(prerequisiteRegion.Value)}:\n";
-                    message += $"{prerequisiteRegionData.currentBuildingCount} / {prerequisiteRegionData.buildingsRequiredToUnlock} buildings placed";
-                    
-                    lockedRegionText.text = message;
+                    int levelsNeeded = requiredLevel - currentLevel; // Use subtraction to calculate how many more levels the player needs before reaching the required unlock level. 
+                    message += $"Progress: <color=#FF6B6B>{levelsNeeded} more level{(levelsNeeded == 1 ? "" : "s")} needed</color>"; // Append nothing if needed levels left is just 1, otherwise append an "s" for plurality. 
                 }
+
                 else
                 {
-                    lockedRegionText.text = $"<b>{regionName} is locked!</b>\n\nThis region will be unlocked as you progress through the game.";
+                    message += $"<color=#00FF00>Ready to unlock!</color>";
                 }
+
+                lockedRegionText.text = message; // Set the whole combined message onto the UI text. 
             }
+
             else
             {
-                lockedRegionText.text = $"<b>{regionName} is locked!</b>\n\nThis region is not yet available.";
+                lockedRegionText.text = $"<b>{regionName} is locked!</b>\n\nThis region will be unlocked as you progress through the game.";
             }
 
-            lockedRegionPopup.SetActive(true);
+            lockedRegionPopup.SetActive(true); // Show the UI text panel now. 
         }
 
-        /// <summary>
-        /// Get the prerequisite region that needs to be completed to unlock the target region
-        /// </summary>
-        private AssessmentQuizManager.RegionType? GetPrerequisiteRegion(AssessmentQuizManager.RegionType targetRegion)
+        private int GetRequiredLevelForRegion(AssessmentQuizManager.RegionType region)
         {
-            var unlockSystem = LifeCraft.Systems.RegionUnlockSystem.Instance;
-            if (unlockSystem == null) return null;
-
-            // Get the unlock order from the system
-            var unlockOrder = unlockSystem.GetUnlockOrder();
-            if (unlockOrder == null || unlockOrder.Count == 0) return null;
-
-            // Get the starting region to exclude it from consideration
-            var startingRegion = unlockSystem.GetStartingRegion();
-            
-            // Create a filtered unlock order that excludes the starting region
-            var filteredUnlockOrder = new List<AssessmentQuizManager.RegionType>();
-            foreach (var region in unlockOrder)
+            if (PlayerLevelManager.Instance == null)
             {
-                if (region != startingRegion)
-                {
-                    filteredUnlockOrder.Add(region);
-                }
+                return -1;
             }
 
-            // Find the target region in the filtered unlock order
-            int targetIndex = -1;
-            for (int i = 0; i < filteredUnlockOrder.Count; i++)
+            var regionBuildings = PlayerLevelManager.Instance.GetRegionBuildings(region); // Get the specific region's list of buildings. 
+            if (regionBuildings != null && regionBuildings.Count > 0) // If the specific region's list of buildings exists and has more than 0 buildings, 
             {
-                if (filteredUnlockOrder[i] == targetRegion)
-                {
-                    targetIndex = i;
-                    break;
-                }
+                string firstBuilding = regionBuildings[0]; // Get the first building in the region's list (at index 0).
+                return PlayerLevelManager.Instance.GetBuildingUnlockLevel(firstBuilding); // Return the unlock level for that first building in the region's list. 
             }
 
-            // If target region is not found or is the first region in filtered order, no prerequisite
-            if (targetIndex <= 0) return null;
-
-            // Return the region that comes before the target region in filtered unlock order
-            return filteredUnlockOrder[targetIndex - 1];
+            return -1; // Otherwise, return -1 as the unlock level. 
         }
 
         /// <summary>
