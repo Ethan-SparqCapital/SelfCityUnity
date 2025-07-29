@@ -696,4 +696,113 @@ This project uses various asset packs with their respective licenses. Please ref
 - **Force Reset Functions**: Developer tools for testing unlock systems
 - **Visual Debugging**: Clear visual indicators for all unlock states
 
-This comprehensive level-up system transforms SelfCity from a simple city-building game into a rich progression-based experience where every action contributes to player advancement, with the City and Shop pages now fully integrated with the progression system to provide a cohesive and engaging gameplay experience. 
+This comprehensive level-up system transforms SelfCity from a simple city-building game into a rich progression-based experience where every action contributes to player advancement, with the City and Shop pages now fully integrated with the progression system to provide a cohesive and engaging gameplay experience.
+
+---
+
+# 🆕 Latest Feature Implementation: Profile Page & Journal System
+
+## 📝 Comprehensive Profile Management System
+
+### 👤 User Profile Features
+- **Personal Information Management**: Complete profile system with username, email, age range, and gender fields
+- **Notification Preferences**: Toggle for enabling/disabling in-game notifications
+- **Data Validation**: Real-time validation for email format and username requirements
+- **Profile Persistence**: All profile data automatically saved to PlayerPrefs with instant loading
+- **Professional UI Design**: Clean, modern profile interface with proper form validation and error handling
+
+### 🎮 Game Credits System
+- **Team Credits Display**: Professional credits panel showcasing development team
+- **Company Information**: Displays company name, game title, and version information
+- **Team Member Recognition**: Individual credits for game developer, graphic designer, and concept creators
+- **Modal Interface**: Elegant popup design with smooth open/close animations
+- **Customizable Content**: Easy-to-update team information and company details
+
+## 📖 Advanced Journal System with Mood Tracking
+
+### 🎯 Core Journal Features
+- **Personal Journal Entries**: Create, edit, and manage personal journal entries with automatic date tracking
+- **Mood Tracking System**: 10 different mood options with emojis (Happy 😊, Sad 😔, Angry 😤, Anxious 😰, Tired 😴, Thoughtful 🤔, Calm 😌, Excited 😃, Neutral 😐, Grateful 😍)
+- **Character Count Display**: Real-time character counter with visual feedback (0/1000 limit)
+- **Auto-Save Functionality**: Automatic draft saving every 30 seconds to prevent data loss
+- **Entry Management**: View, edit, and delete journal entries with confirmation dialogs
+
+### 📚 Book Interface Design
+- **Physical Book Metaphor**: Journal entries displayed as book pages with realistic tab design
+- **Navigation System**: Left and right arrow buttons for flipping through journal entries like a real book
+- **Tab-Based Organization**: Journal entries appear as purple-tabbed pages on the right side of the book
+- **Visual Polish**: Cream-colored book background with proper typography and spacing
+- **Responsive Layout**: Book interface adapts to different screen sizes and orientations
+
+### 🔄 Advanced Navigation Features
+- **Sequential Entry Navigation**: Use arrow buttons to flip through all journal entries
+- **Wrapping Navigation**: Seamlessly navigate from last entry to first entry and vice versa
+- **Direct Entry Access**: Click any tab to jump directly to that specific journal entry
+- **Smart Button Visibility**: Navigation arrows only appear when multiple entries exist
+- **Entry Preview**: Tabs show entry previews with date and mood information
+
+### 💾 Data Persistence & Management
+- **JSON-Based Storage**: Journal entries saved to local JSON files for reliable data persistence
+- **Entry Export Functionality**: Export all journal data for backup or analysis
+- **Data Validation**: Comprehensive error handling for file operations and data integrity
+- **Memory Management**: Efficient loading and caching of journal entries
+- **Cross-Session Persistence**: All journal data maintained between game sessions
+
+### 🎨 Enhanced User Experience
+- **Intuitive Interface**: Easy-to-use journal creation and editing interface
+- **Visual Feedback**: Clear visual indicators for save status, character limits, and navigation
+- **Accessibility Features**: High contrast text, readable fonts, and touch-friendly controls
+- **Mobile Optimization**: Optimized for mobile devices with appropriate touch targets
+- **Professional Styling**: Consistent visual design matching the game's overall aesthetic
+
+### 🔧 Technical Implementation
+
+#### Profile Management System
+- **ProfileManager.cs**: Centralized profile data management with validation and persistence
+- **Real-Time Validation**: Email format validation and username length requirements
+- **Event-Driven Updates**: Profile changes trigger UI updates and data persistence
+- **Error Handling**: Comprehensive error handling for data loading and saving operations
+
+#### Journal System Architecture
+- **JournalEntryUI.cs**: Individual journal entry display and interaction management
+- **Mood Tracking Integration**: Seamless integration of mood selection with entry content
+- **Navigation Logic**: Advanced navigation system for flipping through entries
+- **Data Serialization**: Efficient JSON serialization for journal entry storage
+
+#### UI Integration
+- **UIManager Integration**: Seamless integration with existing UI management system
+- **Modal System**: Professional modal dialogs for journal editing and credits display
+- **Responsive Design**: Adaptive layout system for different screen sizes
+- **Visual Consistency**: Unified visual language across all profile and journal interfaces
+
+### 🎯 Key Features Summary
+
+#### Profile Page
+- ✅ **User Information Management**: Username, email, age range, gender
+- ✅ **Notification Preferences**: Toggle for in-game notifications
+- ✅ **Data Validation**: Real-time validation with error messages
+- ✅ **Profile Persistence**: Automatic save/load functionality
+- ✅ **Game Credits**: Professional team credits display
+
+#### Journal System
+- ✅ **Entry Creation**: Create new journal entries with mood tracking
+- ✅ **Entry Editing**: Edit existing entries with full content and mood modification
+- ✅ **Entry Deletion**: Delete entries with confirmation dialogs
+- ✅ **Navigation**: Arrow-based navigation through all entries
+- ✅ **Tab Interface**: Visual tab system for direct entry access
+- ✅ **Auto-Save**: Automatic draft saving to prevent data loss
+- ✅ **Character Limits**: Real-time character counting with visual feedback
+- ✅ **Mood Tracking**: 10 different mood options with emoji support
+- ✅ **Data Export**: Export functionality for journal data backup
+- ✅ **Cross-Session Persistence**: All data maintained between game sessions
+
+### 🚀 Integration with Existing Systems
+- **Seamless UI Integration**: Profile and journal systems integrate perfectly with existing game UI
+- **Consistent Design Language**: Visual design matches the game's overall aesthetic
+- **Performance Optimization**: Efficient data management with minimal performance impact
+- **Mobile Compatibility**: Fully optimized for mobile devices and touch interfaces
+- **Accessibility Compliance**: High contrast, readable fonts, and touch-friendly controls
+
+This comprehensive Profile and Journal system adds significant depth to the SelfCity experience, providing players with personal space for reflection and habit tracking while maintaining the game's focus on healthy lifestyle development. The system is designed to be both functional and emotionally engaging, encouraging players to document their journey toward better habits and personal growth.
+
+--- 
