@@ -36,7 +36,10 @@ namespace LifeCraft.Shop
 
         private void OnPlayerLevelUp(int newLevel) // Called when the player levels up. 
         {
-            PopulateShop(); // Refresh the shop items based on the new level. 
+            // OPTIMIZATION: Instead of repopulating the entire shop (which destroys and recreates all UI elements),
+            // we now only update the lock states of existing shop items. This provides better performance
+            // and smoother user experience when transitioning from locked to unlocked states.
+            UpdateShopItemLockStates(); // Update lock states instead of repopulating
         }
 
         private void OnDestroy()
@@ -48,21 +51,62 @@ namespace LifeCraft.Shop
             }
         }
 
+        /// <summary>
+        /// Populates the shop with ALL available buildings, displaying both unlocked and locked items.
+        /// This creates a better UX by showing players their complete progression path and what's coming next.
+        /// </summary>
         void PopulateShop()
         {
             // Clear old items
             foreach (Transform child in shopGrid)
                 Destroy(child.gameObject);
 
-            // Add new items
+            // UI CHANGE: Show ALL buildings instead of only unlocked ones
+            // This allows players to see their complete progression path and creates anticipation
+            // for future unlocks, improving overall user engagement and satisfaction.
             foreach (var item in buildingDatabase.buildings)
             {
-                // Check if this building is unlocked at the current player level:
-                if (PlayerLevelManager.Instance.IsBuildingUnlocked(item.name))
+                var go = Instantiate(shopItemPrefab, shopGrid);
+                var ui = go.GetComponent<ShopBuildingItemUI>();
+                
+                // Determine lock state for each building based on current player level
+                // This enables the visual distinction between available and future content
+                bool isUnlocked = PlayerLevelManager.Instance.IsBuildingUnlocked(item.name);
+                int unlockLevel = PlayerLevelManager.Instance.GetBuildingUnlockLevel(item.name);
+                
+                // Setup UI with appropriate lock state - locked buildings will show gray overlay,
+                // unlock level requirement, and disabled buy button while maintaining visibility
+                ui.Setup(item, OnBuyClicked, resourceIcon, !isUnlocked, unlockLevel);
+            }
+        }
+
+        /// <summary>
+        /// Updates the lock state of all existing shop items when the player levels up.
+        /// This method provides smooth transitions from locked to unlocked state without
+        /// destroying and recreating UI elements, resulting in better performance and UX.
+        /// </summary>
+        void UpdateShopItemLockStates()
+        {
+            // Iterate through all existing shop items and update their lock states
+            // This approach is more efficient than repopulating the entire shop
+            foreach (Transform child in shopGrid)
+            {
+                var ui = child.GetComponent<ShopBuildingItemUI>();
+                if (ui != null)
                 {
-                    var go = Instantiate(shopItemPrefab, shopGrid);
-                    var ui = go.GetComponent<ShopBuildingItemUI>();
-                    ui.Setup(item, OnBuyClicked, resourceIcon); // Pass the resource icon to the Setup method. 
+                    // Get the building name to check its current unlock status
+                    string buildingName = ui.GetBuildingName();
+                    if (!string.IsNullOrEmpty(buildingName))
+                    {
+                        // Re-evaluate unlock status based on new player level
+                        // This ensures the UI accurately reflects the current game state
+                        bool isUnlocked = PlayerLevelManager.Instance.IsBuildingUnlocked(buildingName);
+                        int unlockLevel = PlayerLevelManager.Instance.GetBuildingUnlockLevel(buildingName);
+                        
+                        // Update the UI to reflect the new lock state
+                        // This will trigger visual changes (overlay removal, button enabling, etc.)
+                        ui.UpdateLockState(!isUnlocked, unlockLevel);
+                    }
                 }
             }
         }

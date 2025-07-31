@@ -3,7 +3,7 @@
 A Unity-based city-building game that helps you build healthy real-life habits while constructing your dream city.
 
 ## 🎮 Game Overview
-SelfCity is a 2D city-building game where players construct and manage their own city while also building healthy habits in real life. The quest system is inspired by real-world wellness, creativity, social, and health activities, encouraging players to take positive actions each day. The game features an intuitive UI system with drag-and-drop functionality, daily quests, a custom quest system, and a comprehensive building system.
+SelfCity is a 2D city-building game where players construct and manage their own city while also building healthy habits in real life. The quest system is inspired by real-world wellness, creativity, social, and health activities, encouraging players to take positive actions each day. The game features an intuitive UI system with drag-and-drop functionality, daily quests, a custom quest system, a comprehensive building system, and a complete authentication and subscription system.
 
 ## ✨ Features
 
@@ -27,6 +27,9 @@ SelfCity is a 2D city-building game where players construct and manage their own
 * **📱 Drag & Drop** – Intuitive building placement system with inventory integration and grid snapping.
 * **🎨 Visual Assets** – Rich collection of sprites and visual elements
 * **🔧 Modular Architecture** – Well-structured codebase for easy expansion
+* **🔐 Authentication System** – Complete user authentication with Google Sign-In, Apple Sign-In, Email/Password, and Guest mode
+* **💎 Subscription Management** – Premium subscription system with exclusive content and features
+* **📝 Profile & Journal System** – Personal profile management and mood-tracking journal
 
 ## 🛠️ Technical Details
 
@@ -35,6 +38,8 @@ SelfCity is a 2D city-building game where players construct and manage their own
 * **Input System:** Unity's new Input System
 * **UI Framework:** Unity UI with TextMesh Pro
 * **Scripting:** C#
+* **Authentication:** Multi-platform authentication system
+* **Platforms:** Android (configured), iOS (ready for Mac setup)
 
 ## 📁 Project Structure
 
@@ -44,10 +49,11 @@ Assets/
 │   ├── Core/           # Game management and core systems
 │   ├── Buildings/      # Building-related scripts
 │   ├── Districts/      # District management
-│   ├── Systems/        # Quest and unlock systems
-│   └── UI/            # User interface scripts (including dynamic quest/To-Do UI)
+│   ├── Systems/        # Quest, unlock, authentication, and subscription systems
+│   ├── Shop/           # Shop and subscription management
+│   └── UI/            # User interface scripts (including authentication UI)
 ├── Scenes/            # Unity scenes
-├── Prefabs/           # Reusable game objects (including ToDoItemPrefab, QuestItem, etc.)
+├── Prefabs/           # Reusable game objects
 ├── Sprites/           # Visual assets and icons
 ├── Materials/         # Materials and shaders
 └── ScriptableObjects/ # Game data and configurations
@@ -59,6 +65,7 @@ Assets/
 
 * Unity 2022.3 LTS or newer
 * Universal Render Pipeline (URP) - will be auto-installed
+* Android Build Support (for mobile development)
 
 ### Installation
 
@@ -68,8 +75,8 @@ Assets/
          * `Assets/`  
          * `Packages/`  
          * `ProjectSettings/`  
-         * (optionally) `UserSettings/`  
-   * Do **not** include `Library/`, `Temp/`, or `Logs/` folders.
+         * `README.md`
+   * Do **not** include `Library/`, `Temp/`, `Logs/`, `UserSettings/`, or any `.keystore` files.
 2. **Open in Unity Hub**  
    * Launch Unity Hub  
    * Click "Open" and select the project folder  
@@ -77,6 +84,11 @@ Assets/
 3. **Open the main scene**  
    * Navigate to `Assets/Scenes/SampleScene.unity`  
    * Press Play to start the game
+
+### Authentication Setup
+
+For full authentication functionality, follow the detailed setup guide:
+- **See:** `Assets/Scripts/UI/Authentication_Setup_Guide.md`
 
 ## 🎯 How to Play
 
@@ -93,6 +105,34 @@ Assets/
 6. **Manage Your Inventory**  
    * All decorations and buildings you win or purchase are stored in your inventory. Use the inventory UI to view, filter, and drag items into your city. Placing an item removes it from inventory; clicking a placed item on the grid returns it to your inventory, supporting all filters and sorting.
 7. **Expand Districts** – Unlock new areas as you progress
+8. **Manage Your Profile** – Access the Profile page to manage your account, view game credits, and use the personal journal system
+
+## 🔐 Authentication & Subscription Features
+
+### **Multi-Platform Authentication**
+- **Google Sign-In**: Seamless Google account integration (Android/Web)
+- **Apple Sign-In**: Apple ID integration (iOS - requires Mac for setup)
+- **Email/Password**: Traditional email authentication
+- **Guest Mode**: Quick start without account creation
+
+### **Premium Subscription System**
+- **Premium Decor Chest**: Exclusive decoration items for subscribers
+- **Premium Buildings**: Special building types only available to premium users
+- **Premium Resources**: 50% resource bonus for premium subscribers
+- **Ad-Free Experience**: No advertisements for premium users
+- **Priority Support**: Enhanced customer support for premium users
+
+### **Profile Management**
+- **Personal Information**: Username, email, age range, gender
+- **Notification Preferences**: Toggle for in-game notifications
+- **Data Persistence**: All profile data automatically saved and restored
+
+### **Journal System**
+- **Personal Journal Entries**: Create, edit, and manage journal entries
+- **Mood Tracking**: 10 different mood options with emoji support
+- **Auto-Save**: Automatic draft saving every 30 seconds
+- **Book Interface**: Physical book metaphor with tab navigation
+- **Data Export**: Export journal data for backup or analysis
 
 ## 📝 Custom Tasks Feature
 
@@ -122,6 +162,9 @@ Assets/
 * `QuestManager.cs` – Quest system management (static, daily, and custom quests)
 * `ResourceManager.cs` – Resource tracking
 * `UIManager.cs` – User interface controller
+* `AuthenticationManager.cs` – Multi-platform authentication system
+* `SubscriptionManager.cs` – Premium subscription management
+* `ProfileManager.cs` – User profile and journal management
 * `CustomTaskModalHandler.cs` – Handles the custom quest modal logic
 * `QuestItemUI.cs` – Handles quest item display and "Add To-Do" logic
 * `ToDoListManager.cs` – Manages the To-Do list and quest completion
@@ -191,7 +234,7 @@ The `Assets/Resources/DecorationNames.txt` file is used to mass-populate the Cit
 # SelfCity Unity Game - Development Progress
 
 ## Project Overview
-SelfCity is a Unity-based city-building game with persistent saving/loading capabilities, featuring a comprehensive inventory system, resource management, and quest mechanics.
+SelfCity is a Unity-based city-building game with persistent saving/loading capabilities, featuring a comprehensive inventory system, resource management, quest mechanics, and a complete authentication and subscription system.
 
 ## Core Features Implemented
 
@@ -249,7 +292,35 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Isometric Art Style**: Consistent isometric visual design
 - **Building Sprites**: 141+ building sprites with regular and damaged states
 
+### 🔐 Authentication System
+- **Multi-Platform Support**: Google Sign-In, Apple Sign-In, Email/Password, Guest mode
+- **Profile Management**: Complete user profile system with data persistence
+- **Session Management**: Secure session handling and user state management
+- **Cross-Platform Compatibility**: Works on Android and iOS (with proper setup)
+
+### 💎 Subscription System
+- **Premium Features**: Exclusive content for premium subscribers
+- **Subscription Management**: Complete subscription lifecycle management
+- **Payment Integration**: Ready for Google Play and App Store integration
+- **Feature Gating**: Premium content access control
+
+### 📝 Profile & Journal System
+- **Personal Profile**: Username, email, preferences, and notification settings
+- **Mood Tracking Journal**: Personal journal with mood tracking and emoji support
+- **Data Persistence**: All profile and journal data saved locally
+- **Export Functionality**: Journal data export for backup and analysis
+
 ## 🆕 Recent Updates & New Features
+
+### 🔐 Comprehensive Authentication & Subscription System
+- **AuthenticationManager**: Complete multi-platform authentication system
+- **SubscriptionManager**: Premium subscription management with feature gating
+- **AuthenticationUI**: Professional sign-in interface with multiple options
+- **Profile Management**: Complete user profile system with data validation
+- **Journal System**: Personal journal with mood tracking and book interface
+- **Cross-Platform Support**: Android (configured) and iOS (ready for setup)
+- **Development Mode**: Authentication bypass for development and testing
+- **Real Authentication Framework**: Ready for Google Cloud Console and Apple Developer setup
 
 ### 🖼️ Enhanced Sprite System
 - **Unified Sprite Management**: Consolidated sprite system where all sprites are stored in CityBuilder and referenced by Shop UI, eliminating duplication
@@ -315,6 +386,16 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **LevelUpDebugger**: Debug script for testing level-up and building unlock systems
 
 ## 🚀 Latest Major Updates (Since Last GitHub Push)
+
+### 🔐 Authentication & Subscription System Implementation
+- **AuthenticationManager**: Complete multi-platform authentication system supporting Google Sign-In, Apple Sign-In, Email/Password, and Guest mode
+- **SubscriptionManager**: Premium subscription management with feature gating and payment integration
+- **AuthenticationUI**: Professional sign-in interface with multiple authentication options
+- **Profile Management**: Complete user profile system with data validation and persistence
+- **Journal System**: Personal journal with mood tracking, auto-save, and book interface
+- **Cross-Platform Support**: Android fully configured, iOS ready for Mac setup
+- **Development Mode**: Authentication bypass for development and testing
+- **Real Authentication Framework**: Ready for Google Cloud Console and Apple Developer setup
 
 ### 🎯 Level-Up UI Integration System (Phase 5D)
 - **PlayerLevelManager**: Comprehensive player progression system with level-based building unlocks
@@ -440,6 +521,8 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Manager Pattern**: Centralized managers for different game systems
 - **Event-Driven**: UI updates driven by game events
 - **Modular Design**: Systems are loosely coupled for easy maintenance
+- **Authentication Framework**: Multi-platform authentication with development mode support
+- **Subscription Management**: Premium feature gating and payment integration
 
 ### Key Scripts
 - **CityBuilder**: Core city building and management logic
@@ -448,6 +531,9 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **QuestManager**: Handles quest generation, tracking, and rewards
 - **UIManager**: Centralized UI management and updates
 - **BuildingShopDatabase**: Shop system and item purchasing
+- **AuthenticationManager**: Multi-platform authentication system
+- **SubscriptionManager**: Premium subscription management
+- **ProfileManager**: User profile and journal management
 - **PlayerLevelManager**: Player progression and level-based building unlocks
 - **LevelUpManager**: Level-up celebrations and unlock notifications
 - **EXPProgressBarManager**: EXP progress bar with real-time updates
@@ -458,6 +544,8 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **File-Based Storage**: Save files stored locally on device
 - **Automatic Backup**: Save data backed up to prevent data loss
 - **Version Control**: Save data includes version information for compatibility
+- **Profile Data**: User profile and journal data persisted locally
+- **Authentication State**: User authentication state maintained across sessions
 
 ## Development Progress
 
@@ -489,6 +577,11 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - [x] Hybrid difficulty-based EXP calculation
 - [x] Building unlock notifications
 - [x] Region unlock system integration
+- [x] **Complete authentication system (Google, Apple, Email, Guest)**
+- [x] **Premium subscription management**
+- [x] **Profile management system**
+- [x] **Personal journal with mood tracking**
+- [x] **Cross-platform authentication support**
 
 ### 🔄 Recent Improvements
 - **Save/Load Reliability**: Fixed issues with buildings disappearing after reload
@@ -513,6 +606,11 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - [x] UI Layout Improvements: Better responsive design and element sizing
 - [x] Prize Pool Visualization: Visual prize pools with decoration sprites
 - [x] Code Consolidation: Removed duplicate sprite fields and improved maintainability
+- [x] **Authentication System**: Complete multi-platform authentication framework
+- [x] **Subscription Management**: Premium feature gating and payment integration
+- [x] **Profile System**: User profile management with data validation
+- [x] **Journal System**: Personal journal with mood tracking and auto-save
+- [x] **Cross-Platform Support**: Android configured, iOS ready for setup
 
 ### 🚧 Current Development Focus
 - **Performance Optimization**: Improving save/load performance
@@ -529,6 +627,9 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - **Visual Consistency**: Ensuring consistent visual experience across all UI elements
 - **Grid System Enhancement**: Advanced grid placement features and optimizations
 - **Chest System Polish**: Enhanced chest mechanics and reward visualization
+- **Authentication Polish**: Real authentication setup and testing
+- **Subscription Testing**: Payment processing integration and testing
+- **Cross-Platform Testing**: iOS setup and testing (when Mac available)
 
 ## Getting Started
 
@@ -536,12 +637,17 @@ SelfCity is a Unity-based city-building game with persistent saving/loading capa
 - Unity 2022.3 LTS or later
 - Universal Render Pipeline (URP)
 - TextMesh Pro
+- Android Build Support (for mobile development)
 
 ### Installation
 1. Clone the repository
 2. Open the project in Unity
 3. Open the SampleScene in Assets/Scenes/
 4. Press Play to start the game
+
+### Authentication Setup
+For full authentication functionality, follow the detailed setup guide:
+- **See:** `Assets/Scripts/UI/Authentication_Setup_Guide.md`
 
 ### Controls
 - **Left Click**: Select and place buildings
@@ -570,7 +676,7 @@ This project uses various asset packs with their respective licenses. Please ref
 
 *Last Updated: January 2025*
 *Developed by:* 
-*Development Status: Active Development - Core Systems Complete with Level-Up Integration and Enhanced Visual Systems* 
+*Development Status: Active Development - Core Systems Complete with Authentication, Subscription, and Level-Up Integration* 
 
 ---
 
