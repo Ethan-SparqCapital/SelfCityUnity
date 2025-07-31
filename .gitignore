@@ -89,4 +89,132 @@ Desktop.ini
 
 # Rider
 .idea/
-*.sln.iml 
+*.sln.iml
+
+# Keystore files (security risk)
+*.keystore
+*.jks
+*.p12
+*.pfx
+
+# Unity temporary files
+.utmp/
+SelfCity_BurstDebugInformation_DoNotShip/
+
+# User settings (personal preferences)
+UserSettings/
+
+# Unity Cloud Build
+.cloudbuild/
+
+# Unity Services
+ProjectSettings/Packages/com.unity.services.core/Settings.json
+
+# Build artifacts
+*.ipa
+*.app
+
+# Unity crash reports
+*.crash
+
+# Unity Analytics
+Analytics/
+
+# Unity Ads
+Ads/
+
+# Unity IAP
+IAP/
+
+# Unity Remote
+Remote/
+
+# Unity Test Framework
+TestResults/
+
+# Unity Performance Testing
+PerformanceTestResults/
+
+# Unity Profiler
+Profiler/
+
+# Unity Memory Profiler
+MemoryProfiler/
+
+# Unity Frame Debugger
+FrameDebugger/
+
+# Unity Graphics Debugger
+GraphicsDebugger/
+
+# Unity Shader Graph
+ShaderGraph/
+
+# Unity VFX Graph
+VFXGraph/
+
+# Unity Timeline
+Timeline/
+
+# Unity Cinemachine
+Cinemachine/
+
+# Unity Post Processing
+PostProcessing/
+
+# Unity TextMesh Pro
+TextMeshPro/
+
+# Unity Input System
+InputSystem/
+
+# Unity UI Toolkit
+UI Toolkit/
+
+# Unity 2D
+2D/
+
+# Unity 3D
+3D/
+
+# Unity Animation
+Animation/
+
+# Unity Audio
+Audio/
+
+# Unity Physics
+Physics/
+
+# Unity Rendering
+Rendering/
+
+# Unity Scripting
+Scripting/
+
+# Unity Services
+Services/
+
+# Unity XR
+XR/
+
+# Unity VR
+VR/
+
+# Unity AR
+AR/
+
+# Unity ML
+ML/
+
+# Unity AI
+AI/
+
+# Unity Networking
+Networking/
+
+# Unity Multiplayer
+Multiplayer/
+
+# Unity Cloud
+Cloud/ 
