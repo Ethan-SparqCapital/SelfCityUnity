@@ -311,6 +311,73 @@ namespace LifeCraft.UI
                         }
                         placedItemUI.Initialize(_decorationItem);
 
+                        // Add HoldDownInteraction component for action menu
+                        var holdDownInteraction = placedItem.GetComponent<HoldDownInteraction>();
+                        if (holdDownInteraction == null)
+                        {
+                            holdDownInteraction = placedItem.AddComponent<HoldDownInteraction>();
+                        }
+                        
+                        // Initialize the HoldDownInteraction with proper data
+                        // Since this is a UI-based grid system, we'll handle building data directly
+                        Debug.Log($"Initializing item: {_decorationItem.displayName}");
+                        
+                        // Check if this is a building by looking at the region type
+                        bool isBuilding = (_decorationItem.region != RegionType.Decoration);
+                        
+                        // For buildings, we'll set a default construction time based on the region
+                        int constructionTimeMinutes = 60; // Default 1 hour
+                        if (isBuilding)
+                        {
+                            // Set construction time based on region (you can adjust these values)
+                            switch (_decorationItem.region)
+                            {
+                                case RegionType.HealthHarbor:
+                                    constructionTimeMinutes = 60; // 1 hour
+                                    break;
+                                case RegionType.MindPalace:
+                                    constructionTimeMinutes = 90; // 1.5 hours
+                                    break;
+                                case RegionType.CreativeCommons:
+                                    constructionTimeMinutes = 120; // 2 hours
+                                    break;
+                                case RegionType.SocialSquare:
+                                    constructionTimeMinutes = 150; // 2.5 hours
+                                    break;
+                                default:
+                                    constructionTimeMinutes = 60; // Default
+                                    break;
+                            }
+                        }
+                        
+                        holdDownInteraction.InitializeItemData(isBuilding, _decorationItem.displayName, 0, ResourceManager.ResourceType.EnergyCrystals);
+                        Debug.Log($"Initialized HoldDownInteraction for {_decorationItem.displayName}: isBuilding={isBuilding}");
+                        
+                        // If this is a building, start construction directly (only on first placement)
+                        if (isBuilding)
+                        {
+                            Debug.Log($"Starting construction for {_decorationItem.displayName} with {constructionTimeMinutes} minutes");
+                            
+                            // Use the BuildingConstructionTimer component on the placed item
+                            var constructionTimer = placedItem.GetComponent<BuildingConstructionTimer>();
+                            if (constructionTimer != null)
+                            {
+                                // Use the placed item's position as a unique identifier
+                                Vector3Int gridPosition = new Vector3Int(
+                                    Mathf.RoundToInt(placedItem.transform.position.x),
+                                    Mathf.RoundToInt(placedItem.transform.position.y),
+                                    0
+                                );
+                                
+                                constructionTimer.StartConstruction(_decorationItem.displayName, gridPosition, constructionTimeMinutes, _decorationItem.region.ToString());
+                                Debug.Log($"Started construction for {_decorationItem.displayName} at {gridPosition} (FIRST PLACEMENT)");
+                            }
+                            else
+                            {
+                                Debug.LogError("BuildingConstructionTimer component not found on placed item!");
+                            }
+                        }
+
                         // Use the PROVEN inventory approach - get the IconImage and set the sprite directly
                         if (LifeCraft.Core.CityBuilder.Instance != null)
                         {

@@ -1,5 +1,6 @@
 using UnityEngine; // We need UnityEngine for MonoBehaviour and ScriptableObject. 
 using LifeCraft.Systems;
+using TMPro; // Add TextMeshPro namespace
 
 namespace LifeCraft.UI
 {
@@ -17,6 +18,12 @@ namespace LifeCraft.UI
         public UnityEngine.UI.Button mindPalaceTabButton;
         public UnityEngine.UI.Button creativeCommonsTabButton;
         public UnityEngine.UI.Button socialSquareTabButton;
+
+        [Header("Region Tab Unlock Messages")]
+        public TextMeshProUGUI healthHarborUnlockText;
+        public TextMeshProUGUI mindPalaceUnlockText;
+        public TextMeshProUGUI creativeCommonsUnlockText;
+        public TextMeshProUGUI socialSquareUnlockText;
 
         [Header("Level System Integration")]
         [SerializeField] private PlayerLevelManager playerLevelManager; 
@@ -68,6 +75,22 @@ namespace LifeCraft.UI
             yield return new WaitForSeconds(0.2f);
             Debug.Log("ShopTabManager: Forcing refresh after delay");
             UpdateRegionTabVisibility();
+        }
+
+        /// <summary>
+        /// Get the unlock level for a region by finding the unlock level of its first building
+        /// </summary>
+        private int GetRegionUnlockLevel(AssessmentQuizManager.RegionType region)
+        {
+            if (PlayerLevelManager.Instance == null) return -1;
+
+            var regionBuildings = PlayerLevelManager.Instance.GetRegionBuildings(region);
+            if (regionBuildings != null && regionBuildings.Count > 0)
+            {
+                string firstBuilding = regionBuildings[0];
+                return PlayerLevelManager.Instance.GetBuildingUnlockLevel(firstBuilding);
+            }
+            return -1;
         }
 
         public void ShowTodayContent() // Method to show today's decor items. 
@@ -127,6 +150,7 @@ namespace LifeCraft.UI
 
         /// <summary>
         /// Update which region tab buttons are visible based on unlocked regions
+        /// UI IMPROVEMENT: Show ALL region tabs with "Unlocks at Level x" messages for locked regions
         /// </summary>
         public void UpdateRegionTabVisibility()
         {
@@ -153,10 +177,27 @@ namespace LifeCraft.UI
             if (healthHarborTabButton != null)
             {
                 bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.HealthHarbor);
-                bool wasActive = healthHarborTabButton.gameObject.activeSelf;
-                healthHarborTabButton.gameObject.SetActive(isUnlocked);
+                int unlockLevel = GetRegionUnlockLevel(AssessmentQuizManager.RegionType.HealthHarbor);
+                
+                // Always show the button, but make it non-interactable if locked
+                healthHarborTabButton.gameObject.SetActive(true);
                 healthHarborTabButton.interactable = isUnlocked;
-                Debug.Log($"Health Harbor tab: was {(wasActive ? "ACTIVE" : "INACTIVE")}, now {(isUnlocked ? "SHOWN" : "HIDDEN")}");
+                
+                // Update unlock message
+                if (healthHarborUnlockText != null)
+                {
+                    if (isUnlocked)
+                    {
+                        healthHarborUnlockText.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        healthHarborUnlockText.gameObject.SetActive(true);
+                        healthHarborUnlockText.text = $"Unlocks at Level {unlockLevel}";
+                    }
+                }
+                
+                Debug.Log($"Health Harbor tab: now {(isUnlocked ? "UNLOCKED" : $"LOCKED (Level {unlockLevel})")}");
             }
             else
             {
@@ -167,10 +208,27 @@ namespace LifeCraft.UI
             if (mindPalaceTabButton != null)
             {
                 bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.MindPalace);
-                bool wasActive = mindPalaceTabButton.gameObject.activeSelf;
-                mindPalaceTabButton.gameObject.SetActive(isUnlocked);
+                int unlockLevel = GetRegionUnlockLevel(AssessmentQuizManager.RegionType.MindPalace);
+                
+                // Always show the button, but make it non-interactable if locked
+                mindPalaceTabButton.gameObject.SetActive(true);
                 mindPalaceTabButton.interactable = isUnlocked;
-                Debug.Log($"Mind Palace tab: was {(wasActive ? "ACTIVE" : "INACTIVE")}, now {(isUnlocked ? "SHOWN" : "HIDDEN")}");
+                
+                // Update unlock message
+                if (mindPalaceUnlockText != null)
+                {
+                    if (isUnlocked)
+                    {
+                        mindPalaceUnlockText.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        mindPalaceUnlockText.gameObject.SetActive(true);
+                        mindPalaceUnlockText.text = $"Unlocks at Level {unlockLevel}";
+                    }
+                }
+                
+                Debug.Log($"Mind Palace tab: now {(isUnlocked ? "UNLOCKED" : $"LOCKED (Level {unlockLevel})")}");
             }
             else
             {
@@ -181,10 +239,27 @@ namespace LifeCraft.UI
             if (creativeCommonsTabButton != null)
             {
                 bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.CreativeCommons);
-                bool wasActive = creativeCommonsTabButton.gameObject.activeSelf;
-                creativeCommonsTabButton.gameObject.SetActive(isUnlocked);
+                int unlockLevel = GetRegionUnlockLevel(AssessmentQuizManager.RegionType.CreativeCommons);
+                
+                // Always show the button, but make it non-interactable if locked
+                creativeCommonsTabButton.gameObject.SetActive(true);
                 creativeCommonsTabButton.interactable = isUnlocked;
-                Debug.Log($"Creative Commons tab: was {(wasActive ? "ACTIVE" : "INACTIVE")}, now {(isUnlocked ? "SHOWN" : "HIDDEN")}");
+                
+                // Update unlock message
+                if (creativeCommonsUnlockText != null)
+                {
+                    if (isUnlocked)
+                    {
+                        creativeCommonsUnlockText.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        creativeCommonsUnlockText.gameObject.SetActive(true);
+                        creativeCommonsUnlockText.text = $"Unlocks at Level {unlockLevel}";
+                    }
+                }
+                
+                Debug.Log($"Creative Commons tab: now {(isUnlocked ? "UNLOCKED" : $"LOCKED (Level {unlockLevel})")}");
             }
             else
             {
@@ -195,10 +270,27 @@ namespace LifeCraft.UI
             if (socialSquareTabButton != null)
             {
                 bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.SocialSquare);
-                bool wasActive = socialSquareTabButton.gameObject.activeSelf;
-                socialSquareTabButton.gameObject.SetActive(isUnlocked);
+                int unlockLevel = GetRegionUnlockLevel(AssessmentQuizManager.RegionType.SocialSquare);
+                
+                // Always show the button, but make it non-interactable if locked
+                socialSquareTabButton.gameObject.SetActive(true);
                 socialSquareTabButton.interactable = isUnlocked;
-                Debug.Log($"Social Square tab: was {(wasActive ? "ACTIVE" : "INACTIVE")}, now {(isUnlocked ? "SHOWN" : "HIDDEN")}");
+                
+                // Update unlock message
+                if (socialSquareUnlockText != null)
+                {
+                    if (isUnlocked)
+                    {
+                        socialSquareUnlockText.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        socialSquareUnlockText.gameObject.SetActive(true);
+                        socialSquareUnlockText.text = $"Unlocks at Level {unlockLevel}";
+                    }
+                }
+                
+                Debug.Log($"Social Square tab: now {(isUnlocked ? "UNLOCKED" : $"LOCKED (Level {unlockLevel})")}");
             }
             else
             {

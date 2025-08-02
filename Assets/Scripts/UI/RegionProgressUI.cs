@@ -23,7 +23,7 @@ namespace LifeCraft.UI
 
         [Header("Settings")]
         [SerializeField] private bool showOnStart = true;
-        [SerializeField] private float updateInterval = 1f; // How often to update the display
+        //[SerializeField] private float updateInterval = 1f; // How often to update the display
 
         [Header("Level System Integration")]
         [SerializeField] private PlayerLevelManager playerLevelManager;

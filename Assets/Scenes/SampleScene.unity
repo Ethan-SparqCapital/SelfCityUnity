@@ -555,11 +555,12 @@ RectTransform:
   m_Children:
   - {fileID: 1278325827}
   - {fileID: 392376798}
+  - {fileID: 1236816321}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 139, y: -800}
+  m_AnchoredPosition: {x: 139, y: -1000}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &27174960
@@ -3320,7 +3321,6 @@ MonoBehaviour:
   closeButton: {fileID: 677618858}
   toggleButton: {fileID: 1340999945}
   showOnStart: 0
-  updateInterval: 1
   playerLevelManager: {fileID: 0}
 --- !u!114 &145073921
 MonoBehaviour:
@@ -4492,9 +4492,9 @@ RectTransform:
   m_Father: {fileID: 997835829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_SizeDelta: {x: 20, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &200179341
 MonoBehaviour:
@@ -4539,8 +4539,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 407775242}
   m_HandleRect: {fileID: 407775241}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.49557292
+  m_Value: -0.00000012604059
+  m_Size: 0.49557227
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5688,7 +5688,7 @@ RectTransform:
   m_Father: {fileID: 1687549788}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6168,6 +6168,163 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 246299388}
   m_CullTransparentMesh: 1
+--- !u!1 &246669930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 246669934}
+  - component: {fileID: 246669933}
+  - component: {fileID: 246669931}
+  - component: {fileID: 246669932}
+  m_Layer: 5
+  m_Name: SocialSquareUnlockText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &246669931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246669930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Unlocks at Level X
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &246669932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246669930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!222 &246669933
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246669930}
+  m_CullTransparentMesh: 1
+--- !u!224 &246669934
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246669930}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 699472897}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &249392479
 GameObject:
   m_ObjectHideFlags: 0
@@ -7195,7 +7352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000017166138, y: 1936.9999}
+  m_AnchoredPosition: {x: 0.000017166138, y: 1937.0002}
   m_SizeDelta: {x: 0.000009536743, y: 3840}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &297440294
@@ -7308,9 +7465,9 @@ RectTransform:
   m_Father: {fileID: 1315311753}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: -17}
+  m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &299344247
 MonoBehaviour:
@@ -8577,8 +8734,9 @@ RectTransform:
   - {fileID: 145073919}
   - {fileID: 1388894664}
   - {fileID: 1430033476}
-  - {fileID: 492812631}
+  - {fileID: 1294410971}
   - {fileID: 196121752}
+  - {fileID: 492812631}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -11389,7 +11547,7 @@ RectTransform:
   m_Father: {fileID: 1636539563}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0.49557227}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -14516,7 +14674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dec0e1427f97a34091dc9473bc5c0dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingPrefab: {fileID: 0}
+  buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
   buildingContainer: {fileID: 1902738871}
   grid: {fileID: 0}
   gridSize: {x: 20, y: 20}
@@ -14527,2486 +14685,3480 @@ MonoBehaviour:
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Pine Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Maple Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Cherry Blossom Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Palm Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Birch Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Willow Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Spruce Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Flower Bed
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Rose Bush
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sunflower Patch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Tulip Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Daffodil Cluster
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Lavender Patch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Hydrangea Bush
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Azalea Bush
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Garden Bench
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Picnic Table
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Wooden Fence
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: White Picket Fence
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Stone Path
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Brick Path
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Gravel Path
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Cobblestone Path
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Bird Bath
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Gazebo
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Pergola
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Arbor
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Trellis
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Ivy Archway
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Topiary
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Small Hedge
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Large Hedge
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Decorative Rock
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Boulder
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Rock Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Water Feature
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Koi Pond
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Lily Pond
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Small Bridge
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Wooden Bridge
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Stone Bridge
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Lamp Post
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Lantern Post
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fairy Lights
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: String Lights
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Hanging Lanterns
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Street Clock
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Bicycle Rack
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Trash Can
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Mailbox
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fire Hydrant
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Community Bulletin Board
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Welcome Sign
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: City Banner
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Community Mural
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Butterfly Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Birdhouse
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Squirrel Feeder
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Log Bench
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Tree Stump
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Mushroom Ring
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Flower Pot
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Hanging Basket
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Ivy Trellis
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Arbor Gate
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Stone Lantern
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Waterfall
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Rain Barrel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Compost Bin
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Vegetable Patch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Herb Spiral
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Raised Planter
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Cactus Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Succulent Planter
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Bamboo Grove
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Bonsai Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Zen Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sand Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Meditation Stone
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Wind Chime
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Weather Vane
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sundial
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Bird Feeder
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Rabbit Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fox Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Turtle Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Frog Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Squirrel Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Deer Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Lion Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Eagle Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Owl Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Dog Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Cat Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Dolphin Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Whale Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fish Pond
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Water Lily
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Reed Cluster
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Marsh Grass
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Wildflower Patch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fern Cluster
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Mossy Rock
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Pebble Border
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Log Pile
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fire Pit
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: BBQ Grill
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Picnic Blanket
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Hammock
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Swing Set
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Slide
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Seesaw
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Jungle Gym
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Climbing Wall
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sandbox
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sandbox Toys
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sandbox Umbrella
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sandbox Fence
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sandbox Castle
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Tunnel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Bridge
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Ladder
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rope Net
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Spinner
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Merry-Go-Round
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Spring Rider
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Balance Beam
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Monkey Bars
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Fireman Pole
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Stepping Stones
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Hopscotch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Chalk Art
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Basketball Hoop
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Soccer Goal
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Tetherball
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Kickball Base
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Baseball Diamond
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Batting Cage
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Scoreboard
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Bleachers
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Dugout
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Water Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Shade Sail
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Picnic Shelter
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Snack Stand
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Restroom
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Bike Rack
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Scooter Rack
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Skateboard Rack
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rollerblade Rack
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Helmet Locker
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Lost & Found
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground First Aid Station
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Information Board
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Map
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rules Sign
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Welcome Sign
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Exit Sign
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Direction Sign
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Distance Marker
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Height Chart
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Growth Chart
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Birthday Board
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Achievement Board
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Star Chart
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Weather Station
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rain Gauge
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Thermometer
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Wind Sock
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Barometer
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Anemometer
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Compass
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Globe
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Solar System Model
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rocket Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Spaceship Model
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Alien Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Astronaut Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Moon Rock
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Meteorite
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Satellite Dish
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Observatory Dome
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Planetarium
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Star Projector
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Telescope
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Binoculars
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Periscope
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Kaleidoscope
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Prism
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rainbow Arch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Cloud Bench
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Sun Dial
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Moon Bench
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Star Bench
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Galaxy Mural
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Nebula Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Comet Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Shooting Star
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Meteor Shower
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Aurora Lights
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Northern Lights
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Solar Flare
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Eclipse Model
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Sunflower Maze
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Corn Maze
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Hay Bale
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Scarecrow
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Pumpkin Patch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Apple Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Orchard Basket
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Fruit Stand
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Veggie Stand
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Flower Cart
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Seed Packet
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Watering Can
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Garden Tools
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Potting Bench
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Greenhouse
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Potting Shed
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Tool Shed
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Wheelbarrow
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Garden Hose
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Sprinkler
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rain Chain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rain Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Butterfly Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Pollinator Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Bird Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Squirrel Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rabbit Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Fairy Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Gnome Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Dragon Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Unicorn Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Mermaid Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Pirate Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Treasure Chest
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Pirate Ship
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Anchor
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Ship Wheel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Lifebuoy
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Lighthouse
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Beach Umbrella
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Beach Chair
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Beach Towel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Sandcastle
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Seashell
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Starfish
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Crab
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Dolphin
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Whale
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Shark
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Octopus
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Jellyfish
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Coral
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Seaweed
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Message Bottle
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Driftwood
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Surfboard
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Boogie Board
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Paddleboard
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Kayak
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Canoe
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Rowboat
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Sailboat
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Fishing Rod
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Fishing Net
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Fish Basket
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Fish Crate
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Fish Barrel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Fish Market
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Lobster Trap
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Crab Pot
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Oyster Basket
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Pearl
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Clam Shell
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Sand Dollar
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Sea Glass
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Beach Ball
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Volleyball Net
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Frisbee
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Kite
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Pinwheel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Bubble Wand
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Hula Hoop
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Jump Rope
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Bean Bag Toss
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Horseshoe Pit
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Cornhole Board
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Ladder Toss
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Bocce Court
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Croquet Set
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Mini Golf Hole
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Golf Flag
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Golf Ball
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Golf Club
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Golf Cart
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Scorecard
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Trophy
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Medal
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Ribbon
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Certificate
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Plaque
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Banner
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Playground Streamers
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Golden Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Crystal Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Neon Sign
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Rainbow Arch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Diamond Bench
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Luxury Lamp Post
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Billboard
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Hologram Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Platinum Mailbox
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Designer Flower Bed
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Marble Path
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Ornate Gazebo
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Water Feature
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Enchanted Lantern
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Royal Banner
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Waterfall
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Floating Lantern
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Enchanted Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Celestial Globe
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Starlight Archway
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Rose Gold Planter
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Illuminated Topiary
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Butterfly Swarm
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Magic Portal
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Glowing Mushroom Circle
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Aurora Borealis Projector
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Firefly Lamp
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Crystal Chandelier Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Rainbow Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Golden Bird Bath
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Silver Wind Chime
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Fairy Circle
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Prismatic Mosaic
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Star Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Shooting Star
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Meteor Shower
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Cloud Swing
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Rainbow Slide
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Water Lily Pond
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Lotus Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Koi Pond
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Dragon Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Phoenix Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Unicorn Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Pegasus Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Mermaid Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Dolphin Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Whale Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Jellyfish Lamp
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Coral Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Seahorse Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Octopus Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Treasure Chest
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Pirate Ship
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Lighthouse
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Ship Wheel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Anchor
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Compass Rose
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Map Table
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Telescope
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Observatory Dome
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Planetarium
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Rocket Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Satellite Dish
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Space Shuttle
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Moon Rock
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Meteorite
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Alien Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated UFO Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Robot Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Circuit Board Path
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Hologram Billboard
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Laser Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Plasma Globe
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Tesla Coil
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Electric Arc
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Lightning Rod
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Storm Cloud
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Rain Cloud
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Sun Dial
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Solar Panel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Wind Turbine
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Water Wheel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Geode Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Crystal Cave
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Gemstone Path
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Sapphire Bench
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Ruby Planter
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Emerald Lamp
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Amethyst Arch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Opal Mosaic
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Pearl Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Coral Reef
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Starfish Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Sand Dollar Path
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Seashell Bench
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Nautilus Lamp
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Mermaid Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Pirate Flag
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Treasure Map
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Parrot Sculpture
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Monkey Statue
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Banana Tree
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Coconut Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Surfboard Rack
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Lifeguard Chair
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Beach Umbrella
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Beach Ball
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Sandcastle
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animated Tiki Torch
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Wellness Clinic
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: -2018337925, guid: 056d0540c5d3a1f4bb603c1e84d411d1, type: 3}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Yoga Studio
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Juice Bar
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sleep Sanctuary
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Nutrition Lab
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Spa Retreat
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Running Track
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Physical Therapy Center
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Biohacking Hub
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Aquatic Center
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Hydration Station
-    buildingPrefab: {fileID: 0}
+    buildingPrefab: {fileID: 7319920927127002613, guid: affcc00847888a443a2aaa8468b77736, type: 3}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fresh Air Foundry
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fitness Fortress
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Zen Cycle Studio
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Climbing Wall Plaza
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Mindful Mile Path
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sunlight Solarium
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Adventure Obstacle Park
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Wellness Workshop
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Movement Metro
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Meditation Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Therapy Center
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Gratitude Gardens
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Boundary Bridge
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Calm Cascade
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Reflection Pavilion
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Meditation Monument
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Therapy Tower
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Mindful Maze
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Insight Library
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Dream Dome
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Focus Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Resilience Retreat
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Memory Museum
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Empathy Emporium
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Puzzle Plaza
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Inspiration Observatory
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Mindfulness Monorail
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Wisdom Workshop
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Serotonin Springs
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Writers' Loft
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Street Art Alley
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Expression Exhibit
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Art Amphitheater
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Innovation Incubator
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Style Studio
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Music Monument
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Makerspace Market
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Inspiration Tower
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Animation Arcade
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Design Den
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Sculpture Studio
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Film Festival Plaza
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Improv Island
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Fashion Runway
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Game Dev Garage
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Poetry Pavilion
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: "Creative Caf\xE9"
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Color Splash Park
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Dream Lab
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Friendship Fountain
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Kindness Kiosk
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Community Center
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Cultural Pavilion
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Game Arcade
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Coffee Corner
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Family Fortress
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Support Network Hub
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Social Stage
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Volunteer Village
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Celebration Square
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Pet Park
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Teamwork Tower
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Compliment Carousel
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Empathy Exchange
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Social Skate Rink
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Kindness Garden
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Festival Field
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: "Connection Caf\xE9"
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   - buildingName: Positivity Plaza
     buildingPrefab: {fileID: 0}
     costResource: 0
     costAmount: 0
     buildingSprite: {fileID: 0}
+    hasConstructionTime: 1
+    constructionTimeMinutes: 60
   uiManager: {fileID: 0}
   resourceManager: {fileID: 0}
   OnBuildingPlaced:
@@ -17486,7 +18638,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1240233940}
   m_Father: {fileID: 314535079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -18004,7 +19157,7 @@ RectTransform:
   m_Father: {fileID: 216193492}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.49557292}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -21626,7 +22779,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000017166138, y: 1937.0001}
+  m_AnchoredPosition: {x: 0.000017166138, y: 1937}
   m_SizeDelta: {x: 0.000009536743, y: 3840}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &637185778
@@ -22030,9 +23183,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 89549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 225, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &663469682
@@ -23086,6 +24239,7 @@ RectTransform:
   m_Children:
   - {fileID: 115681390}
   - {fileID: 2088316171}
+  - {fileID: 246669934}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -29130,11 +30284,12 @@ RectTransform:
   m_Children:
   - {fileID: 429559566}
   - {fileID: 750712558}
+  - {fileID: 1736078277}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 139, y: -1000}
+  m_AnchoredPosition: {x: 139, y: -1100}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &915634709
@@ -30693,10 +31848,10 @@ RectTransform:
   - {fileID: 713076591}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 139, y: -800}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &958895552
 MonoBehaviour:
@@ -31526,9 +32681,9 @@ RectTransform:
   m_Father: {fileID: 1315311753}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: -17}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &990827849
 MonoBehaviour:
@@ -31893,7 +33048,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &997835829
 RectTransform:
   m_ObjectHideFlags: 0
@@ -32007,6 +33162,10 @@ MonoBehaviour:
   mindPalaceTabButton: {fileID: 27174961}
   creativeCommonsTabButton: {fileID: 915634710}
   socialSquareTabButton: {fileID: 699472899}
+  healthHarborUnlockText: {fileID: 2010114806}
+  mindPalaceUnlockText: {fileID: 1236816324}
+  creativeCommonsUnlockText: {fileID: 1736078280}
+  socialSquareUnlockText: {fileID: 246669931}
   playerLevelManager: {fileID: 0}
 --- !u!114 &997835834
 MonoBehaviour:
@@ -32584,7 +33743,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2101190276}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999726
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -34493,9 +35652,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1136788723}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 225, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1115788958
@@ -36918,9 +38077,9 @@ RectTransform:
   m_Father: {fileID: 997835829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: -17}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1208376342
 MonoBehaviour:
@@ -37602,7 +38761,7 @@ RectTransform:
   m_Father: {fileID: 1396980755}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -37644,6 +38803,163 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1236816320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1236816321}
+  - component: {fileID: 1236816323}
+  - component: {fileID: 1236816324}
+  - component: {fileID: 1236816322}
+  m_Layer: 5
+  m_Name: MindPalaceUnlockText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1236816321
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236816320}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 27174959}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1236816322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236816320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!222 &1236816323
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236816320}
+  m_CullTransparentMesh: 1
+--- !u!114 &1236816324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1236816320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Unlocks at Level X
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1237150474
 GameObject:
   m_ObjectHideFlags: 0
@@ -37937,6 +39253,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237716839}
   m_CullTransparentMesh: 1
+--- !u!1 &1240233939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1240233940}
+  m_Layer: 5
+  m_Name: ConstructionUI_Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1240233940
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240233939}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1532841702}
+  m_Father: {fileID: 492812631}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1241019066
 GameObject:
   m_ObjectHideFlags: 0
@@ -40255,6 +41607,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293740665}
   m_CullTransparentMesh: 1
+--- !u!1 &1294410970
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1294410971}
+  m_Layer: 5
+  m_Name: ActionMenu_Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1294410971
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294410970}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 314535079}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1294994489
 GameObject:
   m_ObjectHideFlags: 0
@@ -41092,9 +42479,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 491550368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 225, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1325014568
@@ -41357,9 +42744,9 @@ RectTransform:
   m_Father: {fileID: 1315311753}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 20}
+  m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1326576976
 MonoBehaviour:
@@ -41822,7 +43209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1337891327
 RectTransform:
   m_ObjectHideFlags: 0
@@ -42799,9 +44186,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1279095304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 225, y: -50}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1368831847
@@ -46312,9 +47699,9 @@ RectTransform:
   m_Father: {fileID: 997835829}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: -17, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1506167217
 MonoBehaviour:
@@ -47000,6 +48387,120 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1530382555}
   m_CullTransparentMesh: 1
+--- !u!1001 &1532841701
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1240233940}
+    m_Modifications:
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -40.860413
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 71.40076
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4837314403934024234, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4938431667319403362, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_Name
+      value: ConstructionTimeUI_Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 4938431667319403362, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7942597370434094417, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+--- !u!224 &1532841702 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4755794719711518595, guid: 4046439f502f7b24eb66b6da0e73c2bc, type: 3}
+  m_PrefabInstance: {fileID: 1532841701}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1534226106
 GameObject:
   m_ObjectHideFlags: 0
@@ -50786,11 +52287,12 @@ RectTransform:
   m_Children:
   - {fileID: 571680871}
   - {fileID: 745544173}
+  - {fileID: 2010114803}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 139, y: -600}
+  m_AnchoredPosition: {x: 139, y: -900}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1673595844
@@ -53304,6 +54806,163 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1732276298}
   m_CullTransparentMesh: 1
+--- !u!1 &1736078276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1736078277}
+  - component: {fileID: 1736078279}
+  - component: {fileID: 1736078280}
+  - component: {fileID: 1736078278}
+  m_Layer: 5
+  m_Name: CreativeCommonsUnlockText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1736078277
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736078276}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 915634708}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1736078278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736078276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!222 &1736078279
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736078276}
+  m_CullTransparentMesh: 1
+--- !u!114 &1736078280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1736078276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Unlocks at Level X
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1752087196
 GameObject:
   m_ObjectHideFlags: 0
@@ -55792,10 +57451,10 @@ RectTransform:
   - {fileID: 83042661}
   m_Father: {fileID: 392826957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 139, y: -1000}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1856178860
 MonoBehaviour:
@@ -58969,6 +60628,163 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2009826053}
   m_CullTransparentMesh: 1
+--- !u!1 &2010114802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2010114803}
+  - component: {fileID: 2010114805}
+  - component: {fileID: 2010114806}
+  - component: {fileID: 2010114804}
+  m_Layer: 5
+  m_Name: HealthHarborUnlockText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &2010114803
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010114802}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1673595843}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2010114804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010114802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 1
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
+--- !u!222 &2010114805
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010114802}
+  m_CullTransparentMesh: 1
+--- !u!114 &2010114806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010114802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Unlocks at Level X
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2033359418
 GameObject:
   m_ObjectHideFlags: 0
@@ -60578,7 +62394,7 @@ RectTransform:
   m_Father: {fileID: 1509036389}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.99999726}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}

@@ -23,6 +23,10 @@ namespace LifeCraft.Core
             public ResourceManager.ResourceType costResource;
             public int costAmount;
             public Sprite buildingSprite;
+            
+            [Header("Construction Time")]
+            public bool hasConstructionTime = true; // Only buildings have construction time, not decorations
+            public int constructionTimeMinutes = 60; // Default construction time in minutes
         }
 
         [Header("Building Configuration")]
@@ -322,6 +326,11 @@ namespace LifeCraft.Core
         /// </summary>
         public Vector3Int WorldToMap(Vector3 worldPos)
         {
+            if (grid == null)
+            {
+                Debug.LogError("Grid is null in WorldToMap! Returning Vector3Int.zero");
+                return Vector3Int.zero;
+            }
             return grid.WorldToCell(worldPos);
         }
 
@@ -355,6 +364,13 @@ namespace LifeCraft.Core
         /// </summary>
         public bool AttemptToPlaceBuilding(string buildingType, Vector3 worldPos)
         {
+            Debug.Log($"=== AttemptToPlaceBuilding called for {buildingType} at {worldPos} ===");
+            
+            // Convert world position to grid position
+            Vector3Int mapPos = WorldToMap(worldPos);
+            
+            Debug.Log($"Converted to map position: {mapPos}");
+            
             // Check if building type exists
             if (!_buildingTypeLookup.ContainsKey(buildingType))
             {
@@ -362,15 +378,8 @@ namespace LifeCraft.Core
                 return false;
             }
 
-            Vector3Int mapPos = WorldToMap(worldPos);
-            
-            if (!IsPlacementValid(mapPos))
-            {
-                Debug.LogWarning($"Position {mapPos} is not valid for building placement.");
-                return false;
-            }
-
             var buildingData = _buildingTypeLookup[buildingType];
+            Debug.Log($"Building data found: hasConstructionTime={buildingData.hasConstructionTime}, cost={buildingData.costAmount}");
 
             // Check if player can afford the building
             if (ResourceManager.Instance.SpendResources(buildingData.costResource, buildingData.costAmount))
@@ -384,6 +393,7 @@ namespace LifeCraft.Core
                     Debug.Log($"Saved game after placing building '{buildingType}' at {mapPos}");
                 }
                 
+                Debug.Log($"Successfully placed {buildingType} at {mapPos}");
                 return true;
             }
             else
@@ -416,6 +426,33 @@ namespace LifeCraft.Core
 
             // Update region unlock system
             UpdateRegionUnlockSystem(buildingType, true);
+
+            // Start construction if this is a building (not a decoration)
+            if (buildingData.hasConstructionTime)
+            {
+                StartBuildingConstruction(buildingType, mapPos);
+            }
+
+            // Add HoldDownInteraction component for all placed items
+            var holdDownInteraction = buildingInstance.GetComponent<HoldDownInteraction>();
+            if (holdDownInteraction == null)
+            {
+                holdDownInteraction = buildingInstance.AddComponent<HoldDownInteraction>();
+            }
+            
+            // Initialize the HoldDownInteraction with building data
+            if (buildingData.hasConstructionTime)
+            {
+                // This is a building, so set it up as a building
+                holdDownInteraction.InitializeItemData(true, buildingType, buildingData.costAmount, buildingData.costResource);
+                Debug.Log($"Initialized HoldDownInteraction for building: {buildingType}");
+            }
+            else
+            {
+                // This is a decoration
+                holdDownInteraction.InitializeItemData(false, buildingType, 0, ResourceManager.ResourceType.EnergyCrystals);
+                Debug.Log($"Initialized HoldDownInteraction for decoration: {buildingType}");
+            }
 
             // Trigger event
             OnBuildingPlaced?.Invoke(buildingType, mapPos);
@@ -491,11 +528,23 @@ namespace LifeCraft.Core
         }
 
         /// <summary>
-        /// Get building type data
+        /// Get building type data by name
         /// </summary>
         public BuildingTypeData GetBuildingTypeData(string buildingType)
         {
-            return _buildingTypeLookup.TryGetValue(buildingType, out BuildingTypeData data) ? data : null;
+            Debug.Log($"GetBuildingTypeData called for: {buildingType}");
+            Debug.Log($"Available building types: {string.Join(", ", _buildingTypeLookup.Keys)}");
+            
+            if (_buildingTypeLookup.TryGetValue(buildingType, out BuildingTypeData data))
+            {
+                Debug.Log($"Found building data for {buildingType}: hasConstructionTime={data.hasConstructionTime}");
+                return data;
+            }
+            else
+            {
+                Debug.LogError($"Building type '{buildingType}' not found in lookup!");
+                return null;
+            }
         }
 
         /// <summary>
@@ -610,6 +659,139 @@ namespace LifeCraft.Core
 
             // Default to Health Harbor if no match found
             return AssessmentQuizManager.RegionType.HealthHarbor;
+        }
+
+        /// <summary>
+        /// Calculate construction time for a building based on its unlock level
+        /// </summary>
+        public float CalculateConstructionTime(string buildingName)
+        {
+            if (PlayerLevelManager.Instance == null)
+                return 60f; // Default 1 hour if PlayerLevelManager not available
+                
+            int unlockLevel = PlayerLevelManager.Instance.GetBuildingUnlockLevel(buildingName);
+            if (unlockLevel <= 0)
+                return 60f; // Default 1 hour for invalid levels
+                
+            // Calculate construction time based on unlock level
+            // Formula: Base time (30 min) + (unlock level - 1) * 30 min
+            // This ensures level 1 buildings take 30 min, level 2 take 60 min, etc.
+            // Max construction time is 24 hours (1440 minutes) for highest level buildings
+            float baseTimeMinutes = 30f;
+            float timePerLevelMinutes = 30f;
+            float maxTimeMinutes = 1440f; // 24 hours
+            
+            float constructionTimeMinutes = baseTimeMinutes + (unlockLevel - 1) * timePerLevelMinutes;
+            
+            // Cap at maximum time
+            constructionTimeMinutes = Mathf.Min(constructionTimeMinutes, maxTimeMinutes);
+            
+            Debug.Log($"Construction time for {buildingName} (Level {unlockLevel}): {constructionTimeMinutes} minutes");
+            return constructionTimeMinutes;
+        }
+        
+        /// <summary>
+        /// Get the region type for a building
+        /// </summary>
+        public string GetBuildingRegionType(string buildingName)
+        {
+            // This would need to be implemented based on your building data structure
+            // For now, return a default region type
+            return "HealthHarbor"; // Default region
+        }
+        
+        /// <summary>
+        /// Called when construction is complete
+        /// </summary>
+        public void OnConstructionComplete(string buildingName, Vector3Int gridPosition)
+        {
+            Debug.Log($"Construction completed for {buildingName} at {gridPosition}");
+            
+            // The building is now fully constructed and functional
+            // You might want to trigger any completion effects here
+            
+            // Save the game
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.SaveGame();
+            }
+        }
+        
+        /// <summary>
+        /// Start construction for a building at the specified position
+        /// </summary>
+        public void StartBuildingConstruction(string buildingName, Vector3Int gridPosition)
+        {
+            Debug.Log($"=== StartBuildingConstruction called for {buildingName} at {gridPosition} ===");
+            
+            // Calculate construction time
+            float constructionTimeMinutes = CalculateConstructionTime(buildingName);
+            string regionType = GetBuildingRegionType(buildingName);
+            
+            Debug.Log($"Construction time: {constructionTimeMinutes} minutes, Region: {regionType}");
+            
+            // Get the building GameObject
+            if (_placedBuildings.TryGetValue(gridPosition, out GameObject building))
+            {
+                Debug.Log($"Found building GameObject: {building.name}");
+                
+                // Find the ConstructionTimeUI_Prefab in the scene hierarchy
+                GameObject constructionUIPrefab = null;
+                
+                // First try to find it under PopupParent
+                Transform popupParent = GameObject.Find("PopupParent")?.transform;
+                if (popupParent != null)
+                {
+                    Debug.Log("Found PopupParent");
+                    Transform constructionParent = popupParent.Find("ConstructionUI_Parent");
+                    if (constructionParent != null)
+                    {
+                        Debug.Log("Found ConstructionUI_Parent");
+                        constructionUIPrefab = constructionParent.Find("ConstructionTimeUI_Prefab")?.gameObject;
+                        if (constructionUIPrefab != null)
+                        {
+                            Debug.Log("Found ConstructionTimeUI_Prefab under ConstructionUI_Parent");
+                        }
+                    }
+                }
+                
+                // If not found, try to find it anywhere in the scene
+                if (constructionUIPrefab == null)
+                {
+                    Debug.Log("Searching for ConstructionTimeUI_Prefab anywhere in scene...");
+                    constructionUIPrefab = GameObject.Find("ConstructionTimeUI_Prefab");
+                    if (constructionUIPrefab != null)
+                    {
+                        Debug.Log("Found ConstructionTimeUI_Prefab in scene");
+                    }
+                }
+                
+                if (constructionUIPrefab != null)
+                {
+                    // Get the ConstructionTimeUI component from the prefab
+                    var constructionUI = constructionUIPrefab.GetComponent<ConstructionTimeUI>();
+                    if (constructionUI != null)
+                    {
+                        Debug.Log("Found ConstructionTimeUI component, starting construction...");
+                        // Start construction
+                        constructionUI.StartConstruction(buildingName, gridPosition, constructionTimeMinutes, regionType);
+                        
+                        Debug.Log($"Started construction for {buildingName} at {gridPosition}. Duration: {constructionTimeMinutes} minutes");
+                    }
+                    else
+                    {
+                        Debug.LogError("ConstructionTimeUI_Prefab found but does not have ConstructionTimeUI component.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("ConstructionTimeUI_Prefab not found in scene. Make sure it's instantiated under PopupParent/ConstructionUI_Parent.");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Building not found in _placedBuildings at position {gridPosition}");
+            }
         }
     }
 

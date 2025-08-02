@@ -112,6 +112,41 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
         }
     }
 
+    /// <summary>
+    /// Remove a quest/task from the To-Do List by text
+    /// </summary>
+    /// <param name="questText">The text of the quest/task to remove</param>
+    public void RemoveToDo(string questText)
+    {
+        if (toDoListContainer == null) return;
+        
+        // Find and remove the item with matching text
+        for (int i = toDoListContainer.childCount - 1; i >= 0; i--)
+        {
+            Transform item = toDoListContainer.GetChild(i);
+            
+            // Check TextMeshPro first
+            TMP_Text tmpText = item.GetComponentInChildren<TMP_Text>();
+            if (tmpText != null && tmpText.text == questText)
+            {
+                Destroy(item.gameObject);
+                Debug.Log($"Removed quest from To-Do List: {questText}");
+                return;
+            }
+            
+            // Check Unity UI Text
+            Text uiText = item.GetComponentInChildren<Text>();
+            if (uiText != null && uiText.text == questText)
+            {
+                Destroy(item.gameObject);
+                Debug.Log($"Removed quest from To-Do List: {questText}");
+                return;
+            }
+        }
+        
+        Debug.LogWarning($"Quest not found in To-Do List: {questText}");
+    }
+
     // Helper method to get the correct resource sprite for the region. 
     private Sprite GetResourceSpriteForRegion(string questText)
     {
@@ -359,6 +394,23 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
                 }
 
                 string questText = GetQuestTextFromItem(item); // Get the quest text from the item to use for the reward. 
+                
+                // Check if this is a construction skip quest
+                // We'll identify construction quests by checking if they're in any BuildingConstructionTimer's tracking
+                var constructionTimers = FindObjectsByType<BuildingConstructionTimer>(FindObjectsSortMode.None);
+                bool isConstructionQuest = false;
+                
+                foreach (var constructionTimer in constructionTimers)
+                {
+                    // Check if this timer has the quest text in its tracking
+                    if (constructionTimer.HasQuest(questText))
+                    {
+                        isConstructionQuest = true;
+                        constructionTimer.CheckSkipQuestCompletion(questText);
+                        break;
+                    }
+                }
+                
                 int rewardAmount = 5;
                 ToDoItemMeta metaReward = item.GetComponent<ToDoItemMeta>();
                 if (metaReward != null)
@@ -445,7 +497,7 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
     /// <summary>
     /// Helper to get the quest/task text from a to-do item.
     /// </summary>
-    private string GetQuestTextFromItem(Transform item)
+    public string GetQuestTextFromItem(Transform item)
     {
         TMP_Text tmp = item.GetComponentInChildren<TMP_Text>();
         if (tmp != null) return tmp.text; // If the TextMeshPro component is found, return its text. 
