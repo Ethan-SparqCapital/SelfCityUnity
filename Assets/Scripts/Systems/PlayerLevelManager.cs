@@ -13,6 +13,7 @@ namespace LifeCraft.Systems
     {
         public Dictionary<string, int> buildingUnlockLevels; // Dictionary to hold building names and their corresponding unlock levels: (Key = building name, Value = unlock level).
         public Dictionary<AssessmentQuizManager.RegionType, List<string>> regionBuildings; // Dictionary to hold region type and each of their corresponding buildings: (Key = region type, Value = list of building names).
+        public Dictionary<string, float> buildingConstructionTimes; // Dictionary to hold building names and their corresponding construction times: (Key = building name, Value = construction time in minutes).
         public int currentLevel; // Current player level. 
         public int currentEXP; // Current player EXP. 
         public string saveVersion = "1.0"; // Version of the save data format (for future compatibility). 
@@ -42,6 +43,8 @@ namespace LifeCraft.Systems
         private Dictionary<string, int> _buildingUnlockLevels = new Dictionary<string, int>();
         // Dictionary to hold region type and each of their corresponding buildings: (Key = region type, Value = list of building names)
         private Dictionary<AssessmentQuizManager.RegionType, List<string>> _regionBuildings = new Dictionary<AssessmentQuizManager.RegionType, List<string>>();
+        // Dictionary to hold building names and their corresponding construction times: (Key = building name, Value = construction time in minutes)
+        private Dictionary<string, float> _buildingConstructionTimes = new Dictionary<string, float>();
 
         // Singleton
         private static PlayerLevelManager _instance;
@@ -154,11 +157,95 @@ namespace LifeCraft.Systems
 
             Debug.Log("Building unlock system initialized successfully");
 
-            // STEP 7: Save the game to persist the building unlock data
+            // STEP 7: Calculate and store construction times for all buildings
+            Debug.Log("Calculating construction times for all buildings...");
+            CalculateConstructionTimesForAllBuildings();
+
+            // STEP 8: Check for region unlocks immediately after initialization
+            Debug.Log("Checking for region unlocks after initialization...");
+            CheckForRegionUnlocks();
+
+            // STEP 9: Save the game to persist the building unlock data
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.SaveGame();
             }
+            
+            Debug.Log($"=== END PLAYER LEVEL MANAGER INITIALIZE BUILDING UNLOCK SYSTEM ===");
+        }
+
+        /// <summary>
+        /// Calculate construction times for all buildings based on their unlock levels
+        /// This ensures proper distribution: 1 minute for lowest level, 6 hours for highest level
+        /// </summary>
+        private void CalculateConstructionTimesForAllBuildings()
+        {
+            Debug.Log("=== CALCULATING CONSTRUCTION TIMES ===");
+            
+            if (_buildingUnlockLevels.Count == 0)
+            {
+                Debug.LogWarning("No building unlock levels found - cannot calculate construction times");
+                return;
+            }
+
+            // Clear existing construction times
+            _buildingConstructionTimes.Clear();
+
+            // Find the minimum and maximum unlock levels to establish the range
+            int minUnlockLevel = int.MaxValue;
+            int maxUnlockLevel = int.MinValue;
+            
+            foreach (var kvp in _buildingUnlockLevels)
+            {
+                minUnlockLevel = Mathf.Min(minUnlockLevel, kvp.Value);
+                maxUnlockLevel = Mathf.Max(maxUnlockLevel, kvp.Value);
+            }
+
+            Debug.Log($"Unlock level range: {minUnlockLevel} to {maxUnlockLevel}");
+
+            // Debug: Log all unlock levels to see what's happening
+            Debug.Log("=== ALL UNLOCK LEVELS ===");
+            foreach (var kvp in _buildingUnlockLevels)
+            {
+                Debug.Log($"Building: {kvp.Key}, Unlock Level: {kvp.Value}");
+            }
+            Debug.Log("=== END ALL UNLOCK LEVELS ===");
+
+            // Calculate construction times for each building
+            foreach (var kvp in _buildingUnlockLevels)
+            {
+                string buildingName = kvp.Key;
+                int unlockLevel = kvp.Value;
+                
+                // Calculate construction time using linear interpolation
+                // Formula: minTime + (unlockLevel - minLevel) * (maxTime - minTime) / (maxLevel - minLevel)
+                float minTimeMinutes = 1f; // 1 minute for lowest level
+                float maxTimeMinutes = 360f; // 6 hours (360 minutes) for highest level
+                
+                float constructionTimeMinutes;
+                if (maxUnlockLevel == minUnlockLevel)
+                {
+                    // All buildings have the same unlock level, use average time
+                    constructionTimeMinutes = (minTimeMinutes + maxTimeMinutes) / 2f;
+                    Debug.Log($"All buildings have same level ({maxUnlockLevel}), using average time: {constructionTimeMinutes}");
+                }
+                else
+                {
+                    // Linear interpolation based on unlock level
+                    float progress = (float)(unlockLevel - minUnlockLevel) / (maxUnlockLevel - minUnlockLevel);
+                    constructionTimeMinutes = minTimeMinutes + (progress * (maxTimeMinutes - minTimeMinutes));
+                    Debug.Log($"Level {unlockLevel}: progress = ({unlockLevel} - {minUnlockLevel}) / ({maxUnlockLevel} - {minUnlockLevel}) = {progress:F3}");
+                    Debug.Log($"Level {unlockLevel}: time = {minTimeMinutes} + ({progress:F3} * {maxTimeMinutes - minTimeMinutes}) = {constructionTimeMinutes:F1} minutes");
+                }
+                
+                // Store the construction time
+                _buildingConstructionTimes[buildingName] = constructionTimeMinutes;
+                
+                Debug.Log($"Building '{buildingName}' (Level {unlockLevel}): {constructionTimeMinutes:F1} minutes construction time");
+            }
+            
+            Debug.Log($"Calculated construction times for {_buildingConstructionTimes.Count} buildings");
+            Debug.Log("=== END CALCULATING CONSTRUCTION TIMES ===");
         }
 
         // Helper Function (2): Sort buildings based on region unlock sequence and excitement level
@@ -249,6 +336,9 @@ namespace LifeCraft.Systems
         // Helper Function (3): Assign unlock levels to buildings (1-40)
         private void AssignUnlockLevelsToBuildings(List<BuildingShopItem> sortedBuildings)
         {
+            Debug.Log("=== ASSIGNING UNLOCK LEVELS TO BUILDINGS ===");
+            Debug.Log($"Total buildings to assign levels to: {sortedBuildings.Count}");
+            
             int totalBuildings = sortedBuildings.Count; // Get the total number of buildings in the sorted list (currently 80). 
             int maxUnlockLevel = 40; // Maximum unlock level for buildings (1-40). 
 
@@ -266,8 +356,10 @@ namespace LifeCraft.Systems
 
                 _buildingUnlockLevels[sortedBuildings[i].name] = unlockLevel; // Assign the calculated unlock level to the building's name in the dictionary (sortedBuildings is of type BuildingShopItem, which contains a "name" field for the Building Name). 
 
-                Debug.Log($"Building '{sortedBuildings[i].name}' unlocks at level {unlockLevel}"); // Log the building name and its unlock level for debugging purposes. 
+                Debug.Log($"Building '{sortedBuildings[i].name}' (index {i}) unlocks at level {unlockLevel}"); // Log the building name and its unlock level for debugging purposes. 
             }
+            
+            Debug.Log("=== END ASSIGNING UNLOCK LEVELS ===");
         }
 
         /// <summary>
@@ -351,6 +443,9 @@ namespace LifeCraft.Systems
         /// </summary>
         private void CheckForRegionUnlocks()
         {
+            Debug.Log($"=== CHECK FOR REGION UNLOCKS ===");
+            Debug.Log($"Current player level: {currentLevel}");
+            
             // (1) Get the player's region unlock sequence from RegionUnlockSystem instance.
             // (2) Check each region to see if its first building unlocks at current level. 
             // (3) If yes, unlock the region and trigger OnRegionUnlocked event. 
@@ -359,6 +454,7 @@ namespace LifeCraft.Systems
 
             if (regionUnlockSystem == null)
             {
+                Debug.LogError("RegionUnlockSystem.Instance is null in CheckForRegionUnlocks!");
                 return; // Exit if the region unlock system is not initialized. 
             }
 
@@ -388,6 +484,8 @@ namespace LifeCraft.Systems
             {
                 GameManager.Instance.SaveGame();
             }
+            
+            Debug.Log($"=== END CHECK FOR REGION UNLOCKS ===");
         }
 
         /// <summary>
@@ -400,6 +498,38 @@ namespace LifeCraft.Systems
                 return _buildingUnlockLevels[buildingName];
             }
             return -1; // Building not found
+        }
+
+        /// <summary>
+        /// Get the construction time for a specific building (in minutes)
+        /// </summary>
+        public float GetBuildingConstructionTime(string buildingName)
+        {
+            Debug.Log($"GetBuildingConstructionTime called for: {buildingName}");
+            
+            if (_buildingConstructionTimes.ContainsKey(buildingName))
+            {
+                float time = _buildingConstructionTimes[buildingName];
+                Debug.Log($"Found construction time for '{buildingName}': {time} minutes");
+                return time;
+            }
+            
+            // Fallback: calculate on-the-fly if not found in dictionary
+            Debug.LogWarning($"Construction time not found for '{buildingName}' - calculating on-the-fly");
+            int unlockLevel = GetBuildingUnlockLevel(buildingName);
+            if (unlockLevel > 0)
+            {
+                // Use the same calculation as before for fallback
+                float minTimeMinutes = 1f;
+                float maxTimeMinutes = 360f;
+                float progress = Mathf.Clamp01((float)(unlockLevel - 1) / 39f); // Assume levels 1-40
+                float constructionTimeMinutes = minTimeMinutes + (progress * (maxTimeMinutes - minTimeMinutes));
+                Debug.Log($"Fallback calculation for '{buildingName}' (Level {unlockLevel}): {constructionTimeMinutes} minutes");
+                return constructionTimeMinutes;
+            }
+            
+            Debug.LogWarning($"No unlock level found for '{buildingName}', returning default 60 minutes");
+            return 60f; // Default 1 hour if building not found
         }
 
         /// <summary>
@@ -473,6 +603,9 @@ namespace LifeCraft.Systems
                 regionBuildings = _regionBuildings != null
                     ? new Dictionary<AssessmentQuizManager.RegionType, List<string>>(_regionBuildings)
                     : new Dictionary<AssessmentQuizManager.RegionType, List<string>>(), // Create a copy of the region buildings dictionary. 
+                buildingConstructionTimes = _buildingConstructionTimes != null
+                    ? new Dictionary<string, float>(_buildingConstructionTimes)
+                    : new Dictionary<string, float>(), // Create a copy of the building construction times dictionary.
                 currentLevel = currentLevel, // Save the current player level. 
                 currentEXP = currentEXP // Save the current player EXP. 
             };
@@ -492,6 +625,11 @@ namespace LifeCraft.Systems
                 ? new Dictionary<AssessmentQuizManager.RegionType, List<string>>(saveData.regionBuildings) 
                 : new Dictionary<AssessmentQuizManager.RegionType, List<string>>();
 
+            // Safely load building construction times - handle null dictionaries
+            _buildingConstructionTimes = saveData.buildingConstructionTimes != null 
+                ? new Dictionary<string, float>(saveData.buildingConstructionTimes) 
+                : new Dictionary<string, float>();
+
             currentLevel = saveData.currentLevel; // Re-load the saved current player level. 
             currentEXP = saveData.currentEXP; // Re-load the saved current EXP. 
         }
@@ -507,6 +645,7 @@ namespace LifeCraft.Systems
             // Clear building unlock data
             _buildingUnlockLevels.Clear();
             _regionBuildings.Clear();
+            _buildingConstructionTimes.Clear();
 
             // Reset player level and EXP
             currentLevel = 1;
@@ -551,6 +690,7 @@ namespace LifeCraft.Systems
             // Clear building unlock data
             _buildingUnlockLevels.Clear();
             _regionBuildings.Clear();
+            _buildingConstructionTimes.Clear();
 
             // Clear saved data from PlayerPrefs
             PlayerPrefs.DeleteKey("BuildingUnlockData");

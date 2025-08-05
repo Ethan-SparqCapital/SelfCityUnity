@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using LifeCraft.Systems;
 using LifeCraft.Core;
+using LifeCraft.UI;
 
 namespace LifeCraft.UI
 {
@@ -33,6 +34,9 @@ namespace LifeCraft.UI
             
             // Manually initialize HoldDownInteraction if it wasn't done properly
             InitializeHoldDownInteraction();
+            
+            // Set up action menu for this placed item
+            SetupActionMenu();
         }
         
         /// <summary>
@@ -48,28 +52,19 @@ namespace LifeCraft.UI
                 // Check if this is a building by looking at the region type
                 bool isBuilding = (_decorationItem.region != RegionType.Decoration);
                 
-                // For buildings, we'll set a default construction time based on the region
-                int constructionTimeMinutes = 60; // Default 1 hour
+                // For buildings, get construction time from PlayerLevelManager
+                float constructionTimeMinutes = 60f; // Default 1 hour
                 if (isBuilding)
                 {
-                    // Set construction time based on region
-                    switch (_decorationItem.region)
+                    // Use PlayerLevelManager to get the proper construction time based on unlock level
+                    if (PlayerLevelManager.Instance != null)
                     {
-                        case RegionType.HealthHarbor:
-                            constructionTimeMinutes = 60; // 1 hour
-                            break;
-                        case RegionType.MindPalace:
-                            constructionTimeMinutes = 90; // 1.5 hours
-                            break;
-                        case RegionType.CreativeCommons:
-                            constructionTimeMinutes = 120; // 2 hours
-                            break;
-                        case RegionType.SocialSquare:
-                            constructionTimeMinutes = 150; // 2.5 hours
-                            break;
-                        default:
-                            constructionTimeMinutes = 60; // Default
-                            break;
+                        constructionTimeMinutes = PlayerLevelManager.Instance.GetBuildingConstructionTime(_decorationItem.displayName);
+                        Debug.Log($"Using PlayerLevelManager construction time for {_decorationItem.displayName}: {constructionTimeMinutes} minutes");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("PlayerLevelManager.Instance is null - using default construction time");
                     }
                 }
                 
@@ -81,41 +76,23 @@ namespace LifeCraft.UI
                 {
                     Debug.Log($"Manually starting construction for {_decorationItem.displayName} with {constructionTimeMinutes} minutes");
                     
-                    // Find the ConstructionTimeUI_Prefab and start construction
-                    GameObject constructionUIPrefab = null;
-                    Transform popupParent = GameObject.Find("PopupParent")?.transform;
-                    if (popupParent != null)
+                    // Use the BuildingConstructionTimer component on this placed item
+                    var constructionTimer = GetComponent<BuildingConstructionTimer>();
+                    if (constructionTimer != null)
                     {
-                        Transform constructionParent = popupParent.Find("ConstructionUI_Parent");
-                        if (constructionParent != null)
-                        {
-                            constructionUIPrefab = constructionParent.Find("ConstructionTimeUI_Prefab")?.gameObject;
-                        }
-                    }
-                    
-                    if (constructionUIPrefab != null)
-                    {
-                        var constructionUI = constructionUIPrefab.GetComponent<ConstructionTimeUI>();
-                        if (constructionUI != null)
-                        {
-                            // Use the placed item's position as a unique identifier
-                            Vector3Int gridPosition = new Vector3Int(
-                                Mathf.RoundToInt(transform.position.x),
-                                Mathf.RoundToInt(transform.position.y),
-                                0
-                            );
-                            
-                            constructionUI.StartConstruction(_decorationItem.displayName, gridPosition, constructionTimeMinutes, _decorationItem.region.ToString());
-                            Debug.Log($"Manually started construction for {_decorationItem.displayName} at {gridPosition}");
-                        }
-                        else
-                        {
-                            Debug.LogError("ConstructionTimeUI component not found on prefab");
-                        }
+                        // Use the placed item's position as a unique identifier
+                        Vector3Int gridPosition = new Vector3Int(
+                            Mathf.RoundToInt(transform.position.x),
+                            Mathf.RoundToInt(transform.position.y),
+                            0
+                        );
+                        
+                        constructionTimer.StartConstruction(_decorationItem.displayName, gridPosition, constructionTimeMinutes, _decorationItem.region.ToString());
+                        Debug.Log($"Manually started construction for {_decorationItem.displayName} at {gridPosition}");
                     }
                     else
                     {
-                        Debug.LogError("ConstructionTimeUI_Prefab not found");
+                        Debug.LogError("BuildingConstructionTimer component not found on placed item!");
                     }
                 }
             }
@@ -336,6 +313,60 @@ namespace LifeCraft.UI
         public DecorationItem GetDecorationItem()
         {
             return _decorationItem;
+        }
+        
+        /// <summary>
+        /// Set up the action menu for this placed item
+        /// </summary>
+        private void SetupActionMenu()
+        {
+            var holdDownInteraction = GetComponent<HoldDownInteraction>();
+            if (holdDownInteraction != null && holdDownInteraction.actionMenuPrefab == null)
+            {
+                // Try to find the ActionMenuUI_Prefab
+                GameObject actionMenuPrefab = FindActionMenuPrefab();
+                if (actionMenuPrefab != null)
+                {
+                    holdDownInteraction.actionMenuPrefab = actionMenuPrefab;
+                    Debug.Log($"Set up action menu for {gameObject.name}");
+                }
+                else
+                {
+                    Debug.LogWarning($"Could not find ActionMenuUI_Prefab for {gameObject.name}");
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Find the ActionMenuUI_Prefab
+        /// </summary>
+        private GameObject FindActionMenuPrefab()
+        {
+            // Try to load from Resources
+            GameObject prefab = Resources.Load<GameObject>("ActionMenuUI_Prefab");
+            if (prefab != null)
+            {
+                return prefab;
+            }
+            
+            // Try to load from the specific path
+            prefab = Resources.Load<GameObject>("Prefabs/UI/ActionMenuUI_Prefab");
+            if (prefab != null)
+            {
+                return prefab;
+            }
+            
+            // Try to find it in the scene
+            GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+            foreach (GameObject obj in allObjects)
+            {
+                if (obj.name == "ActionMenuUI_Prefab" && obj.GetComponent<ActionMenuUI>() != null)
+                {
+                    return obj;
+                }
+            }
+            
+            return null;
         }
 
         /// <summary>

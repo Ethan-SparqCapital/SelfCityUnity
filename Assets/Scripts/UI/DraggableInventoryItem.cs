@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using LifeCraft.Core; // To access RegionEditManager and DecorationItem classes. 
 using LifeCraft.UI; // To access InventoryUI and PlacedItemUI
+using LifeCraft.Systems; // To access PlayerLevelManager
 
 namespace LifeCraft.UI
 {
@@ -325,28 +326,19 @@ namespace LifeCraft.UI
                         // Check if this is a building by looking at the region type
                         bool isBuilding = (_decorationItem.region != RegionType.Decoration);
                         
-                        // For buildings, we'll set a default construction time based on the region
-                        int constructionTimeMinutes = 60; // Default 1 hour
+                        // For buildings, get construction time from PlayerLevelManager
+                        float constructionTimeMinutes = 60f; // Default 1 hour
                         if (isBuilding)
                         {
-                            // Set construction time based on region (you can adjust these values)
-                            switch (_decorationItem.region)
+                            // Use PlayerLevelManager to get the proper construction time based on unlock level
+                            if (PlayerLevelManager.Instance != null)
                             {
-                                case RegionType.HealthHarbor:
-                                    constructionTimeMinutes = 60; // 1 hour
-                                    break;
-                                case RegionType.MindPalace:
-                                    constructionTimeMinutes = 90; // 1.5 hours
-                                    break;
-                                case RegionType.CreativeCommons:
-                                    constructionTimeMinutes = 120; // 2 hours
-                                    break;
-                                case RegionType.SocialSquare:
-                                    constructionTimeMinutes = 150; // 2.5 hours
-                                    break;
-                                default:
-                                    constructionTimeMinutes = 60; // Default
-                                    break;
+                                constructionTimeMinutes = PlayerLevelManager.Instance.GetBuildingConstructionTime(_decorationItem.displayName);
+                                Debug.Log($"Using PlayerLevelManager construction time for {_decorationItem.displayName}: {constructionTimeMinutes} minutes");
+                            }
+                            else
+                            {
+                                Debug.LogWarning("PlayerLevelManager.Instance is null - using default construction time");
                             }
                         }
                         

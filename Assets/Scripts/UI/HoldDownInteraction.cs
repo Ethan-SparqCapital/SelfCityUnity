@@ -16,7 +16,7 @@ namespace LifeCraft.UI
         // Hold configuration removed - no longer needed
         
         [Header("Action Menu")]
-        public GameObject actionMenuPrefab;
+        [SerializeField] public GameObject actionMenuPrefab;
         [Tooltip("Enter the exact name of the parent GameObject (e.g., 'ActionMenu_Parent')")]
         public string actionMenuParentName = "ActionMenu_Parent";
         
@@ -137,19 +137,28 @@ namespace LifeCraft.UI
                             break;
                         }
                     }
+                    
+                    // If parent not found, create it
+                    if (cachedActionMenuParent == null)
+                    {
+                        cachedActionMenuParent = CreateActionMenuParent();
+                    }
                 }
                 
                 if (cachedActionMenuParent != null)
                 {
                     currentActionMenu = Instantiate(actionMenuPrefab, cachedActionMenuParent);
                     
-                    // Position the action menu at the mouse position
+                    // Position the action menu near the clicked item
                     var rectTransform = currentActionMenu.GetComponent<RectTransform>();
                     if (rectTransform != null)
                     {
-                        // Use the new Input System
-                        Vector3 mousePos = UnityEngine.InputSystem.Mouse.current.position.ReadValue();
-                        rectTransform.position = mousePos;
+                        // Convert world position to screen position
+                        Vector3 worldPos = transform.position;
+                        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+                        
+                        // Position the menu above the item with some offset
+                        rectTransform.position = screenPos + Vector3.up * 100f;
                         
                         // Make sure the action menu is visible and on top
                         currentActionMenu.SetActive(true);
@@ -168,7 +177,7 @@ namespace LifeCraft.UI
                             parentCanvas.sortingOrder = 998;
                         }
                         
-                        Debug.Log($"Action menu positioned at {mousePos} and set active");
+                        Debug.Log($"Action menu positioned at {screenPos} and set active");
                     }
                     
                     actionMenuUI = currentActionMenu.GetComponent<ActionMenuUI>();
@@ -341,6 +350,43 @@ namespace LifeCraft.UI
         public bool IsBuilding()
         {
             return isBuilding;
+        }
+        
+        /// <summary>
+        /// Create the ActionMenu_Parent if it doesn't exist
+        /// </summary>
+        private Transform CreateActionMenuParent()
+        {
+            // Find existing Canvas
+            Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+            Canvas targetCanvas = null;
+            
+            // Prefer the main UI canvas (usually the first one)
+            if (canvases.Length > 0)
+            {
+                targetCanvas = canvases[0];
+                Debug.Log($"Using Canvas: {targetCanvas.name}");
+            }
+            
+            if (targetCanvas == null)
+            {
+                Debug.LogError("No Canvas found in scene! Action menu cannot be created.");
+                return null;
+            }
+            
+            // Create new ActionMenu_Parent
+            GameObject newParent = new GameObject(actionMenuParentName);
+            newParent.transform.SetParent(targetCanvas.transform, false);
+            
+            // Set up the parent as a UI container
+            RectTransform rectTransform = newParent.AddComponent<RectTransform>();
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
+            
+            Debug.Log($"Created new ActionMenu_Parent: {newParent.name}");
+            return newParent.transform;
         }
     }
 } 

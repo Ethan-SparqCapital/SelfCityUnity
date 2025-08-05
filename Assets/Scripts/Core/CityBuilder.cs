@@ -666,27 +666,20 @@ namespace LifeCraft.Core
         /// </summary>
         public float CalculateConstructionTime(string buildingName)
         {
+            Debug.Log($"=== CITYBUILDER CALCULATE CONSTRUCTION TIME ===");
+            Debug.Log($"Building name: {buildingName}");
+            
             if (PlayerLevelManager.Instance == null)
+            {
+                Debug.LogError("PlayerLevelManager.Instance is null!");
                 return 60f; // Default 1 hour if PlayerLevelManager not available
+            }
                 
-            int unlockLevel = PlayerLevelManager.Instance.GetBuildingUnlockLevel(buildingName);
-            if (unlockLevel <= 0)
-                return 60f; // Default 1 hour for invalid levels
-                
-            // Calculate construction time based on unlock level
-            // Formula: Base time (30 min) + (unlock level - 1) * 30 min
-            // This ensures level 1 buildings take 30 min, level 2 take 60 min, etc.
-            // Max construction time is 24 hours (1440 minutes) for highest level buildings
-            float baseTimeMinutes = 30f;
-            float timePerLevelMinutes = 30f;
-            float maxTimeMinutes = 1440f; // 24 hours
+            // Use the new pre-calculated construction time system
+            float constructionTimeMinutes = PlayerLevelManager.Instance.GetBuildingConstructionTime(buildingName);
             
-            float constructionTimeMinutes = baseTimeMinutes + (unlockLevel - 1) * timePerLevelMinutes;
-            
-            // Cap at maximum time
-            constructionTimeMinutes = Mathf.Min(constructionTimeMinutes, maxTimeMinutes);
-            
-            Debug.Log($"Construction time for {buildingName} (Level {unlockLevel}): {constructionTimeMinutes} minutes");
+            Debug.Log($"Final construction time for {buildingName}: {constructionTimeMinutes} minutes (from PlayerLevelManager)");
+            Debug.Log($"=== END CITYBUILDER CALCULATE CONSTRUCTION TIME ===");
             return constructionTimeMinutes;
         }
         
@@ -735,57 +728,19 @@ namespace LifeCraft.Core
             {
                 Debug.Log($"Found building GameObject: {building.name}");
                 
-                // Find the ConstructionTimeUI_Prefab in the scene hierarchy
-                GameObject constructionUIPrefab = null;
-                
-                // First try to find it under PopupParent
-                Transform popupParent = GameObject.Find("PopupParent")?.transform;
-                if (popupParent != null)
+                // Use the BuildingConstructionTimer component on the building
+                var constructionTimer = building.GetComponent<BuildingConstructionTimer>();
+                if (constructionTimer != null)
                 {
-                    Debug.Log("Found PopupParent");
-                    Transform constructionParent = popupParent.Find("ConstructionUI_Parent");
-                    if (constructionParent != null)
-                    {
-                        Debug.Log("Found ConstructionUI_Parent");
-                        constructionUIPrefab = constructionParent.Find("ConstructionTimeUI_Prefab")?.gameObject;
-                        if (constructionUIPrefab != null)
-                        {
-                            Debug.Log("Found ConstructionTimeUI_Prefab under ConstructionUI_Parent");
-                        }
-                    }
-                }
-                
-                // If not found, try to find it anywhere in the scene
-                if (constructionUIPrefab == null)
-                {
-                    Debug.Log("Searching for ConstructionTimeUI_Prefab anywhere in scene...");
-                    constructionUIPrefab = GameObject.Find("ConstructionTimeUI_Prefab");
-                    if (constructionUIPrefab != null)
-                    {
-                        Debug.Log("Found ConstructionTimeUI_Prefab in scene");
-                    }
-                }
-                
-                if (constructionUIPrefab != null)
-                {
-                    // Get the ConstructionTimeUI component from the prefab
-                    var constructionUI = constructionUIPrefab.GetComponent<ConstructionTimeUI>();
-                    if (constructionUI != null)
-                    {
-                        Debug.Log("Found ConstructionTimeUI component, starting construction...");
-                        // Start construction
-                        constructionUI.StartConstruction(buildingName, gridPosition, constructionTimeMinutes, regionType);
-                        
-                        Debug.Log($"Started construction for {buildingName} at {gridPosition}. Duration: {constructionTimeMinutes} minutes");
-                    }
-                    else
-                    {
-                        Debug.LogError("ConstructionTimeUI_Prefab found but does not have ConstructionTimeUI component.");
-                    }
+                    Debug.Log("Found BuildingConstructionTimer component, starting construction...");
+                    // Start construction
+                    constructionTimer.StartConstruction(buildingName, gridPosition, constructionTimeMinutes, regionType);
+                    
+                    Debug.Log($"Started construction for {buildingName} at {gridPosition}. Duration: {constructionTimeMinutes} minutes");
                 }
                 else
                 {
-                    Debug.LogError("ConstructionTimeUI_Prefab not found in scene. Make sure it's instantiated under PopupParent/ConstructionUI_Parent.");
+                    Debug.LogError("BuildingConstructionTimer component not found on building GameObject.");
                 }
             }
             else

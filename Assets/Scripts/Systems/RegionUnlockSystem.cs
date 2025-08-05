@@ -19,10 +19,15 @@ namespace LifeCraft.Systems
             {
                 if (_instance == null)
                 {
+                    Debug.Log("RegionUnlockSystem.Instance: Loading from Resources...");
                     _instance = Resources.Load<RegionUnlockSystem>("RegionUnlockSystem");
                     if (_instance == null)
                     {
                         Debug.LogError("RegionUnlockSystem not found in Resources folder!");
+                    }
+                    else
+                    {
+                        Debug.Log($"RegionUnlockSystem.Instance: Successfully loaded instance {_instance.GetInstanceID()}");
                     }
                 }
                 return _instance;
@@ -380,15 +385,22 @@ namespace LifeCraft.Systems
         {
             EnsureInitialized();
             var unlocked = new List<AssessmentQuizManager.RegionType>();
+            
+            Debug.Log($"=== GetUnlockedRegions called ===");
+            Debug.Log($"Total regions in _regionData: {_regionData.Count}");
+            
             foreach (var kvp in _regionData)
             {
+                Debug.Log($"Region {kvp.Key} ({kvp.Value.regionName}): isUnlocked = {kvp.Value.isUnlocked}");
                 if (kvp.Value.isUnlocked)
                 {
                     unlocked.Add(kvp.Key);
+                    Debug.Log($"Added {kvp.Key} to unlocked list");
                 }
             }
 
-            Debug.Log($"IMPORTANT: Region unlock order is: {string.Join(", ", _regionData.Keys)}");
+            Debug.Log($"Returning {unlocked.Count} unlocked regions: {string.Join(", ", unlocked.ConvertAll(r => AssessmentQuizManager.GetRegionDisplayName(r)))}");
+            Debug.Log($"=== End GetUnlockedRegions ===");
             return unlocked;
         }
 

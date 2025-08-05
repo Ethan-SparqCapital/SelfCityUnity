@@ -155,7 +155,7 @@ namespace LifeCraft.Systems
         /// <summary>
         /// Get region quest data for the specified region type
         /// </summary>
-        private RegionQuestData GetRegionQuestData(AssessmentQuizManager.RegionType regionType)
+        public RegionQuestData GetRegionQuestData(AssessmentQuizManager.RegionType regionType)
         {
             foreach (var regionData in regionQuests)
             {

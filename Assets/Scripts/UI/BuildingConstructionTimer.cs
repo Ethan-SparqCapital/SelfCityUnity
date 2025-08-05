@@ -30,12 +30,121 @@ namespace LifeCraft.UI
         private float startTime;
         private bool isCompleted = false;
         private Coroutine updateCoroutine;
+        // Removed allowSkipButtonUpdates flag - no longer needed since skip button text is not updated in UpdateUI
         
-        // Quest tracking
-        private List<string> originalQuestTexts = new List<string>();
-        private List<string> skipQuestIds = new List<string>();
-        private int totalSkipQuests = 0;
-        private int completedSkipQuests = 0;
+        // Quest tracking is now handled by ConstructionManager
+        
+        private void OnEnable()
+        {
+            // Re-synchronize with ConstructionManager when this component becomes active
+            if (!string.IsNullOrEmpty(buildingName))
+            {
+                Debug.Log($"BuildingConstructionTimer OnEnable for {buildingName} - re-synchronizing with ConstructionManager");
+                StartCoroutine(ReSyncWithManager());
+            }
+            else
+            {
+                Debug.Log($"BuildingConstructionTimer OnEnable for unnamed building - waiting for StartConstruction");
+            }
+        }
+        
+        /// <summary>
+        /// Force refresh the UI immediately - useful for debugging
+        /// </summary>
+        [ContextMenu("Force Refresh UI")]
+        public void ForceRefreshUI()
+        {
+            Debug.Log($"ForceRefreshUI: Manually refreshing UI for {buildingName}");
+            if (!string.IsNullOrEmpty(buildingName))
+            {
+                StartCoroutine(ForceUIUpdate());
+            }
+            else
+            {
+                Debug.LogWarning("ForceRefreshUI: No building name set");
+            }
+        }
+        
+        private IEnumerator ReSyncWithManager()
+        {
+            // Wait a frame to ensure ConstructionManager is ready
+            yield return null;
+            
+            Debug.Log($"ReSyncWithManager: Checking ConstructionManager for {buildingName}");
+            
+            if (ConstructionManager.Instance != null)
+            {
+                Debug.Log($"ReSyncWithManager: ConstructionManager.Instance is valid");
+                ConstructionProject project = ConstructionManager.Instance.GetProject(buildingName, gridPosition);
+                
+                if (project != null)
+                {
+                    Debug.Log($"ReSyncWithManager: Found existing project for {buildingName} - re-synchronizing UI");
+                    Debug.Log($"ReSyncWithManager: Project details - Completed: {project.isCompleted}, Quest count: {project.originalQuestTexts.Count}");
+                    
+                    // Subscribe to events
+                    ConstructionManager.Instance.OnConstructionCompleted += OnConstructionCompleted;
+                    ConstructionManager.Instance.OnQuestDeleted += OnQuestDeleted;
+                    
+                    // Check if construction is already completed
+                    if (project.isCompleted)
+                    {
+                        Debug.Log($"ReSyncWithManager: Project {buildingName} is already completed - hiding panel");
+                        CompleteConstruction();
+                    }
+                    else
+                    {
+                        // Show panel and start UI updates
+                        if (constructionPanel != null)
+                        {
+                            constructionPanel.SetActive(true);
+                            Debug.Log($"ReSyncWithManager: Activated construction panel for {buildingName}");
+                        }
+                        
+                        // Set up skip button
+                        if (skipButton != null)
+                        {
+                            skipButton.onClick.RemoveAllListeners();
+                            skipButton.onClick.AddListener(OnSkipButtonClicked);
+                            Debug.Log($"ReSyncWithManager: Set up skip button for {buildingName}");
+                        }
+                        
+                        // Set skip button text based on total quests needed (master list)
+                        if (skipButtonText != null)
+                        {
+                            Debug.Log($"ReSyncWithManager: Current state for {buildingName} - Active quests: {project.activeQuestTexts.Count}, Master quests: {project.originalQuestTexts.Count}");
+                            
+                            if (project.originalQuestTexts.Count > 0)
+                            {
+                                // Show total quests needed from master list (not just active ones)
+                                skipButtonText.text = $"Skip ({project.originalQuestTexts.Count} quests remaining)";
+                                Debug.Log($"ReSyncWithManager: Set skip button text for {buildingName} - total quests needed: {project.originalQuestTexts.Count}");
+                            }
+                            else
+                            {
+                                skipButtonText.text = "Skip (Generate quests)";
+                                Debug.Log($"ReSyncWithManager: Set skip button text for {buildingName} - no quests");
+                            }
+                        }
+                        
+                        // Start UI updates
+                        if (updateCoroutine != null)
+                            StopCoroutine(updateCoroutine);
+                        updateCoroutine = StartCoroutine(UpdateUI());
+                        Debug.Log($"ReSyncWithManager: Started UpdateUI coroutine for {buildingName}");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"ReSyncWithManager: No existing project found for {buildingName} at {gridPosition} - this component may be orphaned");
+                    Debug.LogWarning($"ReSyncWithManager: Available projects: {string.Join(", ", ConstructionManager.Instance.GetAllProjectKeys())}");
+                }
+            }
+            else
+            {
+                Debug.LogError($"ReSyncWithManager: ConstructionManager.Instance is null!");
+            }
+        }
         
         /// <summary>
         /// Start construction for this building
@@ -44,16 +153,20 @@ namespace LifeCraft.UI
         {
             this.buildingName = buildingName;
             this.gridPosition = gridPosition;
-            this.constructionDuration = constructionDurationMinutes * 60f; // Convert to seconds
+            this.constructionDuration = constructionDurationMinutes * 60f;
             this.regionType = regionType;
             this.startTime = Time.time;
             this.isCompleted = false;
             
-            // Reset quest tracking
-            originalQuestTexts.Clear();
-            skipQuestIds.Clear();
-            totalSkipQuests = 0;
-            completedSkipQuests = 0;
+            // Register with the persistent manager
+            if (ConstructionManager.Instance != null)
+            {
+                ConstructionManager.Instance.RegisterConstruction(buildingName, gridPosition, constructionDurationMinutes, regionType);
+                
+                // Subscribe to construction completion events
+                ConstructionManager.Instance.OnConstructionCompleted += OnConstructionCompleted;
+                ConstructionManager.Instance.OnQuestDeleted += OnQuestDeleted;
+            }
             
             // Show the construction panel
             if (constructionPanel != null)
@@ -68,27 +181,48 @@ namespace LifeCraft.UI
                 skipButton.onClick.AddListener(OnSkipButtonClicked);
             }
             
-            // Start the update coroutine
+            // Set initial skip button text
+            if (skipButtonText != null)
+            {
+                skipButtonText.text = "Skip (Generate quests)";
+            }
+            
+            // Start UI update coroutine (this only updates the UI, not the timer logic)
             if (updateCoroutine != null)
                 StopCoroutine(updateCoroutine);
-            updateCoroutine = StartCoroutine(UpdateTimer());
-            
-            Debug.Log($"Started construction for {buildingName} with {constructionDurationMinutes} minutes");
+            updateCoroutine = StartCoroutine(UpdateUI());
         }
-        
-        /// <summary>
-        /// Update the construction timer
-        /// </summary>
-        private IEnumerator UpdateTimer()
+
+        // Replace your UpdateTimer coroutine with UpdateUI:
+        private IEnumerator UpdateUI()
         {
-            while (!isCompleted)
+            Debug.Log($"UpdateUI started for {buildingName}");
+            
+            while (!isCompleted && this != null && this.gameObject != null && this.enabled)
             {
-                float elapsedTime = Time.time - startTime;
-                float remainingTime = constructionDuration - elapsedTime;
+                // Get current project status from manager
+                ConstructionProject project = ConstructionManager.Instance?.GetProject(buildingName, gridPosition);
+                
+                if (project == null)
+                {
+                    Debug.LogWarning($"Project not found for {buildingName} at {gridPosition} - stopping UI updates");
+                    break;
+                }
+                
+                if (project.isCompleted)
+                {
+                    Debug.Log($"Project {buildingName} is completed - stopping UI updates and hiding panel");
+                    CompleteConstruction();
+                    break;
+                }
+                
+                float elapsedTime = Time.time - project.startTime;
+                float remainingTime = project.constructionDuration - elapsedTime;
                 
                 // Check if construction is complete
                 if (remainingTime <= 0)
                 {
+                    Debug.Log($"Construction time expired for {buildingName} - completing construction");
                     CompleteConstruction();
                     break;
                 }
@@ -96,8 +230,8 @@ namespace LifeCraft.UI
                 // Update progress bar
                 if (progressBar != null)
                 {
-                    float progress = elapsedTime / constructionDuration;
-                    progressBar.value = progress;
+                    float progress = elapsedTime / project.constructionDuration;
+                    progressBar.value = Mathf.Clamp01(progress);
                 }
                 
                 // Update timer text
@@ -106,26 +240,14 @@ namespace LifeCraft.UI
                     timerText.text = FormatTime(remainingTime);
                 }
                 
-                // Update skip button text (shows remaining quests if skip was clicked, or new quest count if not)
-                if (skipButtonText != null)
-                {
-                    if (originalQuestTexts.Count > 0)
-                    {
-                        // Skip was clicked - show remaining quests
-                        skipButtonText.text = $"Skip ({originalQuestTexts.Count} quests remaining)";
-                    }
-                    else
-                    {
-                        // Skip not clicked yet - show quest count needed
-                        int questCount = CalculateQuestCount(remainingTime);
-                        QuestDifficulty difficulty = CalculateDifficultyForTime(remainingTime / 60f);
-                        string difficultyText = difficulty.ToString();
-                        skipButtonText.text = $"Skip ({questCount} {difficultyText} quests)";
-                    }
-                }
+                // REMOVED: Skip button text updates from UpdateUI
+                // Skip button text should only update when quests are completed or re-added
+                // This prevents unnecessary updates every second
                 
                 yield return new WaitForSeconds(updateInterval);
             }
+            
+            Debug.Log($"UpdateUI ended for {buildingName}");
         }
         
         /// <summary>
@@ -162,23 +284,7 @@ namespace LifeCraft.UI
             return string.Format("{0:00}:{1:00}", minutes, seconds);
         }
         
-        /// <summary>
-        /// Calculate number of quests needed to skip
-        /// </summary>
-        private int CalculateQuestCount(float remainingTime)
-        {
-            // Scale quests based on remaining time
-            // 24 hours = 1440 minutes = max 10 quests
-            // 1 hour = 60 minutes = ~4 quests
-            // 30 minutes = ~2 quests
-            // 10 minutes = 1 quest
-            
-            float remainingMinutes = remainingTime / 60f;
-            int questCount = Mathf.CeilToInt(remainingMinutes / 144f); // 1440 minutes / 10 quests = 144 minutes per quest
-            
-            // Clamp between 1 and 10 quests
-            return Mathf.Clamp(questCount, 1, 10);
-        }
+
         
         /// <summary>
         /// Handle skip button click
@@ -187,130 +293,107 @@ namespace LifeCraft.UI
         {
             Debug.Log($"Skip button clicked for {buildingName}");
             
-            // Calculate remaining time and quest count
-            float elapsedTime = Time.time - startTime;
-            float remainingTime = constructionDuration - elapsedTime;
-            int questCount = CalculateQuestCount(remainingTime);
-            
-            // Add construction skip quests to To-Do List
-            AddConstructionSkipQuests(questCount);
-            
-            // Keep the construction panel visible - it will only hide when ALL quests are completed
-            Debug.Log($"Added {questCount} quests for {buildingName}. Construction panel remains visible until all quests are completed.");
-        }
-        
-        /// <summary>
-        /// Add construction skip quests to the To-Do List
-        /// </summary>
-        private void AddConstructionSkipQuests(int questCount)
-        {
-            if (ConstructionQuestPool.Instance == null)
+            // Get current project to check progress
+            ConstructionProject project = ConstructionManager.Instance?.GetProject(buildingName, gridPosition);
+            if (project == null)
             {
-                Debug.LogError("ConstructionQuestPool.Instance is null!");
+                Debug.LogError($"Skip button clicked but no project found for {buildingName}");
                 return;
             }
             
-            // Find ToDoListManager in the scene
-            ToDoListManager toDoListManager = FindObjectOfType<ToDoListManager>();
-            if (toDoListManager == null)
+            Debug.Log($"Skip button logic for {buildingName}:");
+            Debug.Log($"  - Master quests: {project.originalQuestTexts.Count}");
+            Debug.Log($"  - Active quests: {project.activeQuestTexts.Count}");
+            Debug.Log($"  - Completed quests: {project.completedSkipQuests}");
+            Debug.Log($"  - Deleted quests: {project.deletedSkipQuests}");
+            
+            // Check if we have quests in master list that can be re-added (deleted quests)
+            if (project.originalQuestTexts.Count > 0)
             {
-                Debug.LogError("ToDoListManager not found in scene!");
-                return;
-            }
-            
-            // Clear any existing quests for this building
-            RemoveExistingQuests();
-            
-            // Get quests based on region type and difficulty
-            var quests = GetQuestsForRegion(regionType, questCount);
-            
-            // Add each quest to the To-Do List
-            foreach (string questText in quests)
-            {
-                // Generate a unique quest ID
-                string questId = $"construction_skip_{System.Guid.NewGuid().ToString().Substring(0, 8)}";
+                // We have quests in master list - check which ones are not currently active
+                List<string> questsToReAdd = new List<string>();
                 
-                // Store the original quest text and ID
-                originalQuestTexts.Add(questText);
-                skipQuestIds.Add(questId);
-                
-                // Add to To-Do List (without the ugly prefix)
-                toDoListManager.AddToDo(questText);
-                
-                Debug.Log($"Added construction quest: {questText}");
-            }
-            
-            totalSkipQuests = quests.Count;
-            completedSkipQuests = 0;
-            
-            Debug.Log($"Added {quests.Count} construction skip quests for {buildingName}");
-        }
-        
-        /// <summary>
-        /// Remove existing quests for this building from the To-Do List
-        /// </summary>
-        private void RemoveExistingQuests()
-        {
-            // Find ToDoListManager in the scene
-            ToDoListManager toDoListManager = FindObjectOfType<ToDoListManager>();
-            if (toDoListManager == null) return;
-            
-            // Remove quests from To-Do List that match our original texts
-            foreach (string questText in originalQuestTexts)
-            {
-                toDoListManager.RemoveToDo(questText);
-            }
-            
-            originalQuestTexts.Clear();
-            skipQuestIds.Clear();
-            totalSkipQuests = 0;
-            completedSkipQuests = 0;
-        }
-        
-        /// <summary>
-        /// Get quests for the specified region and count with difficulty scaling
-        /// </summary>
-        private List<string> GetQuestsForRegion(string regionType, int questCount)
-        {
-            var quests = new List<string>();
-            
-            // Calculate difficulty based on remaining time
-            float remainingMinutes = (constructionDuration - (Time.time - startTime)) / 60f;
-            QuestDifficulty targetDifficulty = CalculateDifficultyForTime(remainingMinutes);
-            
-            // Get quests from the ConstructionQuestPool based on region
-            var regionQuests = ConstructionQuestPool.Instance.GetQuestsForRegion(regionType);
-            
-            if (regionQuests != null && regionQuests.Count > 0)
-            {
-                // Filter quests by difficulty and shuffle
-                var difficultyQuests = FilterQuestsByDifficulty(regionQuests, targetDifficulty);
-                var shuffledQuests = new List<string>(difficultyQuests);
-                
-                // Shuffle the quests
-                for (int i = shuffledQuests.Count - 1; i > 0; i--)
+                foreach (string questText in project.originalQuestTexts)
                 {
-                    int j = Random.Range(0, i + 1);
-                    string temp = shuffledQuests[i];
-                    shuffledQuests[i] = shuffledQuests[j];
-                    shuffledQuests[j] = temp;
+                    if (!project.activeQuestTexts.Contains(questText))
+                    {
+                        questsToReAdd.Add(questText);
+                    }
                 }
                 
-                // Take the required number of quests
-                for (int i = 0; i < Mathf.Min(questCount, shuffledQuests.Count); i++)
+                if (questsToReAdd.Count > 0)
                 {
-                    quests.Add(shuffledQuests[i]);
+                    // Re-add the deleted quests from master list
+                    Debug.Log($"Re-adding {questsToReAdd.Count} deleted quests for {buildingName}");
+                    
+                    // Find ToDoListManager in the scene
+                    ToDoListManager toDoListManager = FindFirstObjectByType<ToDoListManager>();
+                    if (toDoListManager != null)
+                    {
+                        // Re-add quests from master list to active list and To-Do List
+                        foreach (string questText in questsToReAdd)
+                        {
+                            project.activeQuestTexts.Add(questText);
+                            toDoListManager.AddToDo(questText);
+                            Debug.Log($"Re-added quest: {questText}");
+                        }
+                        
+                        // Reset deleted quests counter since we've re-added them
+                        project.deletedSkipQuests = 0;
+                        
+                        // Update skip button text to reflect the total quests needed
+                        if (skipButtonText != null)
+                        {
+                            string newText = $"Skip ({project.originalQuestTexts.Count} quests remaining)";
+                            skipButtonText.text = newText;
+                            Debug.Log($"Updated skip button text after re-adding quests: {newText} for {buildingName}");
+                        }
+                        
+                        Debug.Log($"Successfully re-added {questsToReAdd.Count} quests for {buildingName}");
+                    }
+                    else
+                    {
+                        Debug.LogError("ToDoListManager not found in scene!");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"All quests from master list are already active for {buildingName}");
                 }
             }
-            
-            // If we don't have enough region-specific quests, add generic ones with appropriate difficulty
-            while (quests.Count < questCount)
+            else
             {
-                quests.Add(GetGenericQuestForDifficulty(targetDifficulty));
+                // No quests in master list - this is the FIRST time clicking Skip, generate new quests
+                Debug.Log($"First time clicking Skip for {buildingName} - generating new quests");
+                
+                // Calculate total quests needed based on remaining time
+                float elapsedTime = Time.time - project.startTime;
+                float remainingTime = project.constructionDuration - elapsedTime;
+                float remainingMinutes = remainingTime / 60f;
+                int totalQuestsNeeded = Mathf.CeilToInt(remainingMinutes / 36f); // 360 minutes / 10 quests = 36 minutes per quest
+                totalQuestsNeeded = Mathf.Clamp(totalQuestsNeeded, 1, 10);
+                
+                Debug.Log($"  - Total quests needed: {totalQuestsNeeded}");
+                
+                // Generate new quests
+                if (ConstructionManager.Instance != null)
+                {
+                    ConstructionManager.Instance.AddSkipQuests(buildingName, gridPosition, totalQuestsNeeded);
+                    Debug.Log($"Generated {totalQuestsNeeded} new quests for {buildingName} (first time)");
+                    
+                    // Update skip button text immediately after generating quests
+                    if (skipButtonText != null)
+                    {
+                        string newText = $"Skip ({totalQuestsNeeded} quests remaining)";
+                        skipButtonText.text = newText;
+                        Debug.Log($"Updated skip button text after generating quests: {newText} for {buildingName}");
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"Skip button clicked but ConstructionManager.Instance is null!");
+                }
             }
-            
-            Debug.Log($"Generated {quests.Count} quests for {regionType} with difficulty {targetDifficulty} (remaining: {remainingMinutes:F1} minutes)");
-            return quests;
         }
         
         /// <summary>
@@ -318,28 +401,119 @@ namespace LifeCraft.UI
         /// </summary>
         public void CheckSkipQuestCompletion(string completedQuestText)
         {
-            if (originalQuestTexts.Contains(completedQuestText))
+            Debug.Log($"CheckSkipQuestCompletion called for {buildingName} with quest: {completedQuestText}");
+            
+            // Delegate to ConstructionManager
+            if (ConstructionManager.Instance != null)
             {
-                // Remove the completed quest from our tracking
-                int index = originalQuestTexts.IndexOf(completedQuestText);
-                if (index >= 0)
-                {
-                    originalQuestTexts.RemoveAt(index);
-                    if (index < skipQuestIds.Count)
-                    {
-                        skipQuestIds.RemoveAt(index);
-                    }
-                    completedSkipQuests++;
-                }
+                ConstructionManager.Instance.CheckQuestCompletion(buildingName, gridPosition, completedQuestText);
                 
-                Debug.Log($"Construction quest completed for {buildingName}: {completedQuestText} ({originalQuestTexts.Count} quests remaining)");
+                // Update skip button text immediately for quest completion
+                UpdateSkipButtonTextForCompletion();
+                Debug.Log($"CheckSkipQuestCompletion: Updated skip button text for {buildingName}");
+            }
+            else
+            {
+                Debug.LogError($"CheckSkipQuestCompletion: ConstructionManager.Instance is null!");
+            }
+        }
+        
+        /// <summary>
+        /// Check if a quest deletion matches our construction quests
+        /// </summary>
+        public void CheckSkipQuestDeletion(string deletedQuestText)
+        {
+            Debug.Log($"CheckSkipQuestDeletion called for {buildingName} with quest: {deletedQuestText}");
+            
+            // Delegate to ConstructionManager (this will trigger the OnQuestDeleted event)
+            if (ConstructionManager.Instance != null)
+            {
+                ConstructionManager.Instance.CheckQuestDeletion(buildingName, gridPosition, deletedQuestText);
                 
-                // Check if all quests are completed
-                if (originalQuestTexts.Count == 0)
+                // DON'T update skip button text for deletions - let the player re-add quests if needed
+                Debug.Log($"CheckSkipQuestDeletion: Quest deleted, skip button text unchanged for {buildingName}");
+            }
+            else
+            {
+                Debug.LogError($"CheckSkipQuestDeletion: ConstructionManager.Instance is null!");
+            }
+        }
+        
+        // Removed ReEnableSkipButtonUpdates method - no longer needed
+        
+        /// <summary>
+        /// Update skip button text specifically for quest completion
+        /// </summary>
+        private void UpdateSkipButtonTextForCompletion()
+        {
+            ConstructionProject project = ConstructionManager.Instance?.GetProject(buildingName, gridPosition);
+            if (project != null && skipButtonText != null)
+            {
+                Debug.Log($"UpdateSkipButtonTextForCompletion: Found project for {buildingName}, master quest count: {project.originalQuestTexts.Count}");
+                
+                if (project.originalQuestTexts.Count > 0)
                 {
-                    Debug.Log($"All construction quests completed for {buildingName}. Completing construction and hiding panel.");
-                    CompleteConstruction();
+                    // Show total quests remaining from master list
+                    string newText = $"Skip ({project.originalQuestTexts.Count} quests remaining)";
+                    skipButtonText.text = newText;
+                    Debug.Log($"UpdateSkipButtonTextForCompletion: Updated skip button text to: {newText} for {buildingName}");
                 }
+                else
+                {
+                    // No quests in master list - calculate how many more quests are needed
+                    float elapsedTime = Time.time - project.startTime;
+                    float remainingTime = project.constructionDuration - elapsedTime;
+                    float remainingMinutes = remainingTime / 60f;
+                    int totalQuestsNeeded = Mathf.CeilToInt(remainingMinutes / 36f);
+                    totalQuestsNeeded = Mathf.Clamp(totalQuestsNeeded, 1, 10);
+                    
+                    // Calculate quests still needed (accounting for completed quests)
+                    int questsStillNeeded = totalQuestsNeeded - project.completedSkipQuests;
+                    questsStillNeeded = Mathf.Max(0, questsStillNeeded); // Don't go negative
+                    
+                    // Determine difficulty based on remaining time
+                    QuestDifficulty difficulty;
+                    if (remainingMinutes >= 270f) difficulty = QuestDifficulty.Expert;
+                    else if (remainingMinutes >= 180f) difficulty = QuestDifficulty.Hard;
+                    else if (remainingMinutes >= 90f) difficulty = QuestDifficulty.Medium;
+                    else difficulty = QuestDifficulty.Easy;
+                    
+                    string difficultyText = difficulty.ToString();
+                    string newText = $"Skip ({questsStillNeeded} {difficultyText} quests)";
+                    skipButtonText.text = newText;
+                    Debug.Log($"UpdateSkipButtonTextForCompletion: Updated skip button text to: {newText} for {buildingName}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"UpdateSkipButtonTextForCompletion: Project not found or skipButtonText is null for {buildingName}");
+            }
+        }
+        
+        /// <summary>
+        /// Force an immediate UI update to reflect quest completion
+        /// </summary>
+        private IEnumerator ForceUIUpdate()
+        {
+            // Wait a frame to ensure ConstructionManager has processed the quest completion
+            yield return null;
+            
+            Debug.Log($"ForceUIUpdate: Starting immediate UI update for {buildingName}");
+            
+            // Skip button text updates are now handled by UpdateSkipButtonTextForCompletion
+            
+            // Get current project status and update UI immediately
+            ConstructionProject project = ConstructionManager.Instance?.GetProject(buildingName, gridPosition);
+            if (project != null && skipButtonText != null)
+            {
+                Debug.Log($"ForceUIUpdate: Found project for {buildingName}, active quest count: {project.activeQuestTexts.Count}, master quest count: {project.originalQuestTexts.Count}");
+                
+                // Skip button text is now updated by UpdateSkipButtonTextForCompletion method
+                // This method is only called for quest completions, not deletions
+            }
+            else
+            {
+                Debug.LogWarning($"ForceUIUpdate: Project not found or skipButtonText is null for {buildingName}");
             }
         }
         
@@ -348,118 +522,60 @@ namespace LifeCraft.UI
         /// </summary>
         public bool HasQuest(string questText)
         {
-            return originalQuestTexts.Contains(questText);
-        }
-        
-        /// <summary>
-        /// Calculate difficulty based on remaining time
-        /// </summary>
-        private QuestDifficulty CalculateDifficultyForTime(float remainingMinutes)
-        {
-            // Scale difficulty based on remaining time
-            // 24+ hours (1440+ minutes) = Expert (hardest)
-            // 12-24 hours (720-1440 minutes) = Hard
-            // 2-12 hours (120-720 minutes) = Medium
-            // 0-2 hours (0-120 minutes) = Easy
-            
-            if (remainingMinutes >= 1440f) return QuestDifficulty.Expert;
-            if (remainingMinutes >= 720f) return QuestDifficulty.Hard;
-            if (remainingMinutes >= 120f) return QuestDifficulty.Medium;
-            return QuestDifficulty.Easy;
-        }
-        
-        /// <summary>
-        /// Filter quests by difficulty
-        /// </summary>
-        private List<string> FilterQuestsByDifficulty(List<string> allQuests, QuestDifficulty targetDifficulty)
-        {
-            var filteredQuests = new List<string>();
-            
-            foreach (string quest in allQuests)
+            // Delegate to ConstructionManager
+            if (ConstructionManager.Instance != null)
             {
-                QuestDifficulty questDifficulty = DetermineQuestDifficulty(quest);
-                if (questDifficulty == targetDifficulty)
+                ConstructionProject project = ConstructionManager.Instance.GetProject(buildingName, gridPosition);
+                bool hasQuest = project != null && project.activeQuestTexts.Contains(questText);
+                Debug.Log($"HasQuest check for '{questText}' in {buildingName}: {hasQuest}");
+                if (project != null)
                 {
-                    filteredQuests.Add(quest);
+                    Debug.Log($"HasQuest: Active quests: {string.Join(", ", project.activeQuestTexts)}");
                 }
+                return hasQuest;
+            }
+            return false;
+        }
+        
+        /// <summary>
+        /// Handle construction completion event from ConstructionManager
+        /// </summary>
+        private void OnConstructionCompleted(string completedBuildingName, Vector3Int completedGridPosition)
+        {
+            // Check if this is the construction that was completed
+            if (completedBuildingName == buildingName && completedGridPosition == gridPosition)
+            {
+                Debug.Log($"Construction completion event received for {buildingName} - hiding panel");
+                CompleteConstruction();
+            }
+        }
+        
+        /// <summary>
+        /// Handle quest deletion event from ConstructionManager
+        /// </summary>
+        private void OnQuestDeleted(string deletedBuildingName, Vector3Int deletedGridPosition)
+        {
+            // Check if this is the construction that had a quest deleted
+            if (deletedBuildingName == buildingName && deletedGridPosition == gridPosition)
+            {
+                Debug.Log($"Quest deletion event received for {buildingName} - skip button text unchanged");
+                // Skip button text is no longer updated in UpdateUI, so no action needed
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            // Unsubscribe from events to prevent memory leaks
+            if (ConstructionManager.Instance != null)
+            {
+                ConstructionManager.Instance.OnConstructionCompleted -= OnConstructionCompleted;
+                ConstructionManager.Instance.OnQuestDeleted -= OnQuestDeleted;
             }
             
-            // If no quests found for target difficulty, try easier difficulties
-            if (filteredQuests.Count == 0)
+            // Stop coroutine if it's running
+            if (updateCoroutine != null)
             {
-                foreach (string quest in allQuests)
-                {
-                    QuestDifficulty questDifficulty = DetermineQuestDifficulty(quest);
-                    if (questDifficulty <= targetDifficulty)
-                    {
-                        filteredQuests.Add(quest);
-                    }
-                }
-            }
-            
-            return filteredQuests;
-        }
-        
-        /// <summary>
-        /// Determine quest difficulty based on quest text
-        /// </summary>
-        private QuestDifficulty DetermineQuestDifficulty(string questText)
-        {
-            string lowerText = questText.ToLower();
-            
-            // EASY: Short duration, simple actions
-            if (lowerText.Contains("5 minute") || lowerText.Contains("2 minute") || 
-                lowerText.Contains("quick") || lowerText.Contains("simple") || 
-                lowerText.Contains("small") || lowerText.Contains("just") || 
-                lowerText.Contains("30 second") || lowerText.Contains("1 minute") ||
-                lowerText.Contains("take a") || lowerText.Contains("do a quick") ||
-                lowerText.Contains("smile at") || lowerText.Contains("compliment"))
-                return QuestDifficulty.Easy;
-            
-            // MEDIUM: Moderate duration, practice actions
-            if (lowerText.Contains("10 minute") || lowerText.Contains("15 minute") ||
-                lowerText.Contains("try") || lowerText.Contains("practice") ||
-                lowerText.Contains("write down") || lowerText.Contains("read a") ||
-                lowerText.Contains("watch a") || lowerText.Contains("learn") ||
-                lowerText.Contains("organize") || lowerText.Contains("make a") ||
-                lowerText.Contains("create") || lowerText.Contains("design") ||
-                lowerText.Contains("call or video") || lowerText.Contains("share something"))
-                return QuestDifficulty.Medium;
-            
-            // HARD: Longer duration, complete actions
-            if (lowerText.Contains("20 minute") || lowerText.Contains("30 minute") ||
-                lowerText.Contains("complete") || lowerText.Contains("go for a") ||
-                lowerText.Contains("drink 8 glass") || lowerText.Contains("get at least 30 minute") ||
-                lowerText.Contains("track your") || lowerText.Contains("do a set of"))
-                return QuestDifficulty.Hard;
-            
-            // EXPERT: Very long duration, complex actions
-            if (lowerText.Contains("60 minute") || lowerText.Contains("2 hour") ||
-                lowerText.Contains("complete a full") || lowerText.Contains("spend the entire") ||
-                lowerText.Contains("master") || lowerText.Contains("advanced"))
-                return QuestDifficulty.Expert;
-            
-            // Default to Medium if unclear
-            return QuestDifficulty.Medium;
-        }
-        
-        /// <summary>
-        /// Get a generic quest for the specified difficulty
-        /// </summary>
-        private string GetGenericQuestForDifficulty(QuestDifficulty difficulty)
-        {
-            switch (difficulty)
-            {
-                case QuestDifficulty.Easy:
-                    return "Take a 5-minute break and stretch";
-                case QuestDifficulty.Medium:
-                    return "Spend 15 minutes on a hobby you enjoy";
-                case QuestDifficulty.Hard:
-                    return "Complete a 30-minute workout session";
-                case QuestDifficulty.Expert:
-                    return "Spend 2 hours learning a new skill";
-                default:
-                    return "Complete a healthy habit task";
+                StopCoroutine(updateCoroutine);
             }
         }
     }

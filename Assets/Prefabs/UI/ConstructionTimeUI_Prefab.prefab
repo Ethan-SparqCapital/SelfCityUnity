@@ -529,7 +529,7 @@ GameObject:
   - component: {fileID: 4755794719711518595}
   - component: {fileID: 3401560101950764420}
   - component: {fileID: 5222968794943918521}
-  - component: {fileID: 5084519401389690036}
+  - component: {fileID: 4869747021336495849}
   m_Layer: 5
   m_Name: ConstructionTimeUI_Prefab
   m_TagString: Untagged
@@ -597,7 +597,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5084519401389690036
+--- !u!114 &4869747021336495849
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -606,14 +606,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4938431667319403362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61e85bbb50e64ac40859b4a7c0487faa, type: 3}
+  m_Script: {fileID: 11500000, guid: cea04570e311b1549be318fec7a6ca3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  constructionPanelName: ConstructionTimeUI_Prefab
-  progressBarName: ProgressBar
-  timerTextName: TimerText
-  skipButtonName: SkipButton
-  skipButtonTextName: Text (TMP)
+  constructionPanel: {fileID: 4938431667319403362}
+  progressBar: {fileID: 6157694633815290953}
+  timerText: {fileID: 5785812600537273277}
+  skipButton: {fileID: 5564215016604543768}
+  skipButtonText: {fileID: 8324525415137381072}
   updateInterval: 1
 --- !u!1 &5005138979102644783
 GameObject:

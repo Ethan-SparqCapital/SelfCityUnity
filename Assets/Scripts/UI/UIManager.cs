@@ -141,8 +141,13 @@ namespace LifeCraft.UI
         /// </summary>
         private void SetupBuildingPanel()
         {
+            Debug.Log("=== SETUP BUILDING PANEL ===");
+            
             if (buildingButtonContainer == null || buildingButtonPrefab == null)
+            {
+                Debug.LogError("SetupBuildingPanel: buildingButtonContainer or buildingButtonPrefab is null!");
                 return;
+            }
 
             // Clear existing buttons
             foreach (Transform child in buildingButtonContainer)
@@ -156,6 +161,9 @@ namespace LifeCraft.UI
                 var unlockedRegions = GameManager.Instance.RegionUnlockSystem.GetUnlockedRegions();
                 var allBuildings = buildingShopDatabase.buildings;
                 
+                Debug.Log($"SetupBuildingPanel: Found {unlockedRegions.Count} unlocked regions and {allBuildings.Count} total buildings");
+                
+                int buildingsCreated = 0;
                 foreach (var building in allBuildings)
                 {
                     // Check if this building belongs to an unlocked region
@@ -167,10 +175,19 @@ namespace LifeCraft.UI
                         if (buildingButton != null)
                         {
                             buildingButton.Initialize(building, OnBuildingButtonClicked);
+                            buildingsCreated++;
+                            Debug.Log($"Created building button for: {building.name}");
                         }
                     }
                 }
+                Debug.Log($"SetupBuildingPanel: Created {buildingsCreated} building buttons");
             }
+            else
+            {
+                Debug.LogError("SetupBuildingPanel: buildingShopDatabase or GameManager.Instance.RegionUnlockSystem is null!");
+            }
+            
+            Debug.Log("=== END SETUP BUILDING PANEL ===");
         }
 
         /// <summary>
@@ -178,6 +195,8 @@ namespace LifeCraft.UI
         /// </summary>
         private bool IsBuildingFromUnlockedRegion(string buildingName, List<AssessmentQuizManager.RegionType> unlockedRegions)
         {
+            Debug.Log($"Checking if building '{buildingName}' belongs to unlocked regions: {string.Join(", ", unlockedRegions.ConvertAll(r => AssessmentQuizManager.GetRegionDisplayName(r)))}");
+            
             // Try to get the actual region from the building shop database first
             if (buildingShopDatabase != null)
             {
@@ -187,7 +206,9 @@ namespace LifeCraft.UI
                 {
                     // Convert the building's region to AssessmentQuizManager.RegionType
                     var buildingRegion = GetBuildingRegionFromShopItem(buildingItem);
-                    return unlockedRegions.Contains(buildingRegion);
+                    bool isUnlocked = unlockedRegions.Contains(buildingRegion);
+                    Debug.Log($"Building '{buildingName}' found in shop database, region: {buildingRegion}, isUnlocked: {isUnlocked}");
+                    return isUnlocked;
                 }
             }
             
@@ -199,7 +220,9 @@ namespace LifeCraft.UI
                 buildingName.Contains("Biohacking") || buildingName.Contains("Aquatic") || 
                 buildingName.Contains("Hydration") || buildingName.Contains("Fresh Air"))
             {
-                return unlockedRegions.Contains(AssessmentQuizManager.RegionType.HealthHarbor);
+                bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.HealthHarbor);
+                Debug.Log($"Building '{buildingName}' matched HealthHarbor pattern, isUnlocked: {isUnlocked}");
+                return isUnlocked;
             }
             else if (buildingName.Contains("Meditation") || buildingName.Contains("Therapy") || 
                      buildingName.Contains("Gratitude") || buildingName.Contains("Boundary") || 
@@ -209,7 +232,9 @@ namespace LifeCraft.UI
                      buildingName.Contains("Dream") || buildingName.Contains("Focus") || 
                      buildingName.Contains("Resilience"))
             {
-                return unlockedRegions.Contains(AssessmentQuizManager.RegionType.MindPalace);
+                bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.MindPalace);
+                Debug.Log($"Building '{buildingName}' matched MindPalace pattern, isUnlocked: {isUnlocked}");
+                return isUnlocked;
             }
             else if (buildingName.Contains("Writer") || buildingName.Contains("Art") || 
                      buildingName.Contains("Expression") || buildingName.Contains("Amphitheater") || 
@@ -219,7 +244,9 @@ namespace LifeCraft.UI
                      buildingName.Contains("Design") || buildingName.Contains("Sculpture") || 
                      buildingName.Contains("Film"))
             {
-                return unlockedRegions.Contains(AssessmentQuizManager.RegionType.CreativeCommons);
+                bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.CreativeCommons);
+                Debug.Log($"Building '{buildingName}' matched CreativeCommons pattern, isUnlocked: {isUnlocked}");
+                return isUnlocked;
             }
             else if (buildingName.Contains("Friendship") || buildingName.Contains("Kindness") || 
                      buildingName.Contains("Community") || buildingName.Contains("Cultural") || 
@@ -229,10 +256,13 @@ namespace LifeCraft.UI
                      buildingName.Contains("Celebration") || buildingName.Contains("Pet") || 
                      buildingName.Contains("Teamwork"))
             {
-                return unlockedRegions.Contains(AssessmentQuizManager.RegionType.SocialSquare);
+                bool isUnlocked = unlockedRegions.Contains(AssessmentQuizManager.RegionType.SocialSquare);
+                Debug.Log($"Building '{buildingName}' matched SocialSquare pattern, isUnlocked: {isUnlocked}");
+                return isUnlocked;
             }
 
             // Default to true if no match found (for decorations and other items)
+            Debug.Log($"Building '{buildingName}' didn't match any region pattern, defaulting to true");
             return true;
         }
 
@@ -429,7 +459,22 @@ namespace LifeCraft.UI
         /// </summary>
         public void RefreshBuildingPanel()
         {
+            Debug.Log("=== UIMANAGER REFRESH BUILDING PANEL ===");
+            Debug.Log($"RefreshBuildingPanel called at: {System.DateTime.Now}");
+            
+            // Check RegionUnlockSystem state
+            if (GameManager.Instance?.RegionUnlockSystem != null)
+            {
+                var unlockedRegions = GameManager.Instance.RegionUnlockSystem.GetUnlockedRegions();
+                Debug.Log($"UIManager: RegionUnlockSystem reports {unlockedRegions.Count} unlocked regions: {string.Join(", ", unlockedRegions.ConvertAll(r => AssessmentQuizManager.GetRegionDisplayName(r)))}");
+            }
+            else
+            {
+                Debug.LogError("UIManager: GameManager.Instance or RegionUnlockSystem is null!");
+            }
+            
             SetupBuildingPanel();
+            Debug.Log("=== END UIMANAGER REFRESH BUILDING PANEL ===");
         }
 
         /// <summary>

@@ -307,6 +307,19 @@ namespace LifeCraft.UI
         {
             Debug.Log("=== SHOP TAB REFRESH CALLED ===");
             Debug.Log($"RefreshTabVisibility called at: {System.DateTime.Now}");
+            
+            // Check RegionUnlockSystem state
+            var unlockSystem = LifeCraft.Systems.RegionUnlockSystem.Instance;
+            if (unlockSystem != null)
+            {
+                var unlockedRegions = unlockSystem.GetUnlockedRegions();
+                Debug.Log($"ShopTabManager: RegionUnlockSystem reports {unlockedRegions.Count} unlocked regions: {string.Join(", ", unlockedRegions.ConvertAll(r => AssessmentQuizManager.GetRegionDisplayName(r)))}");
+            }
+            else
+            {
+                Debug.LogError("ShopTabManager: RegionUnlockSystem.Instance is null!");
+            }
+            
             UpdateRegionTabVisibility();
             Debug.Log("=== END SHOP TAB REFRESH ===");
         }

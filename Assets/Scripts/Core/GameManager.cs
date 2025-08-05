@@ -860,11 +860,20 @@ namespace LifeCraft.Core
                     
                     if (questManager != null)
                         questManager.Initialize();
-
-                    // Refresh all UI components to reflect the unlocked region
-                    Debug.Log("Starting UI refresh...");
-                    RefreshUIAfterRegionUnlock();
                     
+                    // Initialize PlayerLevelManager with the selected region and quiz scores
+                    if (PlayerLevelManager.Instance != null && assessmentQuizManager != null)
+                    {
+                        var quizScores = assessmentQuizManager.GetRegionScores();
+                        Debug.Log("Initializing PlayerLevelManager building unlock system...");
+                        PlayerLevelManager.Instance.InitializeBuildingUnlockSystem(selectedRegion, quizScores);
+                        Debug.Log("PlayerLevelManager building unlock system initialized");
+                    }
+                    else
+                    {
+                        Debug.LogError("PlayerLevelManager.Instance or AssessmentQuizManager is null - cannot initialize building unlock system!");
+                    }
+
                     // Subscribe to region unlock events to refresh UI when regions are unlocked
                     if (regionUnlockSystem != null)
                     {
@@ -877,8 +886,15 @@ namespace LifeCraft.Core
                         Debug.LogError("RegionUnlockSystem is null - cannot subscribe to unlock events!");
                     }
                     
+                    // Refresh all UI components to reflect the unlocked region
+                    Debug.Log("Starting UI refresh...");
+                    RefreshUIAfterRegionUnlock();
+                    
                     // Force refresh UI components after a short delay to ensure they're initialized
                     StartCoroutine(RefreshUIAfterDelay());
+                    
+                    // Additional refresh after a longer delay to ensure RegionUnlockSystem state is fully processed
+                    StartCoroutine(RefreshUIAfterRegionUnlockDelayed());
                     
                     // Save the game immediately to persist the unlock state
                     SaveGame();
@@ -910,7 +926,19 @@ namespace LifeCraft.Core
         /// </summary>
         private void RefreshUIAfterRegionUnlock()
         {
-            Debug.Log("Refreshing UI after region unlock...");
+            Debug.Log("=== REFRESH UI AFTER REGION UNLOCK ===");
+            Debug.Log($"RefreshUIAfterRegionUnlock called at: {System.DateTime.Now}");
+            
+            // Check RegionUnlockSystem state first
+            if (regionUnlockSystem != null)
+            {
+                var unlockedRegions = regionUnlockSystem.GetUnlockedRegions();
+                Debug.Log($"RegionUnlockSystem reports {unlockedRegions.Count} unlocked regions: {string.Join(", ", unlockedRegions.ConvertAll(r => AssessmentQuizManager.GetRegionDisplayName(r)))}");
+            }
+            else
+            {
+                Debug.LogError("RegionUnlockSystem is null in RefreshUIAfterRegionUnlock!");
+            }
             
             // Refresh building panel
             if (uiManager != null)
@@ -975,7 +1003,7 @@ namespace LifeCraft.Core
                 Debug.LogWarning("CityMapZoomController not found!");
             }
 
-            Debug.Log("UI refresh completed");
+            Debug.Log("=== END REFRESH UI AFTER REGION UNLOCK ===");
         }
 
         /// <summary>
@@ -983,7 +1011,7 @@ namespace LifeCraft.Core
         /// </summary>
         private System.Collections.IEnumerator RefreshUIAfterDelay()
         {
-            yield return new WaitForSeconds(0.1f); // Wait for UI components to initialize
+            yield return new WaitForSeconds(0.2f); // Wait for UI components to initialize
             
             Debug.Log("Delayed UI refresh starting...");
             RefreshUIAfterRegionUnlock();

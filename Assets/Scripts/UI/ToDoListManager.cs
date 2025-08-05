@@ -33,6 +33,8 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
     /// <param name="questText"> The text of the quest/task to be added to the To-Do List. </param>
     public void AddToDo(string questText, bool fromDailyQuest = false, int rewardAmount = 5) // this method adds a new to-do item to the list, checks if it is from Daily Quests, and stores the dynamic reward amount.
     {
+        Debug.Log($"ToDoListManager: Attempting to add quest: '{questText}' (Container has {toDoListContainer?.childCount ?? 0} items)");
+        
         if (toDoListContainer == null || toDoItemPrefab == null) // check if the container or prefab is not assigned.
         {
             Debug.LogError("ToDoListManager: Container or Prefab not assigned!"); // Log an error if they are not assigned. 
@@ -59,7 +61,7 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
             }
         }
 
-        if (toDoListContainer.childCount <= 10 && !alreadyExists) // My own additional check statement (written by Ethan Le): this checks if the number of children in the container is less than or equal to 10, and if the new quest does not exist in the To-Do List yet. 
+        if (toDoListContainer.childCount <= 20 && !alreadyExists) // Increased limit to 20 to accommodate construction skip quests 
         {
             // Instantiate the To-Do item prefab (toDoItemPrefab) as a child of the container (toDoListContainer). 
             GameObject newItem = Instantiate(toDoItemPrefab, toDoListContainer); // this creates a new instance of the to-do item prefab and sets its parent to the to-do list container. 
@@ -101,9 +103,9 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
 
         }
 
-        else if (toDoListContainer.childCount > 10)// if the number of children in the container is greater than 10, then we cannot add a new item.
+                else if (toDoListContainer.childCount > 20)// if the number of children in the container is greater than 20, then we cannot add a new item.
         {
-            Debug.LogWarning("ToDoListManager: Exceeded 10 items!"); // Log a warning if the number of children in the container is greater than 10, indicating that we cannot add a new item. 
+            Debug.LogWarning("ToDoListManager: Exceeded 20 items!"); // Log a warning if the number of children in the container is greater than 20, indicating that we cannot add a new item.
         }
 
         else if (alreadyExists) // if the questText already exists in the To-Do List, then we cannot add a new item. 
@@ -396,19 +398,50 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
                 string questText = GetQuestTextFromItem(item); // Get the quest text from the item to use for the reward. 
                 
                 // Check if this is a construction skip quest
-                // We'll identify construction quests by checking if they're in any BuildingConstructionTimer's tracking
-                var constructionTimers = FindObjectsByType<BuildingConstructionTimer>(FindObjectsSortMode.None);
+                // Query ConstructionManager directly instead of looking for BuildingConstructionTimer components
                 bool isConstructionQuest = false;
                 
-                foreach (var constructionTimer in constructionTimers)
+                Debug.Log($"[CompleteSelectedTasks] Checking quest: '{questText}' against ConstructionManager");
+                
+                if (ConstructionManager.Instance != null)
                 {
-                    // Check if this timer has the quest text in its tracking
-                    if (constructionTimer.HasQuest(questText))
+                    // Get all active projects from ConstructionManager
+                    var allProjects = ConstructionManager.Instance.GetAllProjectKeys();
+                    Debug.Log($"[CompleteSelectedTasks] Found {allProjects.Count} active construction projects");
+                    
+                    foreach (string projectKey in allProjects)
                     {
-                        isConstructionQuest = true;
-                        constructionTimer.CheckSkipQuestCompletion(questText);
-                        break;
+                        // Parse the project key to get building name and position
+                        string[] parts = projectKey.Split('_');
+                        if (parts.Length >= 4)
+                        {
+                            string buildingName = parts[0];
+                            Vector3Int gridPosition = new Vector3Int(
+                                int.Parse(parts[1]),
+                                int.Parse(parts[2]),
+                                int.Parse(parts[3])
+                            );
+                            
+                            // Check if this project has the quest
+                            ConstructionProject project = ConstructionManager.Instance.GetProject(buildingName, gridPosition);
+                            if (project != null && project.originalQuestTexts.Contains(questText))
+                            {
+                                isConstructionQuest = true;
+                                Debug.Log($"[CompleteSelectedTasks] Found construction quest in project {buildingName}! Calling CheckQuestCompletion for '{questText}'");
+                                ConstructionManager.Instance.CheckQuestCompletion(buildingName, gridPosition, questText);
+                                break;
+                            }
+                        }
                     }
+                }
+                else
+                {
+                    Debug.LogWarning($"[CompleteSelectedTasks] ConstructionManager.Instance is null!");
+                }
+                
+                if (!isConstructionQuest)
+                {
+                    Debug.Log($"[CompleteSelectedTasks] Quest '{questText}' is NOT a construction quest");
                 }
                 
                 int rewardAmount = 5;
@@ -489,6 +522,56 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
             Toggle toggle = item.GetComponentInChildren<Toggle>(); // Get the Toggle component from the item to check if it is marked as selected. 
             if (toggle != null && toggle.isOn) // Check if the item is checkmarked as selected. 
             {
+                string questText = GetQuestTextFromItem(item); // Get the quest text before destroying the item
+                
+                // Check if this is a construction skip quest that was deleted
+                // Query ConstructionManager directly instead of looking for BuildingConstructionTimer components
+                bool isConstructionQuest = false;
+                
+                Debug.Log($"[DeleteSelectedTasks] Checking quest: '{questText}' against ConstructionManager");
+                
+                if (ConstructionManager.Instance != null)
+                {
+                    // Get all active projects from ConstructionManager
+                    var allProjects = ConstructionManager.Instance.GetAllProjectKeys();
+                    Debug.Log($"[DeleteSelectedTasks] Found {allProjects.Count} active construction projects");
+                    
+                    foreach (string projectKey in allProjects)
+                    {
+                        // Parse the project key to get building name and position
+                        string[] parts = projectKey.Split('_');
+                        if (parts.Length >= 4)
+                        {
+                            string buildingName = parts[0];
+                            Vector3Int gridPosition = new Vector3Int(
+                                int.Parse(parts[1]),
+                                int.Parse(parts[2]),
+                                int.Parse(parts[3])
+                            );
+                            
+                            // Check if this project has the quest
+                            ConstructionProject project = ConstructionManager.Instance.GetProject(buildingName, gridPosition);
+                            if (project != null && project.originalQuestTexts.Contains(questText))
+                            {
+                                isConstructionQuest = true;
+                                Debug.Log($"[DeleteSelectedTasks] Found construction quest in project {buildingName}! Calling CheckQuestDeletion for '{questText}'");
+                                ConstructionManager.Instance.CheckQuestDeletion(buildingName, gridPosition, questText);
+                                Debug.Log($"Construction quest deleted: {questText} - notifying ConstructionManager");
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"[DeleteSelectedTasks] ConstructionManager.Instance is null!");
+                }
+                
+                if (!isConstructionQuest)
+                {
+                    Debug.Log($"[DeleteSelectedTasks] Quest '{questText}' is NOT a construction quest");
+                }
+                
                 Destroy(item.gameObject); // Destroy the item without giving a reward. 
             }
         }
