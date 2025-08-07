@@ -342,31 +342,41 @@ namespace LifeCraft.UI
                             }
                         }
                         
-                        holdDownInteraction.InitializeItemData(isBuilding, _decorationItem.displayName, 0, ResourceManager.ResourceType.EnergyCrystals);
-                        Debug.Log($"Initialized HoldDownInteraction for {_decorationItem.displayName}: isBuilding={isBuilding}");
+                        holdDownInteraction.InitializeItemDataFromShop(_decorationItem.displayName, _decorationItem.region);
+                        Debug.Log($"Initialized HoldDownInteraction for {_decorationItem.displayName}: isBuilding={isBuilding}, region={_decorationItem.region}");
                         
                         // If this is a building, start construction directly (only on first placement)
                         if (isBuilding)
                         {
-                            Debug.Log($"Starting construction for {_decorationItem.displayName} with {constructionTimeMinutes} minutes");
-                            
-                            // Use the BuildingConstructionTimer component on the placed item
-                            var constructionTimer = placedItem.GetComponent<BuildingConstructionTimer>();
-                            if (constructionTimer != null)
+                            // Check if this building has saved construction progress
+                            if (_decorationItem.constructionProgress > 0)
                             {
-                                // Use the placed item's position as a unique identifier
-                                Vector3Int gridPosition = new Vector3Int(
-                                    Mathf.RoundToInt(placedItem.transform.position.x),
-                                    Mathf.RoundToInt(placedItem.transform.position.y),
-                                    0
-                                );
-                                
-                                constructionTimer.StartConstruction(_decorationItem.displayName, gridPosition, constructionTimeMinutes, _decorationItem.region.ToString());
-                                Debug.Log($"Started construction for {_decorationItem.displayName} at {gridPosition} (FIRST PLACEMENT)");
+                                // Restore construction progress
+                                RestoreConstructionProgress(placedItem, _decorationItem);
                             }
                             else
                             {
-                                Debug.LogError("BuildingConstructionTimer component not found on placed item!");
+                                // Start new construction
+                                Debug.Log($"Starting new construction for {_decorationItem.displayName} with {constructionTimeMinutes} minutes");
+                                
+                                // Use the BuildingConstructionTimer component on the placed item
+                                var constructionTimer = placedItem.GetComponent<BuildingConstructionTimer>();
+                                if (constructionTimer != null)
+                                {
+                                    // Use the placed item's position as a unique identifier
+                                    Vector3Int gridPosition = new Vector3Int(
+                                        Mathf.RoundToInt(placedItem.transform.position.x),
+                                        Mathf.RoundToInt(placedItem.transform.position.y),
+                                        0
+                                    );
+                                    
+                                    constructionTimer.StartConstruction(_decorationItem.displayName, gridPosition, constructionTimeMinutes, _decorationItem.region.ToString());
+                                    Debug.Log($"Started new construction for {_decorationItem.displayName} at {gridPosition}");
+                                }
+                                else
+                                {
+                                    Debug.LogError("BuildingConstructionTimer component not found on placed item!");
+                                }
                             }
                         }
 
@@ -468,6 +478,69 @@ namespace LifeCraft.UI
             }
         }
         
+        /// <summary>
+        /// Restore construction progress when placing a building back
+        /// </summary>
+        private void RestoreConstructionProgress(GameObject placedItem, DecorationItem decorationItem)
+        {
+            Debug.Log($"Restoring construction progress for {decorationItem.displayName}: {decorationItem.constructionProgress:F1}s remaining");
+            
+            // Use the BuildingConstructionTimer component on the placed item
+            var constructionTimer = placedItem.GetComponent<BuildingConstructionTimer>();
+            if (constructionTimer != null)
+            {
+                // Use the placed item's position as a unique identifier
+                Vector3Int gridPosition = new Vector3Int(
+                    Mathf.RoundToInt(placedItem.transform.position.x),
+                    Mathf.RoundToInt(placedItem.transform.position.y),
+                    0
+                );
+                
+                // Calculate the adjusted start time to account for elapsed time
+                float elapsedTime = decorationItem.constructionDuration - decorationItem.constructionProgress;
+                float adjustedStartTime = Time.time - elapsedTime;
+                
+                // Register the construction project with saved progress
+                if (ConstructionManager.Instance != null)
+                {
+                    // Create a custom construction project with saved progress
+                    ConstructionManager.Instance.RegisterConstructionWithProgress(
+                        decorationItem.displayName,
+                        gridPosition,
+                        decorationItem.constructionDuration / 60f, // Convert back to minutes
+                        decorationItem.region.ToString(),
+                        adjustedStartTime,
+                        decorationItem.originalQuestTexts,
+                        decorationItem.activeQuestTexts,
+                        decorationItem.completedSkipQuests,
+                        decorationItem.totalSkipQuests
+                    );
+                    
+                    // Start the construction timer with the saved progress
+                    constructionTimer.ResumeConstruction(decorationItem.displayName, gridPosition, decorationItem.constructionDuration / 60f, decorationItem.region.ToString(), decorationItem.skipButtonText);
+                    
+                    Debug.Log($"Restored construction for {decorationItem.displayName} at {gridPosition} with {decorationItem.constructionProgress:F1}s remaining");
+                    
+                    // Clear the saved construction progress to prevent it from being restored again
+                    decorationItem.constructionProgress = -1f;
+                    decorationItem.constructionStartTime = -1f;
+                    decorationItem.constructionDuration = -1f;
+                    decorationItem.originalQuestTexts.Clear();
+                    decorationItem.activeQuestTexts.Clear();
+                    decorationItem.completedSkipQuests = 0;
+                    decorationItem.totalSkipQuests = 0;
+                    decorationItem.skipButtonText = "";
+                }
+                else
+                {
+                    Debug.LogError("ConstructionManager.Instance is null!");
+                }
+            }
+            else
+            {
+                Debug.LogError("BuildingConstructionTimer component not found on placed item!");
+            }
+        }
 
     }
 } 

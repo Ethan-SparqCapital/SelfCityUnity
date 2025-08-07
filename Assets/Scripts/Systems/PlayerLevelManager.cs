@@ -29,8 +29,8 @@ namespace LifeCraft.Systems
         [SerializeField] private int currentEXP = 0;
 
         [Header("EXP Configuration")]
-        [SerializeField] private int baseEXPPerLevel = 100;
-        [SerializeField] private float expMultiplier = 1.5f; // Exponential progression
+        [SerializeField] private int baseEXPPerLevel = 50;
+        [SerializeField] private float expMultiplier = 1.15f; // Exponential progression
 
         // Events
         public System.Action<int> OnLevelUp;

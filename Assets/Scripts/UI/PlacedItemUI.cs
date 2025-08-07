@@ -49,6 +49,9 @@ namespace LifeCraft.UI
             {
                 Debug.Log($"Manually initializing HoldDownInteraction for {_decorationItem.displayName}");
                 
+                // Use the new shop-based initialization method
+                holdDownInteraction.InitializeItemDataFromShop(_decorationItem.displayName, _decorationItem.region);
+                
                 // Check if this is a building by looking at the region type
                 bool isBuilding = (_decorationItem.region != RegionType.Decoration);
                 
@@ -68,7 +71,6 @@ namespace LifeCraft.UI
                     }
                 }
                 
-                holdDownInteraction.InitializeItemData(isBuilding, _decorationItem.displayName, 0, ResourceManager.ResourceType.EnergyCrystals);
                 Debug.Log($"Manually initialized HoldDownInteraction for {_decorationItem.displayName}: isBuilding={isBuilding}");
                 
                 // If this is a building, start construction directly
@@ -356,6 +358,15 @@ namespace LifeCraft.UI
                 return prefab;
             }
             
+            // Try to load from Assets path (for editor)
+            #if UNITY_EDITOR
+            prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/ActionMenuUI_Prefab.prefab");
+            if (prefab != null)
+            {
+                return prefab;
+            }
+            #endif
+            
             // Try to find it in the scene
             GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
             foreach (GameObject obj in allObjects)
@@ -366,6 +377,7 @@ namespace LifeCraft.UI
                 }
             }
             
+            Debug.LogError("ActionMenuUI_Prefab not found in Resources, Assets, or scene!");
             return null;
         }
 

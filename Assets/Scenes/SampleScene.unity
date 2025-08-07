@@ -3972,8 +3972,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 1
   currentEXP: 0
-  baseEXPPerLevel: 100
-  expMultiplier: 1.5
+  baseEXPPerLevel: 50
+  expMultiplier: 1.15
 --- !u!4 &168474744
 Transform:
   m_ObjectHideFlags: 0
@@ -4539,8 +4539,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 407775242}
   m_HandleRect: {fileID: 407775241}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.49552345
+  m_Value: -0.00000012604059
+  m_Size: 0.4953374
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7443,8 +7443,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 515050188}
   m_HandleRect: {fileID: 515050186}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.49552345
+  m_Value: -0.00000012604059
+  m_Size: 0.4953374
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace LifeCraft.Core
 {
@@ -28,6 +29,16 @@ namespace LifeCraft.Core
         public System.DateTime dateAcquired; // When the player got this item
         public string source; // Where the item came from ("DecorChest", "PremiumDecorChest", etc.)
         
+        [Header("Construction Progress")]
+        public float constructionProgress = -1f; // Remaining construction time in seconds (-1 = not under construction)
+        public float constructionStartTime = -1f; // When construction started
+        public float constructionDuration = -1f; // Total construction duration
+        public List<string> originalQuestTexts = new List<string>(); // Master list of quests
+        public List<string> activeQuestTexts = new List<string>(); // Currently active quests
+        public int completedSkipQuests = 0; // Number of completed skip quests
+        public int totalSkipQuests = 0; // Total number of skip quests
+        public string skipButtonText = ""; // Current Skip button text to restore
+        
         /// <summary>
         /// Create a new decoration item (used when adding to inventory)
         /// </summary>
@@ -52,7 +63,17 @@ namespace LifeCraft.Core
                 icon = this.icon,
                 iconColor = this.iconColor,
                 size = this.size,
-                source = this.source
+                source = this.source,
+                region = this.region,
+                // Preserve construction progress
+                constructionProgress = this.constructionProgress,
+                constructionStartTime = this.constructionStartTime,
+                constructionDuration = this.constructionDuration,
+                originalQuestTexts = new List<string>(this.originalQuestTexts),
+                activeQuestTexts = new List<string>(this.activeQuestTexts),
+                completedSkipQuests = this.completedSkipQuests,
+                totalSkipQuests = this.totalSkipQuests,
+                skipButtonText = this.skipButtonText
             };
         }
     }

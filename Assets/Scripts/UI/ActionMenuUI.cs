@@ -113,15 +113,31 @@ namespace LifeCraft.UI
             if (holdDownInteraction == null)
                 return;
                 
-            // Convert world position to screen position
-            Vector3 worldPos = holdDownInteraction.transform.position;
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
-            
-            // Position the menu above the item
-            RectTransform rectTransform = GetComponent<RectTransform>();
-            if (rectTransform != null)
+            // Get the clicked item's RectTransform for proper UI positioning
+            var itemRectTransform = holdDownInteraction.GetComponent<RectTransform>();
+            if (itemRectTransform != null)
             {
-                rectTransform.position = screenPos + Vector3.up * 100f; // Offset upward
+                // Position the menu relative to the item in UI space
+                Vector3 itemPosition = itemRectTransform.position;
+                RectTransform rectTransform = GetComponent<RectTransform>();
+                if (rectTransform != null)
+                {
+                    rectTransform.position = itemPosition + Vector3.up * 150f; // Offset upward
+                    Debug.Log($"ActionMenuUI positioned at UI position {itemPosition} + offset");
+                }
+            }
+            else
+            {
+                // Fallback: try to use world position if no RectTransform
+                Vector3 worldPos = holdDownInteraction.transform.position;
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+                
+                RectTransform rectTransform = GetComponent<RectTransform>();
+                if (rectTransform != null)
+                {
+                    rectTransform.position = screenPos + Vector3.up * 100f; // Offset upward
+                    Debug.Log($"ActionMenuUI positioned at screen position {screenPos} (fallback)");
+                }
             }
         }
         

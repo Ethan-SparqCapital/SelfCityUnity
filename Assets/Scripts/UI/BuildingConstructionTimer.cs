@@ -114,16 +114,78 @@ namespace LifeCraft.UI
                         {
                             Debug.Log($"ReSyncWithManager: Current state for {buildingName} - Active quests: {project.activeQuestTexts.Count}, Master quests: {project.originalQuestTexts.Count}");
                             
-                            if (project.originalQuestTexts.Count > 0)
+                            // Use the same logic as UpdateSkipButtonTextOnResume to ensure consistency
+                            ToDoListManager toDoListManager = FindFirstObjectByType<ToDoListManager>();
+                            if (toDoListManager != null && toDoListManager.toDoListContainer != null)
                             {
-                                // Show total quests needed from master list (not just active ones)
-                                skipButtonText.text = $"Skip ({project.originalQuestTexts.Count} quests remaining)";
-                                Debug.Log($"ReSyncWithManager: Set skip button text for {buildingName} - total quests needed: {project.originalQuestTexts.Count}");
+                                // Count how many of our quests are still active in the To-Do List
+                                int activeQuestsInToDoList = 0;
+                                foreach (string questText in project.activeQuestTexts)
+                                {
+                                    // Check if this quest exists in the To-Do List by iterating through all items
+                                    bool questFound = false;
+                                    for (int i = 0; i < toDoListManager.toDoListContainer.childCount; i++)
+                                    {
+                                        Transform item = toDoListManager.toDoListContainer.GetChild(i);
+                                        
+                                        // Check TextMeshPro first
+                                        TMP_Text tmpText = item.GetComponentInChildren<TMP_Text>();
+                                        if (tmpText != null && tmpText.text == questText)
+                                        {
+                                            questFound = true;
+                                            break;
+                                        }
+                                        
+                                        // Check Unity UI Text
+                                        Text uiText = item.GetComponentInChildren<Text>();
+                                        if (uiText != null && uiText.text == questText)
+                                        {
+                                            questFound = true;
+                                            break;
+                                        }
+                                    }
+                                    
+                                    if (questFound)
+                                    {
+                                        activeQuestsInToDoList++;
+                                    }
+                                }
+                                
+                                if (activeQuestsInToDoList > 0)
+                                {
+                                    // We have active quests - show the correct count
+                                    string newText = $"Skip ({activeQuestsInToDoList} quests remaining)";
+                                    skipButtonText.text = newText;
+                                    Debug.Log($"ReSyncWithManager: Updated Skip button text: '{newText}' for {buildingName} (found {activeQuestsInToDoList} active quests in To-Do List)");
+                                }
+                                else if (project.originalQuestTexts.Count > 0)
+                                {
+                                    // No active quests but we have original quests - show total remaining
+                                    string newText = $"Skip ({project.originalQuestTexts.Count} quests remaining)";
+                                    skipButtonText.text = newText;
+                                    Debug.Log($"ReSyncWithManager: Updated Skip button text: '{newText}' for {buildingName} (no active quests, showing total from original list)");
+                                }
+                                else
+                                {
+                                    // No quests at all - show default text
+                                    skipButtonText.text = "Skip (Generate quests)";
+                                    Debug.Log($"ReSyncWithManager: Updated Skip button text: 'Skip (Generate quests)' for {buildingName} (no quests found)");
+                                }
                             }
                             else
                             {
-                                skipButtonText.text = "Skip (Generate quests)";
-                                Debug.Log($"ReSyncWithManager: Set skip button text for {buildingName} - no quests");
+                                // ToDoListManager not found - fallback to original logic
+                                if (project.originalQuestTexts.Count > 0)
+                                {
+                                    // Show total quests needed from master list (not just active ones)
+                                    skipButtonText.text = $"Skip ({project.originalQuestTexts.Count} quests remaining)";
+                                    Debug.Log($"ReSyncWithManager: Set skip button text for {buildingName} - total quests needed: {project.originalQuestTexts.Count}");
+                                }
+                                else
+                                {
+                                    skipButtonText.text = "Skip (Generate quests)";
+                                    Debug.Log($"ReSyncWithManager: Set skip button text for {buildingName} - no quests");
+                                }
                             }
                         }
                         
@@ -191,6 +253,143 @@ namespace LifeCraft.UI
             if (updateCoroutine != null)
                 StopCoroutine(updateCoroutine);
             updateCoroutine = StartCoroutine(UpdateUI());
+        }
+        
+        /// <summary>
+        /// Resume construction for a building that was paused (project already registered)
+        /// </summary>
+        public void ResumeConstruction(string buildingName, Vector3Int gridPosition, float constructionDurationMinutes, string regionType, string savedSkipButtonText = "")
+        {
+            this.buildingName = buildingName;
+            this.gridPosition = gridPosition;
+            this.constructionDuration = constructionDurationMinutes * 60f;
+            this.regionType = regionType;
+            this.isCompleted = false;
+            
+            // Don't register with ConstructionManager - project should already exist
+            if (ConstructionManager.Instance != null)
+            {
+                // Subscribe to construction completion events
+                ConstructionManager.Instance.OnConstructionCompleted += OnConstructionCompleted;
+                ConstructionManager.Instance.OnQuestDeleted += OnQuestDeleted;
+            }
+            
+            // Show the construction panel
+            if (constructionPanel != null)
+            {
+                constructionPanel.SetActive(true);
+            }
+            
+            // Set up the skip button
+            if (skipButton != null)
+            {
+                skipButton.onClick.RemoveAllListeners();
+                skipButton.onClick.AddListener(OnSkipButtonClicked);
+            }
+            
+            // IMMEDIATELY update Skip button text based on current quest state
+            UpdateSkipButtonTextOnResume(savedSkipButtonText);
+            
+            // Start UI update coroutine (this only updates the UI, not the timer logic)
+            if (updateCoroutine != null)
+                StopCoroutine(updateCoroutine);
+            updateCoroutine = StartCoroutine(UpdateUI());
+            
+            Debug.Log($"Resumed construction UI for {buildingName} at {gridPosition}");
+        }
+        
+        /// <summary>
+        /// Update Skip button text immediately when resuming construction
+        /// </summary>
+        private void UpdateSkipButtonTextOnResume(string savedSkipButtonText)
+        {
+            if (skipButtonText == null) return;
+            
+            // Get the current project to check quest state
+            ConstructionProject project = ConstructionManager.Instance?.GetProject(buildingName, gridPosition);
+            if (project != null)
+            {
+                // Check if we have active quests in the To-Do List
+                ToDoListManager toDoListManager = FindFirstObjectByType<ToDoListManager>();
+                if (toDoListManager != null && toDoListManager.toDoListContainer != null)
+                {
+                    // Count how many of our quests are still active in the To-Do List
+                    int activeQuestsInToDoList = 0;
+                    foreach (string questText in project.activeQuestTexts)
+                    {
+                        // Check if this quest exists in the To-Do List by iterating through all items
+                        bool questFound = false;
+                        for (int i = 0; i < toDoListManager.toDoListContainer.childCount; i++)
+                        {
+                            Transform item = toDoListManager.toDoListContainer.GetChild(i);
+                            
+                            // Check TextMeshPro first
+                            TMP_Text tmpText = item.GetComponentInChildren<TMP_Text>();
+                            if (tmpText != null && tmpText.text == questText)
+                            {
+                                questFound = true;
+                                break;
+                            }
+                            
+                            // Check Unity UI Text
+                            Text uiText = item.GetComponentInChildren<Text>();
+                            if (uiText != null && uiText.text == questText)
+                            {
+                                questFound = true;
+                                break;
+                            }
+                        }
+                        
+                        if (questFound)
+                        {
+                            activeQuestsInToDoList++;
+                        }
+                    }
+                    
+                    if (activeQuestsInToDoList > 0)
+                    {
+                        // We have active quests - show the correct count
+                        string newText = $"Skip ({project.originalQuestTexts.Count} quests remaining)";
+                        skipButtonText.text = newText;
+                        Debug.Log($"Updated Skip button text on resume: '{newText}' for {buildingName} (found {project.originalQuestTexts.Count} TOTAL quests in master list)");
+                    }
+
+                    else
+                    {
+                        // No quests at all - show default text
+                        skipButtonText.text = "Skip (Generate quests)";
+                        Debug.Log($"Updated Skip button text on resume: 'Skip (Generate quests)' for {buildingName} (no quests found)");
+                    }
+                }
+                else
+                {
+                    // ToDoListManager not found - use saved text as fallback
+                    if (!string.IsNullOrEmpty(savedSkipButtonText))
+                    {
+                        skipButtonText.text = savedSkipButtonText;
+                        Debug.Log($"Used saved Skip button text on resume: '{savedSkipButtonText}' for {buildingName} (ToDoListManager not found)");
+                    }
+                    else
+                    {
+                        skipButtonText.text = "Skip (Generate quests)";
+                        Debug.Log($"Set default Skip button text on resume for {buildingName} (ToDoListManager not found)");
+                    }
+                }
+            }
+            else
+            {
+                // No project found - use saved text as fallback
+                if (!string.IsNullOrEmpty(savedSkipButtonText))
+                {
+                    skipButtonText.text = savedSkipButtonText;
+                    Debug.Log($"Used saved Skip button text on resume: '{savedSkipButtonText}' for {buildingName} (no project found)");
+                }
+                else
+                {
+                    skipButtonText.text = "Skip (Generate quests)";
+                    Debug.Log($"Set default Skip button text on resume for {buildingName} (no project found)");
+                }
+            }
         }
 
         // Replace your UpdateTimer coroutine with UpdateUI:
@@ -272,6 +471,27 @@ namespace LifeCraft.UI
         public bool IsUnderConstruction()
         {
             return !isCompleted;
+        }
+        
+        /// <summary>
+        /// Pause construction (stop UI updates and hide panel)
+        /// </summary>
+        public void PauseConstruction()
+        {
+            // Stop the UI update coroutine
+            if (updateCoroutine != null)
+            {
+                StopCoroutine(updateCoroutine);
+                updateCoroutine = null;
+                Debug.Log($"Paused UI updates for {buildingName}");
+            }
+            
+            // Hide the construction panel
+            if (constructionPanel != null)
+            {
+                constructionPanel.SetActive(false);
+                Debug.Log($"Hidden construction panel for {buildingName}");
+            }
         }
         
         /// <summary>

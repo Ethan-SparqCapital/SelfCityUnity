@@ -81,6 +81,34 @@ namespace LifeCraft.Systems
             }
         }
         
+        /// <summary>
+        /// Register construction with saved progress (for restoring stored buildings)
+        /// </summary>
+        public void RegisterConstructionWithProgress(string buildingName, Vector3Int gridPosition, float constructionDurationMinutes, string regionType, float startTime, List<string> originalQuestTexts, List<string> activeQuestTexts, int completedSkipQuests, int totalSkipQuests)
+        {
+            string projectKey = $"{buildingName}_{gridPosition.x}_{gridPosition.y}_{gridPosition.z}";
+            
+            if (!activeProjects.ContainsKey(projectKey))
+            {
+                ConstructionProject project = new ConstructionProject
+                {
+                    buildingName = buildingName,
+                    gridPosition = gridPosition,
+                    constructionDuration = constructionDurationMinutes * 60f,
+                    regionType = regionType,
+                    startTime = startTime,
+                    isCompleted = false,
+                    originalQuestTexts = new List<string>(originalQuestTexts),
+                    activeQuestTexts = new List<string>(activeQuestTexts),
+                    completedSkipQuests = completedSkipQuests,
+                    totalSkipQuests = totalSkipQuests
+                };
+                
+                activeProjects[projectKey] = project;
+                Debug.Log($"Registered construction with progress: {projectKey} (remaining time: {(project.constructionDuration - (Time.time - startTime)) / 60f:F1} minutes)");
+            }
+        }
+        
         public ConstructionProject GetProject(string buildingName, Vector3Int gridPosition)
         {
             string projectKey = $"{buildingName}_{gridPosition.x}_{gridPosition.y}_{gridPosition.z}";
@@ -92,6 +120,19 @@ namespace LifeCraft.Systems
         {
             string projectKey = $"{buildingName}_{gridPosition.x}_{gridPosition.y}_{gridPosition.z}";
             return activeProjects.ContainsKey(projectKey) && !activeProjects[projectKey].isCompleted;
+        }
+        
+        /// <summary>
+        /// Pause construction by removing the project from active projects
+        /// </summary>
+        public void PauseConstruction(string buildingName, Vector3Int gridPosition)
+        {
+            string projectKey = $"{buildingName}_{gridPosition.x}_{gridPosition.y}_{gridPosition.z}";
+            if (activeProjects.ContainsKey(projectKey))
+            {
+                activeProjects.Remove(projectKey);
+                Debug.Log($"Paused construction for {buildingName} at {gridPosition}");
+            }
         }
         
         public List<string> GetAllProjectKeys()

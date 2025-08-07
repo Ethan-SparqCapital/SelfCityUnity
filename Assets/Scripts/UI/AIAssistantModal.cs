@@ -496,7 +496,14 @@ namespace LifeCraft.UI
         private void ShowClearConfirmation()
         {
             // REASONING: Use existing confirmation modal system
-            var confirmModal = FindFirstObjectByType<PurchaseConfirmModal>();
+            var confirmModals = FindObjectsByType<PurchaseConfirmModal>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            PurchaseConfirmModal confirmModal = null;
+            
+            if (confirmModals.Length > 0)
+            {
+                confirmModal = confirmModals[0];
+            }
+            
             if (confirmModal != null)
             {
                 confirmModal.Show(
