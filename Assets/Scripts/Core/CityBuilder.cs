@@ -556,6 +556,40 @@ namespace LifeCraft.Core
         }
 
         /// <summary>
+        /// Get list of premium decor items from available building types
+        /// </summary>
+        public List<string> GetPremiumDecorItems()
+        {
+            var premiumItems = new List<string>();
+            
+            // Check if we have access to DecorationDatabase
+            var decorDatabase = Resources.Load<LifeCraft.Shop.DecorationDatabase>("DecorationDatabase");
+            if (decorDatabase != null)
+            {
+                premiumItems.AddRange(decorDatabase.GetPremiumDecorItems());
+                return premiumItems;
+            }
+            
+            // Fallback: look for premium items in available building types
+            foreach (var buildingType in availableBuildingTypes)
+            {
+                // Check if the building name contains premium indicators
+                if (buildingType.buildingName.Contains("Premium") || 
+                    buildingType.buildingName.Contains("Golden") ||
+                    buildingType.buildingName.Contains("Crystal") ||
+                    buildingType.buildingName.Contains("Diamond") ||
+                    buildingType.buildingName.Contains("Luxury") ||
+                    buildingType.buildingName.Contains("Animated") ||
+                    buildingType.buildingName.Contains("Enchanted"))
+                {
+                    premiumItems.Add(buildingType.buildingName);
+                }
+            }
+            
+            return premiumItems;
+        }
+
+        /// <summary>
         /// Find a placed item GameObject at a specific world position
         /// </summary>
         private GameObject FindPlacedItemAtPosition(Vector3 worldPosition)

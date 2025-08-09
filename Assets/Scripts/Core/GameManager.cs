@@ -375,6 +375,15 @@ namespace LifeCraft.Core
                 if (questManager != null)
                     questManager.SaveQuests();
 
+                // Save To-Do List data (active quests)
+                var toDoListManager = FindFirstObjectByType<ToDoListManager>();
+                if (toDoListManager != null)
+                    toDoListManager.SaveToDoList();
+
+                // Save construction data (construction projects and quest states)
+                if (ConstructionManager.Instance != null)
+                    ConstructionManager.Instance.SaveConstructionData();
+
                 // Save current game state and pause status
                 PlayerPrefs.SetInt("GameState", (int)currentGameState);
                 PlayerPrefs.SetInt("IsPaused", isGamePaused ? 1 : 0);
@@ -542,6 +551,29 @@ namespace LifeCraft.Core
                 else
                 {
                     Debug.LogWarning("QuestManager is null - skipping quest load");
+                }
+
+                // Load To-Do List data (active quests)
+                var toDoListManager = FindFirstObjectByType<ToDoListManager>();
+                if (toDoListManager != null)
+                {
+                    toDoListManager.LoadToDoList();
+                    Debug.Log("To-Do List data loaded successfully");
+                }
+                else
+                {
+                    Debug.LogWarning("ToDoListManager is null - skipping To-Do List load");
+                }
+
+                // Load construction data (construction projects and quest states)
+                if (ConstructionManager.Instance != null)
+                {
+                    ConstructionManager.Instance.LoadConstructionData();
+                    Debug.Log("Construction data loaded successfully");
+                }
+                else
+                {
+                    Debug.LogWarning("ConstructionManager is null - skipping construction load");
                 }
 
                 // Load game state and pause status

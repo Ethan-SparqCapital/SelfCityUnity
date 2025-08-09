@@ -96,7 +96,7 @@ namespace LifeCraft.Systems
         /// Send a message to the AI assistant and get a response.
         /// REASONING: Async method allows non-blocking UI during API calls
         /// </summary>
-        public async Task<string> SendMessage(string userMessage)
+        public async Task<string> SendAIMessage(string userMessage)
         {
             // Rate limiting to prevent API abuse
             if (Time.time - lastRequestTime < RATE_LIMIT_DELAY)

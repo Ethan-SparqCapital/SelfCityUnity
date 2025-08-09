@@ -11,5 +11,13 @@ namespace LifeCraft.Shop
 
         [Header("Decorations for Premium Only Players")] // Header for organization in the Unity Inspector. 
         public List<string> premiumOnlyDecorations; // List of decoration names available only for premium players. 
+
+        /// <summary>
+        /// Get list of premium-only decoration items
+        /// </summary>
+        public List<string> GetPremiumDecorItems()
+        {
+            return new List<string>(premiumOnlyDecorations);
+        }
     }
 }

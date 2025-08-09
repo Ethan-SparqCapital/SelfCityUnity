@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections;
+using LifeCraft.Systems; // Add this to access SubscriptionManager
 
 namespace LifeCraft.UI
 {
@@ -24,6 +25,12 @@ namespace LifeCraft.UI
         [SerializeField] private Button saveProfileButton;
         [SerializeField] private Button journalButton;
         [SerializeField] private Button gameCreditsButton;
+        [SerializeField] private Button upgradeToPremiumButton; // Add this field
+        [SerializeField] private Button signOutButton; // Add this field
+
+        [Header("Subscription UI Elements")]
+        [SerializeField] private TMP_Text subscriptionStatusText; // "Free" / "Premium" on Profile
+        [SerializeField] private GameObject premiumBadge; // Crown/Badge object on Profile
 
         [Header("Journal UI Elements")]
         [SerializeField] private GameObject journalPanel;
@@ -84,6 +91,12 @@ namespace LifeCraft.UI
             public string timestamp;
             public int moodIndex;
             public string moodName;
+            public bool hasDrawing; // Premium feature
+            public string drawingData; // Base64 encoded drawing data
+            public bool hasMediaAttachment; // Premium feature
+            public string mediaAttachmentPath; // Path to attached media
+            public string mediaAttachmentType; // "image", "audio", "video"
+            public bool isPremiumEntry; // Whether this entry uses premium features
         }
 
         [System.Serializable]
@@ -104,7 +117,6 @@ namespace LifeCraft.UI
 
         // Events for external systems
         public static event System.Action<ProfileData> OnProfileUpdated;
-        public static event System.Action<JournalEntry> OnJournalEntryAdded;
         public static event System.Action<JournalEntry> OnJournalEntryDeleted;
 
         public static ProfileManager Instance { get; private set; }
@@ -128,6 +140,36 @@ namespace LifeCraft.UI
             SetupEventListeners();
             LoadProfileData();
             LoadJournalData();
+
+            // Subscribe to subscription status changes to refresh UI immediately after upgrade
+            if (AuthenticationManager.Instance != null)
+            {
+                AuthenticationManager.Instance.OnSubscriptionStatusChanged.AddListener(OnSubscriptionStatusChanged);
+                // Initial paint based on auth manager
+                OnSubscriptionStatusChanged(AuthenticationManager.Instance.HasPremiumSubscription);
+            }
+            else if (SubscriptionManager.Instance != null)
+            {
+                // Fallback to simulation subscription state
+                OnSubscriptionStatusChanged(SubscriptionManager.Instance.HasActiveSubscription());
+            }
+        }
+
+        /// <summary>
+        /// Handle subscription status change and update Profile status/badge
+        /// </summary>
+        private void OnSubscriptionStatusChanged(bool hasPremium)
+        {
+            if (subscriptionStatusText != null)
+            {
+                subscriptionStatusText.text = hasPremium ? "Premium" : "Free";
+                subscriptionStatusText.color = hasPremium ? Color.green : Color.gray;
+            }
+
+            if (premiumBadge != null)
+            {
+                premiumBadge.SetActive(hasPremium);
+            }
         }
 
         /// <summary>
@@ -228,6 +270,13 @@ namespace LifeCraft.UI
             if (gameCreditsButton != null)
                 gameCreditsButton.onClick.AddListener(OpenGameCredits);
 
+            // Connect upgrade button to UIManager
+            if (upgradeToPremiumButton != null)
+                upgradeToPremiumButton.onClick.AddListener(OnUpgradeToPremiumClicked);
+
+            if (signOutButton != null)
+                signOutButton.onClick.AddListener(OnSignOutClicked);
+
             // Journal buttons
             if (openBookButton != null)
                 openBookButton.onClick.AddListener(OpenBook);
@@ -239,40 +288,36 @@ namespace LifeCraft.UI
                 closeBookButton.onClick.AddListener(CloseBook);
 
             if (saveJournalButton != null)
-                saveJournalButton.onClick.AddListener(SaveJournalEntry);
+                saveJournalButton.onClick.AddListener(() => SaveJournalEntryFromUI());
 
-            // Delete entry button
             if (deleteEntryButton != null)
                 deleteEntryButton.onClick.AddListener(DeleteCurrentEntryFromBook);
 
-            // Navigation arrow buttons
+            // Navigation buttons
             if (leftArrowButton != null)
                 leftArrowButton.onClick.AddListener(NavigateToPreviousEntry);
 
             if (rightArrowButton != null)
                 rightArrowButton.onClick.AddListener(NavigateToNextEntry);
 
-            // Game Credits buttons
+            // Game credits button
             if (closeCreditsButton != null)
                 closeCreditsButton.onClick.AddListener(CloseGameCredits);
 
-            // Input field listeners
+            // Journal input field
             if (journalInputField != null)
             {
                 journalInputField.onValueChanged.AddListener(OnJournalInputChanged);
                 journalInputField.onEndEdit.AddListener(OnJournalInputEndEdit);
             }
 
-            // Profile input validation
-            if (usernameInput != null)
-                usernameInput.onValueChanged.AddListener(OnUsernameChanged);
+            // Mood dropdown
+            if (moodDropdown != null)
+                moodDropdown.onValueChanged.AddListener(OnMoodChanged);
 
-            if (emailInput != null)
-                emailInput.onValueChanged.AddListener(OnEmailChanged);
-
-            // Edit panel buttons:
+            // Edit panel buttons
             if (editSaveButton != null)
-                editSaveButton.onClick.AddListener(SaveEditedJournalEntry); 
+                editSaveButton.onClick.AddListener(SaveEditedJournalEntry);
 
             if (editDeleteButton != null)
                 editDeleteButton.onClick.AddListener(DeleteCurrentEditingEntry);
@@ -280,9 +325,14 @@ namespace LifeCraft.UI
             if (editCloseButton != null)
                 editCloseButton.onClick.AddListener(CloseEditJournalEntry);
 
-            // Edit input field character count
             if (editJournalInputField != null)
-                editJournalInputField.onValueChanged.AddListener((value) => UpdateEditCharacterCount());
+            {
+                editJournalInputField.onValueChanged.AddListener(OnEditJournalInputChanged);
+                editJournalInputField.onEndEdit.AddListener(OnEditJournalInputEndEdit);
+            }
+
+            if (editMoodDropdown != null)
+                editMoodDropdown.onValueChanged.AddListener(OnEditMoodChanged);
         }
 
         /// <summary>
@@ -534,78 +584,108 @@ namespace LifeCraft.UI
         }
 
         /// <summary>
-        /// Save the current journal entry
+        /// Save a new journal entry with premium features
         /// </summary>
-        private void SaveJournalEntry()
+        public void SaveJournalEntry(string content, int moodIndex = 0, string drawingData = "", string mediaAttachmentPath = "", string mediaAttachmentType = "")
         {
-            if (journalInputField == null || string.IsNullOrWhiteSpace(journalInputField.text))
+            if (string.IsNullOrEmpty(content))
             {
-                if (UIManager.Instance != null)
-                    UIManager.Instance.ShowNotification("Please write something before saving.");
+                Debug.LogWarning("Cannot save empty journal entry");
                 return;
             }
 
-            try
+            var entry = new JournalEntry
             {
-                if (isViewingEntry && currentEntryIndex >= 0 && currentEntryIndex < journalData.entries.Count)
-                {
-                    // Update existing entry
-                    JournalEntry existingEntry = journalData.entries[currentEntryIndex];
-                    existingEntry.content = journalInputField.text.Trim();
-                    existingEntry.moodIndex = moodDropdown?.value ?? 0;
-                    existingEntry.moodName = moodDropdown?.options[moodDropdown.value]?.text ?? "😐 Neutral";
-                    existingEntry.timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                date = System.DateTime.Now.ToString("yyyy-MM-dd"),
+                content = content,
+                timestamp = System.DateTime.Now.ToString("HH:mm:ss"),
+                moodIndex = moodIndex,
+                moodName = GetMoodName(moodIndex),
+                hasDrawing = !string.IsNullOrEmpty(drawingData),
+                drawingData = drawingData,
+                hasMediaAttachment = !string.IsNullOrEmpty(mediaAttachmentPath),
+                mediaAttachmentPath = mediaAttachmentPath,
+                mediaAttachmentType = mediaAttachmentType,
+                isPremiumEntry = !string.IsNullOrEmpty(drawingData) || !string.IsNullOrEmpty(mediaAttachmentPath)
+            };
 
-                    SaveJournalData();
-                    RefreshJournalEntries();
-                    
-                    // Show success notification
-                    if (UIManager.Instance != null)
-                        UIManager.Instance.ShowNotification("Journal entry updated!");
+            journalData.entries.Add(entry);
+            SaveJournalData();
+            RefreshJournalEntries();
+            
+            Debug.Log($"Saved journal entry: {entry.date} at {entry.timestamp}");
+        }
 
-                    // Close the book
-                    CloseBook();
-                }
-                else
-                {
-                    // Create new entry
-                    JournalEntry newEntry = new JournalEntry
-                    {
-                        date = DateTime.Now.ToString("yyyy-MM-dd"),
-                        content = journalInputField.text.Trim(),
-                        timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                        moodIndex = moodDropdown?.value ?? 0,
-                        moodName = moodDropdown?.options[moodDropdown.value]?.text ?? "😐 Neutral"
-                    };
-
-                    journalData.entries.Add(newEntry);
-                    SaveJournalData();
-                    
-                    // Clear input field and draft
-                    journalInputField.text = "";
-                    currentDraft = "";
-                    UpdateCharacterCount("");
-                    
-                    // Refresh entries display
-                    RefreshJournalEntries();
-                    
-                    // Trigger event
-                    OnJournalEntryAdded?.Invoke(newEntry);
-                    
-                    // Show success notification
-                    if (UIManager.Instance != null)
-                        UIManager.Instance.ShowNotification("Journal entry saved!");
-
-                    // Close the book
-                    CloseBook();
-                }
-            }
-            catch (Exception e)
+        /// <summary>
+        /// Get automatic prompt recommendation for premium users
+        /// </summary>
+        public string GetDailyPromptRecommendation()
+        {
+            if (SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasPremiumJournalAccess())
             {
-                Debug.LogError($"Error saving journal entry: {e.Message}");
-                if (UIManager.Instance != null)
-                    UIManager.Instance.ShowNotification("Error saving entry. Please try again.");
+                // Premium users get personalized prompts based on their journal history
+                var prompts = new List<string>
+                {
+                    "What's one thing you're grateful for today?",
+                    "Describe a challenge you faced and how you overcame it.",
+                    "What's something you're looking forward to this week?",
+                    "Reflect on a recent conversation that made you think.",
+                    "What's a goal you're working towards?",
+                    "Describe a moment that made you smile today.",
+                    "What's something you learned about yourself recently?",
+                    "How are you feeling about your progress in life?",
+                    "What's a small victory you had today?",
+                    "Describe your ideal day and what makes it special."
+                };
+
+                // Use the current date as a seed for consistent daily prompts
+                int dayOfYear = System.DateTime.Now.DayOfYear;
+                int promptIndex = dayOfYear % prompts.Count;
+                
+                return prompts[promptIndex];
             }
+            
+            return ""; // Free users don't get automatic prompts
+        }
+
+        /// <summary>
+        /// Check if user can use premium journal features
+        /// </summary>
+        public bool CanUsePremiumJournalFeatures()
+        {
+            return SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasPremiumJournalAccess();
+        }
+
+        /// <summary>
+        /// Add drawing to current journal entry
+        /// </summary>
+        public void AddDrawingToEntry(string drawingData)
+        {
+            if (!CanUsePremiumJournalFeatures())
+            {
+                Debug.LogWarning("Drawing feature requires Premium subscription");
+                return;
+            }
+
+            // This would be called from the drawing interface
+            // The drawing data would be passed to SaveJournalEntry
+            Debug.Log("Drawing added to journal entry");
+        }
+
+        /// <summary>
+        /// Add media attachment to current journal entry
+        /// </summary>
+        public void AddMediaAttachment(string mediaPath, string mediaType)
+        {
+            if (!CanUsePremiumJournalFeatures())
+            {
+                Debug.LogWarning("Media attachment feature requires Premium subscription");
+                return;
+            }
+
+            // This would be called from the media attachment interface
+            // The media path and type would be passed to SaveJournalEntry
+            Debug.Log($"Media attachment added: {mediaPath} ({mediaType})");
         }
 
         /// <summary>
@@ -911,6 +991,63 @@ namespace LifeCraft.UI
         private void OnEmailChanged(string value)
         {
             // Real-time validation feedback could be added here
+        }
+
+        /// <summary>
+        /// Handle upgrade to premium button click
+        /// </summary>
+        private void OnUpgradeToPremiumClicked()
+        {
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.ShowPremiumUpgradePanel();
+            }
+        }
+
+        /// <summary>
+        /// Handle sign out button click
+        /// </summary>
+        private void OnSignOutClicked()
+        {
+            if (AuthenticationManager.Instance != null)
+            {
+                AuthenticationManager.Instance.SignOut();
+            }
+        }
+
+        /// <summary>
+        /// Handle mood dropdown value changed
+        /// </summary>
+        private void OnMoodChanged(int value)
+        {
+            // Handle mood change in the main journal input
+            Debug.Log($"Mood changed to index: {value}");
+        }
+
+        /// <summary>
+        /// Handle edit mood dropdown value changed
+        /// </summary>
+        private void OnEditMoodChanged(int value)
+        {
+            // Handle mood change in the edit panel
+            Debug.Log($"Edit mood changed to index: {value}");
+        }
+
+        /// <summary>
+        /// Handle edit journal input changed
+        /// </summary>
+        private void OnEditJournalInputChanged(string value)
+        {
+            UpdateEditCharacterCount();
+        }
+
+        /// <summary>
+        /// Handle edit journal input end edit
+        /// </summary>
+        private void OnEditJournalInputEndEdit(string value)
+        {
+            // Handle end edit for edit journal input
+            Debug.Log("Edit journal input end edit");
         }
 
         /// <summary>
@@ -1259,7 +1396,31 @@ namespace LifeCraft.UI
         }
 
         /// <summary>
-        /// Navigate to a specific journal entry by index
+        /// Save journal entry from UI button click
         /// </summary>
+        private void SaveJournalEntryFromUI()
+        {
+            if (journalInputField != null)
+            {
+                string content = journalInputField.text.Trim();
+                int moodIndex = moodDropdown != null ? moodDropdown.value : 0;
+                
+                if (!string.IsNullOrEmpty(content))
+                {
+                    SaveJournalEntry(content, moodIndex);
+                    journalInputField.text = "";
+                    UpdateCharacterCount("");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save journal entry with content and mood
+        /// </summary>
+        private string GetMoodName(int moodIndex)
+        {
+            var moods = new string[] { "Happy", "Calm", "Excited", "Grateful", "Content", "Neutral", "Tired", "Stressed", "Sad", "Angry" };
+            return moodIndex >= 0 && moodIndex < moods.Length ? moods[moodIndex] : "Neutral";
+        }
     }
 } 

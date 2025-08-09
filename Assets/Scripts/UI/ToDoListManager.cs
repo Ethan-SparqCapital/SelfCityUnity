@@ -6,6 +6,7 @@ using UnityEngine.UI; // we are using UnityEngine.UI for UI components like Butt
 using LifeCraft.UI; // we are using LifeCraft.UI for the ResourceBarManager, which manages the resource bar UI and functionality. 
 using LifeCraft.Systems; // we are using LifeCraft.Systems for the QuestManager, which manages the quests in the game. 
 using LifeCraft.Core; // we are using LifeCraft.Core for the ResourceManager, which manages the player's resources.
+using System.Collections.Generic; // For List<string> in save/load functionality
 
 public enum QuestDifficulty
 {
@@ -13,6 +14,21 @@ public enum QuestDifficulty
     Medium,    // 10 EXP  
     Hard,      // 15 EXP
     Expert     // 20 EXP
+}
+
+[System.Serializable]
+public class ToDoItemSaveData
+{
+    public string questText;
+    public bool isFromDailyQuest;
+    public string dailyQuestText;
+    public int rewardAmount;
+}
+
+[System.Serializable]
+public class ToDoListSaveWrapper
+{
+    public List<ToDoItemSaveData> items = new List<ToDoItemSaveData>();
 }
 
 public class ToDoListManager : MonoBehaviour // this class manages the to-do list UI and functionality 
@@ -26,6 +42,91 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
     public DailyQuestsButtonHandler dailyQuestsButtonHandler; // this line adds the field into the Inspector, which is a reference to the DailyQuestsButtonHandler script that handles the daily quests button functionality. 
 
     public RewardModal rewardModal; // This line adds the field into the Inspector, which is a reference to the RewardModal script that handles the reward modal popup functionality. 
+
+    /// <summary>
+    /// Save the current To-Do List items to PlayerPrefs
+    /// </summary>
+    public void SaveToDoList()
+    {
+        try
+        {
+            var saveData = new ToDoListSaveWrapper();
+            
+            // Collect all current To-Do items
+            foreach (Transform child in toDoListContainer)
+            {
+                var meta = child.GetComponent<ToDoItemMeta>();
+                if (meta != null)
+                {
+                    var itemData = new ToDoItemSaveData
+                    {
+                        questText = meta.dailyQuestText,
+                        isFromDailyQuest = meta.isFromDailyQuest,
+                        dailyQuestText = meta.dailyQuestText,
+                        rewardAmount = meta.rewardAmount
+                    };
+                    saveData.items.Add(itemData);
+                }
+            }
+            
+            string json = JsonUtility.ToJson(saveData);
+            PlayerPrefs.SetString("ToDoListData", json);
+            PlayerPrefs.Save();
+            Debug.Log($"ToDoList saved: {saveData.items.Count} items");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to save ToDoList: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Load the To-Do List items from PlayerPrefs
+    /// </summary>
+    public void LoadToDoList()
+    {
+        try
+        {
+            if (PlayerPrefs.HasKey("ToDoListData"))
+            {
+                string json = PlayerPrefs.GetString("ToDoListData");
+                var saveData = JsonUtility.FromJson<ToDoListSaveWrapper>(json);
+                
+                if (saveData != null && saveData.items != null)
+                {
+                    // Clear existing items
+                    foreach (Transform child in toDoListContainer)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                    
+                    // Restore saved items
+                    foreach (var itemData in saveData.items)
+                    {
+                        AddToDo(itemData.questText, itemData.isFromDailyQuest, itemData.rewardAmount);
+                    }
+                    
+                    Debug.Log($"ToDoList loaded: {saveData.items.Count} items");
+                }
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to load ToDoList: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Clear all To-Do List items and save the empty state
+    /// </summary>
+    public void ClearToDoList()
+    {
+        foreach (Transform child in toDoListContainer)
+        {
+            Destroy(child.gameObject);
+        }
+        SaveToDoList();
+    }
 
     /// <summary>
     /// Call this method to add a quest/task to the To-Do List. 
@@ -77,10 +178,41 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
                 // Set the quest label and reward amount text in the UI if the fields are assigned.
                 if (meta.LabelText != null)
                     meta.LabelText.text = questText; // Set the quest/task label
+                
+                // CRITICAL FIX: Check if this is a construction quest (Skip Quest)
+                // Construction quests should NOT show reward amounts or currency sprites
+                bool isConstructionQuest = IsConstructionQuest(questText);
+                
                 if (meta.RewardAmountText != null)
-                    meta.RewardAmountText.text = $"+{rewardAmount}"; // Set the reward amount
-                // Assign the ResourceIcon field in the Inspector to the correct Image component on your prefab. 
+                {
+                    if (isConstructionQuest)
+                    {
+                        // Hide reward text for construction quests
+                        meta.RewardAmountText.text = "";
+                        meta.RewardAmountText.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        // Show reward text for regular quests
+                        meta.RewardAmountText.text = $"+{rewardAmount}";
+                        meta.RewardAmountText.gameObject.SetActive(true);
+                    }
+                }
+                
+                                // Assign the ResourceIcon field in the Inspector to the correct Image component on your prefab.
                 if (meta.ResourceIcon != null)
+                {
+                    if (isConstructionQuest)
+                    {
+                        // Hide currency sprite for construction quests
+                        meta.ResourceIcon.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        // Show currency sprite for regular quests
+                        meta.ResourceIcon.gameObject.SetActive(true);
+                    }
+                }
                     meta.ResourceIcon.sprite = GetResourceSpriteForRegion(questText); // Set the resource icon based on the region. 
             }
 
@@ -288,6 +420,40 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
         Debug.Log($"Quest: '{questText}' | Difficulty: {difficulty} | Base EXP: {baseEXP - (isDailyQuest ? 2 : 0) - (isCustomQuest ? 1 : 0)} | Type Bonus: +{(isDailyQuest ? 2 : 0) + (isCustomQuest ? 1 : 0)} | Total: {baseEXP}");
         
         return baseEXP;
+    }
+
+    /// <summary>
+    /// Checks if a quest is a construction quest (Skip Quest)
+    /// </summary>
+    private bool IsConstructionQuest(string questText)
+    {
+        // Check if this quest exists in any active construction project
+        if (ConstructionManager.Instance != null)
+        {
+            var allProjects = ConstructionManager.Instance.GetAllProjectKeys();
+            foreach (string projectKey in allProjects)
+            {
+                // Parse the project key to get building name and position
+                string[] parts = projectKey.Split('_');
+                if (parts.Length >= 4)
+                {
+                    string buildingName = parts[0];
+                    Vector3Int gridPosition = new Vector3Int(
+                        int.Parse(parts[1]),
+                        int.Parse(parts[2]),
+                        int.Parse(parts[3])
+                    );
+                    
+                    // Check if this project has the quest
+                    ConstructionProject project = ConstructionManager.Instance.GetProject(buildingName, gridPosition);
+                    if (project != null && project.originalQuestTexts.Contains(questText))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /// <summary>

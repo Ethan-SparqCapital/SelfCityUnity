@@ -238,7 +238,7 @@ namespace LifeCraft.UI
             // Send to AI manager
             if (aiManager != null)
             {
-                await aiManager.SendMessage(message);
+                await aiManager.SendAIMessage(message);
             }
         }
 

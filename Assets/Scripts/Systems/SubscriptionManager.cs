@@ -9,26 +9,29 @@ namespace LifeCraft.Systems
 {
     /// <summary>
     /// Manages premium subscriptions and premium feature access
-    /// Integrates with shop systems to provide premium content
+    /// SIMULATION MODE: Uses PlayerPrefs for testing, no real purchases
     /// </summary>
     public class SubscriptionManager : MonoBehaviour
     {
         [Header("Subscription Configuration")]
         [SerializeField] private string monthlySubscriptionId = "premium_monthly";
         [SerializeField] private string yearlySubscriptionId = "premium_yearly";
-        [SerializeField] private float monthlyPrice = 4.99f;
-        [SerializeField] private float yearlyPrice = 39.99f;
+        [SerializeField] private float monthlyPrice = 6.99f; // Updated to $6.99
+        [SerializeField] private float yearlyPrice = 69.99f; // ~17% discount for yearly
 
         [Header("Premium Features")]
         [SerializeField] private bool enablePremiumDecorChest = true;
         [SerializeField] private bool enablePremiumBuildings = true;
         [SerializeField] private bool enablePremiumResources = true;
         [SerializeField] private bool enablePremiumJournalFeatures = true;
+        [SerializeField] private bool enableFasterConstruction = true; // New: 20% faster construction
+        [SerializeField] private bool enableUnlimitedFriends = true; // New: Unlimited friends list
 
         [Header("Premium Content")]
         [SerializeField] private List<string> premiumDecorItems = new List<string>();
         [SerializeField] private List<string> premiumBuildings = new List<string>();
         [SerializeField] private int premiumResourceBonus = 50; // Percentage bonus
+        [SerializeField] private float constructionTimeReduction = 0.2f; // 20% reduction
 
         [Header("Events")]
         public UnityEvent<bool> OnSubscriptionStatusChanged;
@@ -76,6 +79,7 @@ namespace LifeCraft.Systems
         private void Start()
         {
             InitializeSubscriptionManager();
+            LoadPremiumDecorItemsFromSystems(); // Auto-load premium decor items
         }
 
         /// <summary>
@@ -119,14 +123,14 @@ namespace LifeCraft.Systems
         /// <summary>
         /// Validate current subscription status
         /// </summary>
-        private async void ValidateSubscriptionStatus()
+        private void ValidateSubscriptionStatus()
         {
             if (hasActiveSubscription)
             {
                 // Check if subscription has expired
                 if (DateTime.Now > subscriptionExpiryDate)
                 {
-                    await CancelSubscription();
+                    _ = CancelSubscription(); // Fire and forget
                 }
                 else
                 {
@@ -143,31 +147,28 @@ namespace LifeCraft.Systems
         }
 
         /// <summary>
-        /// Purchase monthly subscription
+        /// SIMULATION: Purchase monthly subscription (for testing)
         /// </summary>
         public async Task<bool> PurchaseMonthlySubscription()
         {
             try
             {
-                Debug.Log("Attempting to purchase monthly subscription...");
+                Debug.Log("SIMULATION: Purchasing monthly subscription...");
                 
-                // Simulate purchase process
-                // In production, integrate with Unity IAP
-                await Task.Delay(2000);
+                // Simulate purchase delay
+                await Task.Delay(1000);
                 
-                // Set subscription data
+                // Handle monthly subscription purchase
                 hasActiveSubscription = true;
                 currentSubscriptionId = monthlySubscriptionId;
                 currentSubscriptionType = SubscriptionType.Monthly;
                 subscriptionExpiryDate = DateTime.Now.AddMonths(1);
                 
                 SaveSubscriptionData();
-                
-                // Trigger events
                 OnSubscriptionStatusChanged?.Invoke(true);
                 UnlockPremiumFeatures();
                 
-                Debug.Log("Monthly subscription purchased successfully!");
+                Debug.Log("SIMULATION: Monthly subscription purchased successfully!");
                 return true;
             }
             catch (Exception e)
@@ -178,30 +179,28 @@ namespace LifeCraft.Systems
         }
 
         /// <summary>
-        /// Purchase yearly subscription
+        /// SIMULATION: Purchase yearly subscription (for testing)
         /// </summary>
         public async Task<bool> PurchaseYearlySubscription()
         {
             try
             {
-                Debug.Log("Attempting to purchase yearly subscription...");
+                Debug.Log("SIMULATION: Purchasing yearly subscription...");
                 
-                // Simulate purchase process
-                await Task.Delay(2000);
+                // Simulate purchase delay
+                await Task.Delay(1000);
                 
-                // Set subscription data
+                // Handle yearly subscription purchase
                 hasActiveSubscription = true;
                 currentSubscriptionId = yearlySubscriptionId;
                 currentSubscriptionType = SubscriptionType.Yearly;
                 subscriptionExpiryDate = DateTime.Now.AddYears(1);
                 
                 SaveSubscriptionData();
-                
-                // Trigger events
                 OnSubscriptionStatusChanged?.Invoke(true);
                 UnlockPremiumFeatures();
                 
-                Debug.Log("Yearly subscription purchased successfully!");
+                Debug.Log("SIMULATION: Yearly subscription purchased successfully!");
                 return true;
             }
             catch (Exception e)
@@ -212,7 +211,7 @@ namespace LifeCraft.Systems
         }
 
         /// <summary>
-        /// Cancel current subscription
+        /// Cancel subscription
         /// </summary>
         public async Task<bool> CancelSubscription()
         {
@@ -220,18 +219,12 @@ namespace LifeCraft.Systems
             {
                 Debug.Log("Cancelling subscription...");
                 
-                // Simulate cancellation process
-                await Task.Delay(1000);
-                
-                // Clear subscription data
                 hasActiveSubscription = false;
                 currentSubscriptionId = "";
                 currentSubscriptionType = SubscriptionType.None;
-                subscriptionExpiryDate = DateTime.MinValue;
                 
                 SaveSubscriptionData();
                 
-                // Trigger events
                 OnSubscriptionStatusChanged?.Invoke(false);
                 LockPremiumFeatures();
                 
@@ -273,6 +266,18 @@ namespace LifeCraft.Systems
                 OnPremiumFeatureUnlocked?.Invoke("Premium Journal Features");
                 Debug.Log("Premium Journal Features unlocked!");
             }
+
+            if (enableFasterConstruction)
+            {
+                OnPremiumFeatureUnlocked?.Invoke("Faster Construction");
+                Debug.Log("Faster Construction unlocked!");
+            }
+
+            if (enableUnlimitedFriends)
+            {
+                OnPremiumFeatureUnlocked?.Invoke("Unlimited Friends");
+                Debug.Log("Unlimited Friends unlocked!");
+            }
         }
 
         /// <summary>
@@ -299,6 +304,24 @@ namespace LifeCraft.Systems
             {
                 OnPremiumFeatureLocked?.Invoke("Premium Journal Features");
             }
+
+            if (enableFasterConstruction)
+            {
+                OnPremiumFeatureLocked?.Invoke("Faster Construction");
+            }
+
+            if (enableUnlimitedFriends)
+            {
+                OnPremiumFeatureLocked?.Invoke("Unlimited Friends");
+            }
+        }
+
+        /// <summary>
+        /// Check if user has active subscription
+        /// </summary>
+        public bool HasActiveSubscription()
+        {
+            return hasActiveSubscription;
         }
 
         /// <summary>
@@ -334,6 +357,22 @@ namespace LifeCraft.Systems
         }
 
         /// <summary>
+        /// Check if user has faster construction
+        /// </summary>
+        public bool HasFasterConstruction()
+        {
+            return hasActiveSubscription && enableFasterConstruction;
+        }
+
+        /// <summary>
+        /// Check if user has unlimited friends
+        /// </summary>
+        public bool HasUnlimitedFriends()
+        {
+            return hasActiveSubscription && enableUnlimitedFriends;
+        }
+
+        /// <summary>
         /// Get premium resource bonus multiplier
         /// </summary>
         public float GetPremiumResourceBonus()
@@ -342,11 +381,71 @@ namespace LifeCraft.Systems
         }
 
         /// <summary>
-        /// Get list of premium decor items
+        /// Get construction time reduction multiplier
+        /// </summary>
+        public float GetConstructionTimeReduction()
+        {
+            return hasActiveSubscription ? (1f - constructionTimeReduction) : 1f;
+        }
+
+        /// <summary>
+        /// Get list of premium decor items (dynamically loaded)
         /// </summary>
         public List<string> GetPremiumDecorItems()
         {
-            return hasActiveSubscription ? new List<string>(premiumDecorItems) : new List<string>();
+            if (hasActiveSubscription)
+            {
+                // Try to load from DecorationDatabase first
+                var decorDatabase = Resources.Load<DecorationDatabase>("DecorationDatabase");
+                if (decorDatabase != null)
+                {
+                    return decorDatabase.GetPremiumDecorItems();
+                }
+                
+                // Fallback to CityBuilder
+                if (LifeCraft.Core.CityBuilder.Instance != null)
+                {
+                    return LifeCraft.Core.CityBuilder.Instance.GetPremiumDecorItems();
+                }
+                
+                // Final fallback to hardcoded list
+                return new List<string>(premiumDecorItems);
+            }
+            
+            return new List<string>();
+        }
+
+        /// <summary>
+        /// Load premium decor items from existing systems
+        /// </summary>
+        public void LoadPremiumDecorItemsFromSystems()
+        {
+            premiumDecorItems.Clear();
+            
+            // Try DecorationDatabase first
+            var decorDatabase = Resources.Load<DecorationDatabase>("DecorationDatabase");
+            if (decorDatabase != null)
+            {
+                var items = decorDatabase.GetPremiumDecorItems();
+                premiumDecorItems.AddRange(items);
+                Debug.Log($"Loaded {items.Count} premium decor items from DecorationDatabase");
+            }
+            
+            // Also try CityBuilder
+            if (LifeCraft.Core.CityBuilder.Instance != null)
+            {
+                var cityBuilderItems = LifeCraft.Core.CityBuilder.Instance.GetPremiumDecorItems();
+                foreach (var item in cityBuilderItems)
+                {
+                    if (!premiumDecorItems.Contains(item))
+                    {
+                        premiumDecorItems.Add(item);
+                    }
+                }
+                Debug.Log($"Added {cityBuilderItems.Count} premium decor items from CityBuilder");
+            }
+            
+            Debug.Log($"Total premium decor items loaded: {premiumDecorItems.Count}");
         }
 
         /// <summary>
@@ -387,11 +486,21 @@ namespace LifeCraft.Systems
             return hasActiveSubscription && GetDaysRemaining() <= 7;
         }
 
-        // Public getters
-        public bool HasActiveSubscription => hasActiveSubscription;
-        public SubscriptionType CurrentSubscriptionType => currentSubscriptionType;
-        public DateTime SubscriptionExpiryDate => subscriptionExpiryDate;
-        public float MonthlyPrice => monthlyPrice;
-        public float YearlyPrice => yearlyPrice;
+        /// <summary>
+        /// SIMULATION: Reset subscription for testing
+        /// </summary>
+        public void ResetSubscriptionForTesting()
+        {
+            PlayerPrefs.DeleteKey("Subscription_Active");
+            PlayerPrefs.DeleteKey("Subscription_Id");
+            PlayerPrefs.DeleteKey("Subscription_Expiry");
+            PlayerPrefs.DeleteKey("Subscription_Type");
+            PlayerPrefs.Save();
+            
+            LoadSubscriptionData();
+            ValidateSubscriptionStatus();
+            
+            Debug.Log("SIMULATION: Subscription reset for testing");
+        }
     }
 } 

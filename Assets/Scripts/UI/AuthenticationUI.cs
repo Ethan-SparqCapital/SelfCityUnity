@@ -42,9 +42,10 @@ namespace LifeCraft.UI
         [SerializeField] private GameObject premiumBadge;
         [SerializeField] private GameObject premiumFeaturesPanel;
 
-        [Header("Settings")]
+        [Header("UI Settings")]
         [SerializeField] private bool showGuestOption = true;
         [SerializeField] private bool showEmailOption = true;
+        [SerializeField] private bool enableAnimations = true;
 
         private AuthenticationManager authManager;
         private ProfileManager profileManager;
@@ -356,28 +357,14 @@ namespace LifeCraft.UI
 
         /// <summary>
         /// Handle upgrade to premium button click
+        /// NOTE: From this UI, we ONLY open the PremiumUpgradePanel. Actual purchase is done by the panel's Upgrade button.
         /// </summary>
-        private async void OnUpgradeToPremiumClicked()
+        private void OnUpgradeToPremiumClicked()
         {
-            ShowLoadingPanel();
-
-            try
+            // Do not start purchase here. Only open the upgrade panel.
+            if (UIManager.Instance != null)
             {
-                bool success = await authManager.PurchasePremiumSubscription();
-                if (success)
-                {
-                    Debug.Log("Premium upgrade successful!");
-                }
-                else
-                {
-                    Debug.LogError("Premium upgrade failed");
-                    ShowProfilePanel();
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Premium upgrade error: {e.Message}");
-                ShowProfilePanel();
+                UIManager.Instance.ShowPremiumUpgradePanel();
             }
         }
 

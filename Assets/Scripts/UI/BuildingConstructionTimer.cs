@@ -65,7 +65,7 @@ namespace LifeCraft.UI
             }
         }
         
-        private IEnumerator ReSyncWithManager()
+        public IEnumerator ReSyncWithManager()
         {
             // Wait a frame to ensure ConstructionManager is ready
             yield return null;
@@ -151,19 +151,12 @@ namespace LifeCraft.UI
                                     }
                                 }
                                 
-                                if (activeQuestsInToDoList > 0)
+                                if (project.originalQuestTexts.Count > 0)
                                 {
-                                    // We have active quests - show the correct count
-                                    string newText = $"Skip ({activeQuestsInToDoList} quests remaining)";
-                                    skipButtonText.text = newText;
-                                    Debug.Log($"ReSyncWithManager: Updated Skip button text: '{newText}' for {buildingName} (found {activeQuestsInToDoList} active quests in To-Do List)");
-                                }
-                                else if (project.originalQuestTexts.Count > 0)
-                                {
-                                    // No active quests but we have original quests - show total remaining
+                                    // Regardless of having or not having active quests, show TOTAL quests remaining from original list:
                                     string newText = $"Skip ({project.originalQuestTexts.Count} quests remaining)";
                                     skipButtonText.text = newText;
-                                    Debug.Log($"ReSyncWithManager: Updated Skip button text: '{newText}' for {buildingName} (no active quests, showing total from original list)");
+                                    Debug.Log($"ReSyncWithManager: Updated Skip button text: '{newText}' for {buildingName} (ALWAYS showing total from original list)");
                                 }
                                 else
                                 {
@@ -346,9 +339,9 @@ namespace LifeCraft.UI
                         }
                     }
                     
-                    if (activeQuestsInToDoList > 0)
+                    if (project.originalQuestTexts.Count > 0)
                     {
-                        // We have active quests - show the correct count
+                        // Regardless of having or not having active quests, show TOTAL quests remaining from original list:
                         string newText = $"Skip ({project.originalQuestTexts.Count} quests remaining)";
                         skipButtonText.text = newText;
                         Debug.Log($"Updated Skip button text on resume: '{newText}' for {buildingName} (found {project.originalQuestTexts.Count} TOTAL quests in master list)");

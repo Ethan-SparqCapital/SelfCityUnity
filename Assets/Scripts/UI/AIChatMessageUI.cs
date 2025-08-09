@@ -36,11 +36,10 @@ namespace LifeCraft.UI
         [SerializeField] private Color aiTextColor = Color.black;
         [SerializeField] private Vector2 aiMessageAlignment = new Vector2(0f, 0f); // Left-aligned
         
-        [Header("Layout Settings")]
+        [Header("Message Settings")]
         [SerializeField] private float maxMessageWidth = 300f;
         [SerializeField] private float minMessageHeight = 40f;
         [SerializeField] private float padding = 10f;
-        [SerializeField] private float cornerRadius = 8f;
         #endregion
 
         #region Private Fields
@@ -190,14 +189,22 @@ namespace LifeCraft.UI
             // If text is wider than max width, recalculate height with word wrapping
             if (preferredSize.x > maxMessageWidth - padding * 2)
             {
-                messageText.enableWordWrapping = true;
+                // Set text wrapping mode
+                if (messageText != null)
+                {
+                    messageText.textWrappingMode = TextWrappingModes.Normal;
+                }
                 messageText.rectTransform.sizeDelta = new Vector2(maxMessageWidth - padding * 2, 0);
                 Canvas.ForceUpdateCanvases();
                 height = Mathf.Max(messageText.GetPreferredValues().y + padding * 2, minMessageHeight);
             }
             else
             {
-                messageText.enableWordWrapping = false;
+                // Set text wrapping mode
+                if (messageText != null)
+                {
+                    messageText.textWrappingMode = TextWrappingModes.Normal;
+                }
             }
             
             // Set the container size

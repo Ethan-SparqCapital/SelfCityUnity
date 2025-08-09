@@ -13,14 +13,14 @@ namespace LifeCraft.Systems
     public class AuthenticationManager : MonoBehaviour
     {
         [Header("Authentication Settings")]
+        [SerializeField] private bool enableGuestMode = true;
         [SerializeField] private bool enableGoogleSignIn = true;
         [SerializeField] private bool enableAppleSignIn = true;
         [SerializeField] private bool enableEmailSignIn = true;
-        [SerializeField] private bool enableGuestMode = true;
 
         [Header("Subscription Settings")]
-        [SerializeField] private string premiumSubscriptionId = "premium_monthly";
-        [SerializeField] private string premiumYearlySubscriptionId = "premium_yearly";
+        [SerializeField] private string monthlySubscriptionId = "premium_monthly";
+        [SerializeField] private string yearlySubscriptionId = "premium_yearly";
 
         [Header("Events")]
         public UnityEvent<AuthUser> OnUserSignedIn;

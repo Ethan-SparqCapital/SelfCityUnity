@@ -59,11 +59,32 @@ namespace LifeCraft.UI
         [Header("Assessment Quiz")]
         [SerializeField] private AssessmentQuizManager assessmentQuizManager;
 
+        [Header("Premium Features")]
+        [SerializeField] private GameObject premiumDecorChestButton;
+        [SerializeField] private GameObject premiumJournalButton;
+        [SerializeField] private GameObject premiumFriendsButton;
+        [SerializeField] private GameObject premiumBadge; // General premium indicator
+
+        [Header("Premium Upgrade")]
+        [SerializeField] private GameObject premiumUpgradePanel;
+        [SerializeField] private Button upgradeToPremiumButton;
+        [SerializeField] private Button closeUpgradePanelButton;
+        [SerializeField] private TMP_Text premiumFeaturesDescriptionText; // Add this for feature descriptions
+
+        [Header("Subscription Status")]
+        [SerializeField] private TMP_Text subscriptionStatusText;
+        [SerializeField] private Button subscriptionInfoButton;
+
+        [Header("Authentication")]
+        [SerializeField] private GameObject authenticationUI;
+        [SerializeField] private bool requireAuthentication = true;
+
         // Private fields
         private Dictionary<ResourceManager.ResourceType, ResourceDisplay> resourceDisplays;
         private List<GameObject> buildingButtons = new List<GameObject>();
         private ResourceManager resourceManager;
         private CityBuilder cityBuilder;
+        private AuthenticationManager authManager;
 
         public static UIManager Instance { get; private set; } // Singleton instance of UIManager. 
         private void Awake()
@@ -94,6 +115,14 @@ namespace LifeCraft.UI
             resourceManager = ResourceManager.Instance;
             // REMOVED: resourceManager.Initialize(); // This was resetting resources to default values!
             cityBuilder = FindFirstObjectByType<LifeCraft.Core.CityBuilder>();
+            authManager = AuthenticationManager.Instance;
+
+            // Check authentication first
+            if (requireAuthentication && authManager != null && !authManager.IsAuthenticated)
+            {
+                ShowAuthenticationUI();
+                return;
+            }
 
             // Setup resource displays
             SetupResourceDisplays();
@@ -385,6 +414,36 @@ namespace LifeCraft.UI
             {
                 resourceManager.OnResourceUpdated.AddListener(OnResourceUpdated);
             }
+
+            // Setup authentication events
+            if (authManager != null)
+            {
+                authManager.OnUserSignedIn.AddListener(OnUserSignedIn);
+                authManager.OnUserSignedOut.AddListener(OnUserSignedOut);
+                // Refresh premium visuals whenever subscription changes (from Auth)
+                authManager.OnSubscriptionStatusChanged.AddListener(_ =>
+                {
+                    UpdatePremiumIndicators();
+                    UpdateSubscriptionStatus();
+                });
+            }
+
+            // Listen to SubscriptionManager events as the source of feature gating
+            if (SubscriptionManager.Instance != null)
+            {
+                SubscriptionManager.Instance.OnSubscriptionStatusChanged.AddListener(_ =>
+                {
+                    UpdatePremiumIndicators();
+                    UpdateSubscriptionStatus();
+                });
+            }
+
+            // Setup premium upgrade panel events
+            if (upgradeToPremiumButton != null)
+                upgradeToPremiumButton.onClick.AddListener(OnUpgradeToPremiumClicked);
+
+            if (closeUpgradePanelButton != null)
+                closeUpgradePanelButton.onClick.AddListener(HidePremiumUpgradePanel);
         }
 
         /// <summary>
@@ -396,6 +455,25 @@ namespace LifeCraft.UI
             {
                 display.UpdateAmount(newAmount);
             }
+        }
+
+        /// <summary>
+        /// Handle user signed in event
+        /// </summary>
+        private void OnUserSignedIn(AuthenticationManager.AuthUser user)
+        {
+            Debug.Log($"User signed in: {user.displayName}");
+            HideAuthenticationUI();
+            InitializeUI(); // Re-initialize UI now that user is authenticated
+        }
+
+        /// <summary>
+        /// Handle user signed out event
+        /// </summary>
+        private void OnUserSignedOut()
+        {
+            Debug.Log("User signed out");
+            ShowAuthenticationUI();
         }
 
         /// <summary>
@@ -513,15 +591,292 @@ namespace LifeCraft.UI
         }
 
         /// <summary>
-        /// Set UI interactable state
+        /// Set UI interactability
         /// </summary>
         public void SetUIInteractable(bool interactable)
         {
-            // Set all UI elements interactable state
-            var buttons = FindObjectsByType<Button>(FindObjectsSortMode.None); 
-            foreach (var button in buttons)
+            // Disable/enable main UI panels
+            if (cityPanel != null) cityPanel.SetActive(interactable);
+            if (homePanel != null) homePanel.SetActive(interactable);
+            if (shopPanel != null) shopPanel.SetActive(interactable);
+            if (profilePanel != null) profilePanel.SetActive(interactable);
+        }
+
+        /// <summary>
+        /// Show the authentication UI if authentication is required and not authenticated.
+        /// </summary>
+        private void ShowAuthenticationUI()
+        {
+            if (authenticationUI != null)
             {
-                button.interactable = interactable;
+                authenticationUI.SetActive(true);
+                // Optionally, you might want to disable other UI elements while showing the auth UI
+                SetUIInteractable(false);
+            }
+        }
+
+        /// <summary>
+        /// Hide the authentication UI.
+        /// </summary>
+        private void HideAuthenticationUI()
+        {
+            if (authenticationUI != null)
+            {
+                authenticationUI.SetActive(false);
+                // Re-enable other UI elements
+                SetUIInteractable(true);
+            }
+        }
+
+        /// <summary>
+        /// Update premium feature indicators
+        /// </summary>
+        public void UpdatePremiumIndicators()
+        {
+            bool hasPremium = false;
+            if (AuthenticationManager.Instance != null)
+            {
+                hasPremium = AuthenticationManager.Instance.HasPremiumSubscription;
+            }
+            else if (SubscriptionManager.Instance != null)
+            {
+                hasPremium = SubscriptionManager.Instance.HasActiveSubscription();
+            }
+
+            // Update premium badge
+            if (premiumBadge != null)
+                premiumBadge.SetActive(hasPremium);
+
+            // Update premium feature buttons
+            if (premiumDecorChestButton != null)
+            {
+                var button = premiumDecorChestButton.GetComponent<Button>();
+                if (button != null)
+                    button.interactable = hasPremium;
+            }
+
+            if (premiumJournalButton != null)
+            {
+                var button = premiumJournalButton.GetComponent<Button>();
+                if (button != null)
+                    button.interactable = hasPremium;
+            }
+
+            if (premiumFriendsButton != null)
+            {
+                var button = premiumFriendsButton.GetComponent<Button>();
+                if (button != null)
+                    button.interactable = hasPremium;
+            }
+        }
+
+        /// <summary>
+        /// Show premium upgrade prompt
+        /// </summary>
+        public void ShowPremiumUpgradePrompt(string featureName)
+        {
+            bool hasPremium = false;
+            if (authManager != null)
+            {
+                hasPremium = authManager.HasPremiumSubscription; // property, not method
+            }
+            else if (SubscriptionManager.Instance != null)
+            {
+                hasPremium = SubscriptionManager.Instance.HasActiveSubscription();
+            }
+
+            if (hasPremium)
+            {
+                // User already has premium, no need to show prompt
+                return;
+            }
+
+            if (premiumUpgradePanel != null)
+            {
+                premiumUpgradePanel.SetActive(true);
+                ShowNotification($"Upgrade to Premium to access {featureName}!");
+            }
+        }
+
+        /// <summary>
+        /// Hide premium upgrade prompt
+        /// </summary>
+        public void HidePremiumUpgradePrompt()
+        {
+            if (premiumUpgradePanel != null)
+                premiumUpgradePanel.SetActive(false);
+        }
+
+        /// <summary>
+        /// Handle premium decor chest access
+        /// </summary>
+        public void OnPremiumDecorChestClicked()
+        {
+            if (SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasPremiumDecorChestAccess())
+            {
+                // User has access, proceed with decor chest
+                Debug.Log("Opening Premium Decor Chest...");
+                // TODO: Open decor chest
+            }
+            else
+            {
+                ShowPremiumUpgradePrompt("Premium Decor Chest");
+            }
+        }
+
+        /// <summary>
+        /// Handle premium journal features access
+        /// </summary>
+        public void OnPremiumJournalClicked()
+        {
+            if (SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasPremiumJournalAccess())
+            {
+                // User has access, proceed with premium journal features
+                Debug.Log("Opening Premium Journal Features...");
+                // TODO: Open premium journal features
+            }
+            else
+            {
+                ShowPremiumUpgradePrompt("Premium Journal Features");
+            }
+        }
+
+        /// <summary>
+        /// Handle premium friends access
+        /// </summary>
+        public void OnPremiumFriendsClicked()
+        {
+            if (SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasUnlimitedFriends())
+            {
+                // User has access, proceed with unlimited friends
+                Debug.Log("Opening Unlimited Friends...");
+                // TODO: Open friends system
+            }
+            else
+            {
+                ShowPremiumUpgradePrompt("Unlimited Friends");
+            }
+        }
+
+        /// <summary>
+        /// Update subscription status display
+        /// </summary>
+        public void UpdateSubscriptionStatus()
+        {
+            if (subscriptionStatusText != null)
+            {
+                bool hasPremium = false;
+                if (AuthenticationManager.Instance != null)
+                {
+                    hasPremium = AuthenticationManager.Instance.HasPremiumSubscription;
+                }
+                else if (SubscriptionManager.Instance != null)
+                {
+                    hasPremium = SubscriptionManager.Instance.HasActiveSubscription();
+                }
+                subscriptionStatusText.text = hasPremium ? "Premium" : "Free";
+                subscriptionStatusText.color = hasPremium ? Color.green : Color.gray;
+            }
+        }
+
+        /// <summary>
+        /// Show premium upgrade panel with feature descriptions
+        /// </summary>
+        public void ShowPremiumUpgradePanel()
+        {
+            if (premiumUpgradePanel != null)
+            {
+                premiumUpgradePanel.SetActive(true);
+                UpdatePremiumFeaturesDescription();
+            }
+        }
+
+        /// <summary>
+        /// Hide premium upgrade panel
+        /// </summary>
+        public void HidePremiumUpgradePanel()
+        {
+            if (premiumUpgradePanel != null)
+                premiumUpgradePanel.SetActive(false);
+        }
+
+        /// <summary>
+        /// Update premium features description text
+        /// </summary>
+        private void UpdatePremiumFeaturesDescription()
+        {
+            if (premiumFeaturesDescriptionText != null)
+            {
+                string featuresDescription = @"✨ Premium Features:
+
+🎨 Premium Decor Chest
+• Exclusive premium decorations
+• Higher chance for rare items
+
+📝 Enhanced Journal Features
+• Daily prompt recommendations
+• Drawing feature in entries
+• Media attachments (photos, audio)
+
+⚡ Faster Construction
+• 20% faster building construction
+• Get your city built quicker
+
+💎 Resource Bonuses
+• 50% bonus on all resources earned
+• More materials for building
+
+👥 Unlimited Friends
+• No 20 friend limit
+• Connect with unlimited players
+
+🚫 Ad-Free Experience
+• No advertisements
+• Uninterrupted gameplay
+
+Upgrade now for just $6.99/month!";
+
+                premiumFeaturesDescriptionText.text = featuresDescription;
+            }
+        }
+
+        /// <summary>
+        /// Handle upgrade to premium button click
+        /// </summary>
+        private async void OnUpgradeToPremiumClicked()
+        {
+            // Safety: If the PremiumUpgradePanel is NOT open, treat this as a request to open it only.
+            if (premiumUpgradePanel == null || !premiumUpgradePanel.activeInHierarchy)
+            {
+                ShowPremiumUpgradePanel();
+                return;
+            }
+
+            // At this point, the panel is open and the click comes from the panel's Upgrade button → proceed to purchase
+            if (authManager != null)
+            {
+                bool success = await authManager.PurchasePremiumSubscription();
+                if (success)
+                {
+                    Debug.Log("Premium upgrade successful!");
+
+                    // Keep feature gating in sync with the SubscriptionManager (simulation layer)
+                    if (SubscriptionManager.Instance != null && !SubscriptionManager.Instance.HasActiveSubscription())
+                    {
+                        // Prefer monthly simulation purchase to mark subscription active and fire events
+                        await SubscriptionManager.Instance.PurchaseMonthlySubscription();
+                    }
+
+                    HidePremiumUpgradePanel();
+                    UpdatePremiumIndicators();
+                    UpdateSubscriptionStatus();
+                    ShowNotification("Welcome to Premium! All premium features are now unlocked.");
+                }
+                else
+                {
+                    Debug.LogError("Premium upgrade failed");
+                    ShowNotification("Upgrade failed. Please try again.");
+                }
             }
         }
     }

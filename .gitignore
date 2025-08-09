@@ -101,6 +101,20 @@ Desktop.ini
 .utmp/
 SelfCity_BurstDebugInformation_DoNotShip/
 
+# Local environment & secrets
+*.env
+*.env.*
+Assets/Resources/AIConfiguration.asset
+Assets/Resources/AIConfiguration*.asset
+Assets/Resources/*AI*Config*.asset
+Assets/Resources/*Secret*.asset
+Assets/Resources/*Keys*.asset
+
+# Platform-specific caches
+.idea/
+.vscode/
+*.code-workspace
+
 # User settings (personal preferences)
 UserSettings/
 

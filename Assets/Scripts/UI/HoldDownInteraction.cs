@@ -385,6 +385,10 @@ namespace LifeCraft.UI
                 float elapsedTime = Time.time - project.startTime;
                 float remainingTime = project.constructionDuration - elapsedTime;
                 
+                // New: Ensure active skip quests are removed from To-Do when storing the building,
+                // but preserve the master list so they can be re-added later.
+                ConstructionManager.Instance.RemoveActiveQuestsFromToDo(itemName, gridPosition);
+
                 // PAUSE THE CONSTRUCTION: Remove the project from active projects
                 ConstructionManager.Instance.PauseConstruction(itemName, gridPosition);
                 
@@ -464,6 +468,20 @@ namespace LifeCraft.UI
                     // Execute the sale
                     ResourceManager.Instance.AddResources(originalCurrency, sellAmount);
                     Debug.Log($"Sold {itemName} for {sellAmount} {originalCurrency} (50% of original price {originalCost})");
+                    
+                    // CRITICAL FIX: Remove construction project data when selling building
+                    // This prevents old construction data from being reused by future buildings
+                    if (ConstructionManager.Instance != null)
+                    {
+                        Vector3Int gridPosition = new Vector3Int(
+                            Mathf.RoundToInt(transform.position.x),
+                            Mathf.RoundToInt(transform.position.y),
+                            0
+                        );
+                        ConstructionManager.Instance.RemoveConstructionProject(itemName, gridPosition);
+                        Debug.Log($"Removed construction project for {itemName} at {gridPosition}");
+                    }
+                    
                     RemoveFromWorld();
                 }, itemSprite);
             }

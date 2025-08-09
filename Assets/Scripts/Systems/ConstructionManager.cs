@@ -28,6 +28,12 @@ namespace LifeCraft.Systems
         public List<string> activeQuestTexts = new List<string>(); // NEW: Currently active quests in To-Do List
     }
 
+    [System.Serializable]
+    public class ConstructionManagerSaveData
+    {
+        public List<ConstructionProject> projects = new List<ConstructionProject>();
+    }
+
     public class ConstructionManager : MonoBehaviour
     {
         public static ConstructionManager Instance { get; private set; }
@@ -59,9 +65,90 @@ namespace LifeCraft.Systems
                 StopCoroutine(updateCoroutine);
             updateCoroutine = StartCoroutine(UpdateAllConstructions());
         }
-        
-        public void RegisterConstruction(string buildingName, Vector3Int gridPosition, float constructionDurationMinutes, string regionType)
+
+        /// <summary>
+        /// Save all construction projects to PlayerPrefs
+        /// </summary>
+        public void SaveConstructionData()
         {
+            try
+            {
+                var saveData = new ConstructionManagerSaveData();
+                
+                // Convert dictionary to list for serialization
+                foreach (var kvp in activeProjects)
+                {
+                    saveData.projects.Add(kvp.Value);
+                }
+                
+                string json = JsonUtility.ToJson(saveData);
+                PlayerPrefs.SetString("ConstructionManagerData", json);
+                PlayerPrefs.Save();
+                Debug.Log($"ConstructionManager saved: {saveData.projects.Count} projects");
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to save ConstructionManager: {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Load all construction projects from PlayerPrefs
+        /// </summary>
+        public void LoadConstructionData()
+        {
+            try
+            {
+                if (PlayerPrefs.HasKey("ConstructionManagerData"))
+                {
+                    string json = PlayerPrefs.GetString("ConstructionManagerData");
+                    var saveData = JsonUtility.FromJson<ConstructionManagerSaveData>(json);
+                    
+                    if (saveData != null && saveData.projects != null)
+                    {
+                        // Clear existing projects
+                        activeProjects.Clear();
+                        
+                        // Restore saved projects
+                        foreach (var project in saveData.projects)
+                        {
+                            string projectKey = $"{project.buildingName}_{project.gridPosition.x}_{project.gridPosition.y}_{project.gridPosition.z}";
+                            activeProjects[projectKey] = project;
+                        }
+                        
+                        Debug.Log($"ConstructionManager loaded: {saveData.projects.Count} projects");
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to load ConstructionManager: {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Clear all construction data and save the empty state
+        /// </summary>
+        public void ClearConstructionData()
+        {
+            activeProjects.Clear();
+            SaveConstructionData();
+        }
+        
+        /// <summary>
+        /// Register a new construction project with premium time reduction applied
+        /// </summary>
+        public void RegisterConstruction(string buildingName, Vector3Int gridPosition, float constructionTimeMinutes, string regionType)
+        {
+            // Apply premium construction time reduction if user has subscription
+            float adjustedConstructionTime = constructionTimeMinutes;
+            if (SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasFasterConstruction())
+            {
+                float reductionMultiplier = SubscriptionManager.Instance.GetConstructionTimeReduction();
+                adjustedConstructionTime = constructionTimeMinutes * reductionMultiplier;
+                Debug.Log($"Premium user: Construction time reduced from {constructionTimeMinutes} to {adjustedConstructionTime} minutes for {buildingName}");
+            }
+
             string projectKey = $"{buildingName}_{gridPosition.x}_{gridPosition.y}_{gridPosition.z}";
             
             if (!activeProjects.ContainsKey(projectKey))
@@ -70,22 +157,37 @@ namespace LifeCraft.Systems
                 {
                     buildingName = buildingName,
                     gridPosition = gridPosition,
-                    constructionDuration = constructionDurationMinutes * 60f,
+                    constructionDuration = adjustedConstructionTime * 60f, // Convert to seconds
                     regionType = regionType,
                     startTime = Time.time,
                     isCompleted = false
                 };
                 
                 activeProjects[projectKey] = project;
-                Debug.Log($"Registered construction: {projectKey}");
+                SaveConstructionData();
+                
+                Debug.Log($"Registered construction: {projectKey} for {adjustedConstructionTime} minutes");
+            }
+            else
+            {
+                Debug.LogWarning($"Construction project already exists: {projectKey}");
             }
         }
-        
+
         /// <summary>
-        /// Register construction with saved progress (for restoring stored buildings)
+        /// Register a construction project with saved progress and premium time reduction
         /// </summary>
-        public void RegisterConstructionWithProgress(string buildingName, Vector3Int gridPosition, float constructionDurationMinutes, string regionType, float startTime, List<string> originalQuestTexts, List<string> activeQuestTexts, int completedSkipQuests, int totalSkipQuests)
+        public void RegisterConstructionWithProgress(string buildingName, Vector3Int gridPosition, float constructionTimeMinutes, string regionType, float startTime, List<string> originalQuestTexts, List<string> activeQuestTexts, int completedSkipQuests, int totalSkipQuests)
         {
+            // Apply premium construction time reduction if user has subscription
+            float adjustedConstructionTime = constructionTimeMinutes;
+            if (SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasFasterConstruction())
+            {
+                float reductionMultiplier = SubscriptionManager.Instance.GetConstructionTimeReduction();
+                adjustedConstructionTime = constructionTimeMinutes * reductionMultiplier;
+                Debug.Log($"Premium user: Construction time reduced from {constructionTimeMinutes} to {adjustedConstructionTime} minutes for {buildingName}");
+            }
+
             string projectKey = $"{buildingName}_{gridPosition.x}_{gridPosition.y}_{gridPosition.z}";
             
             if (!activeProjects.ContainsKey(projectKey))
@@ -94,7 +196,7 @@ namespace LifeCraft.Systems
                 {
                     buildingName = buildingName,
                     gridPosition = gridPosition,
-                    constructionDuration = constructionDurationMinutes * 60f,
+                    constructionDuration = adjustedConstructionTime * 60f, // Convert to seconds
                     regionType = regionType,
                     startTime = startTime,
                     isCompleted = false,
@@ -105,7 +207,13 @@ namespace LifeCraft.Systems
                 };
                 
                 activeProjects[projectKey] = project;
-                Debug.Log($"Registered construction with progress: {projectKey} (remaining time: {(project.constructionDuration - (Time.time - startTime)) / 60f:F1} minutes)");
+                SaveConstructionData();
+                
+                Debug.Log($"Registered construction with progress: {projectKey} for {adjustedConstructionTime} minutes");
+            }
+            else
+            {
+                Debug.LogWarning($"Construction project already exists: {projectKey}");
             }
         }
         
@@ -132,6 +240,27 @@ namespace LifeCraft.Systems
             {
                 activeProjects.Remove(projectKey);
                 Debug.Log($"Paused construction for {buildingName} at {gridPosition}");
+            }
+        }
+
+        /// <summary>
+        /// Remove construction project completely (for when building is sold)
+        /// </summary>
+        public void RemoveConstructionProject(string buildingName, Vector3Int gridPosition)
+        {
+            string projectKey = $"{buildingName}_{gridPosition.x}_{gridPosition.y}_{gridPosition.z}";
+            if (activeProjects.ContainsKey(projectKey))
+            {
+                // Clean up any quests from the To-Do List
+                var project = activeProjects[projectKey];
+                if (project.originalQuestTexts.Count > 0)
+                {
+                    RemoveConstructionQuests(project);
+                }
+                
+                // Remove the project
+                activeProjects.Remove(projectKey);
+                Debug.Log($"Removed construction project for {buildingName} at {gridPosition}");
             }
         }
         
@@ -192,6 +321,49 @@ namespace LifeCraft.Systems
             
             // Notify UI components that construction is complete
             OnConstructionCompleted?.Invoke(project.buildingName, project.gridPosition);
+        }
+
+        /// <summary>
+        /// Remove ONLY the currently active construction quests for a project from the To-Do List,
+        /// preserving the master list so they can be re-added when construction resumes.
+        /// </summary>
+        public void RemoveActiveQuestsFromToDo(string buildingName, Vector3Int gridPosition)
+        {
+            ConstructionProject project = GetProject(buildingName, gridPosition);
+            if (project == null)
+            {
+                Debug.LogWarning($"[RemoveActiveQuestsFromToDo] No construction project found for {buildingName} at {gridPosition}");
+                return;
+            }
+
+            // If there are no active quests, nothing to do
+            if (project.activeQuestTexts == null || project.activeQuestTexts.Count == 0)
+            {
+                Debug.Log($"[RemoveActiveQuestsFromToDo] No active quests to remove for {buildingName} at {gridPosition}");
+                return;
+            }
+
+            // Find ToDoListManager in the scene
+            ToDoListManager toDoListManager = FindFirstObjectByType<ToDoListManager>();
+            if (toDoListManager == null)
+            {
+                Debug.LogError("[RemoveActiveQuestsFromToDo] ToDoListManager not found in scene!");
+                return;
+            }
+
+            // Remove only the active quests from the UI list
+            foreach (string questText in project.activeQuestTexts)
+            {
+                toDoListManager.RemoveToDo(questText);
+                Debug.Log($"[RemoveActiveQuestsFromToDo] Removed active construction quest from To-Do: {questText}");
+            }
+
+            // Preserve master/original list for resume; clear active list
+            project.activeQuestTexts.Clear();
+            project.deletedSkipQuests = 0; // reset deletion counter since we intentionally cleared
+
+            // Do NOT change originalQuestTexts, completedSkipQuests, or totalSkipQuests
+            Debug.Log($"[RemoveActiveQuestsFromToDo] Preserved {project.originalQuestTexts.Count} master quests for {buildingName}; cleared active list.");
         }
 
         public void AddSkipQuests(string buildingName, Vector3Int gridPosition, int questCount)

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI; // For Button and Image components. 
 using LifeCraft.Core; // Reference to the Core namespace for ResourceManager, which deals with resources. 
+using LifeCraft.Systems; // Add this to access SubscriptionManager
 using LifeCraft.UI; // Add this to use RewardModal
 
 namespace LifeCraft.Shop
@@ -166,6 +167,18 @@ namespace LifeCraft.Shop
         // Call this from the Premium Decor Chest button (for premium only)
         public void OpenPremiumDecorChest()
         {
+            // Check if user has premium subscription
+            if (SubscriptionManager.Instance == null || !SubscriptionManager.Instance.HasPremiumDecorChestAccess())
+            {
+                Debug.LogWarning("Premium Decor Chest requires Premium subscription!");
+                // Show upgrade prompt
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.ShowNotification("Premium Decor Chest requires Premium subscription. Upgrade now!");
+                }
+                return;
+            }
+
             // Show confirmation modal before opening the premium chest
             // The modal asks the player to confirm spending a Balance Ticket to open the premium chest
             if (purchaseConfirmModal != null)

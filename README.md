@@ -112,6 +112,17 @@ For iOS development and testing, see: `iOS_SETUP_GUIDE.md` and `SETUP_IOS_WINDOW
 
 ## 🆕 Latest Features
 
+### 🤖 AI Assistant System
+- **In-Game AI Chat**: Context-aware assistant that understands your current level, resources, and quests
+- **Chat History**: Local, persistent `AIChatHistory` with export and clear options
+- **Modern UI**: Typing indicator, smooth animations, user/AI message styling (`AIAssistantModal`)
+- **Configurable**: `AIConfiguration` ScriptableObject supports Azure OpenAI and OpenAI API (dev/prod modes)
+
+### 👥 Friends & Social
+- **Friends List**: Add/remove, pending requests, block/unblock, online status
+- **Premium Limit Lift**: Freemium friend cap with Premium unlocking unlimited friends (`FriendsManager` + `SubscriptionManager`)
+- **Persistence**: Local save/load with events for UI updates
+
 ### 🏗️ Action Menu System
 - **Interactive Building Menu**: Tap placed buildings to open context menu
 - **Store Functionality**: Return buildings to inventory with construction progress saved
@@ -137,6 +148,27 @@ For iOS development and testing, see: `iOS_SETUP_GUIDE.md` and `SETUP_IOS_WINDOW
 - **Unity Cloud Build**: Alternative cloud-based iOS building
 - **Info.plist Configuration**: Proper iOS app configuration
 - **Build Automation**: Automated build scripts for iOS and Android
+
+
+### ⭐ Premium Subscription Enhancements
+- **Simulation Mode**: Safe, local-only subscription testing (no real purchases)
+- **Benefits**: Premium Decor Chest, premium buildings/resources, premium journal features
+- **Progress Boosts**: 20% faster construction, region/resource bonuses
+- **Unlimited Friends**: Removes free-tier friend cap
+- **Status UI**: Clear Premium/Free indicators across Profile/UI
+
+### 🔐 Authentication & Profile Improvements
+- **Auth Methods**: Google, Apple, Email/Password, Guest (simulated flows with session restore)
+- **Unified UI**: `AuthenticationUI` integrates with Profile and subscription status
+- **Profile & Journal**: Auto-save, mood tracking, entry edit/delete, premium drawings/media, daily prompt recommendations
+
+### 🧭 Onboarding Assessment
+- **Wellness Quiz**: Recommends a starting region based on answers (`AssessmentQuizManager`)
+- **Progress Display**: Icons, descriptions, and question progress
+
+### ⚙️ Configuration & Build
+- **Billing Mode**: `Assets/Resources/BillingMode.json` selects Android store (e.g., GooglePlay)
+- **AI Config**: Create `AIConfiguration` asset and set API keys; keep keys out of source control
 
 ## 📁 Project Structure
 ```
@@ -226,6 +258,11 @@ Assets/
 - **Android**: Android Build Support in Unity
 - **iOS**: macOS with Xcode (or cloud builds for Windows)
 
+## 🔒 Security & Privacy
+- **Local-Only Saves**: Player data and AI chat history stored locally; no external storage by default
+- **Clear Data**: In-game options to clear chat history and personal data
+- **Secrets**: Keep API keys outside source; use `AIConfiguration` and environment-secure methods for production
+
 ## 🤝 Contributing
 This is a personal development project. For questions or suggestions, please refer to the development notes within the codebase.
 
@@ -236,6 +273,6 @@ This project uses various asset packs with their respective licenses. Please ref
 
 **Built with ❤️ using Unity**
 
-*Last Updated: January 2025.*
+*Last Updated: February 2025.*
 *Developed By: Ethan Le.*
 *Development Status: Active Development - Core Systems Complete.* 

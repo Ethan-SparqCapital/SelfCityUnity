@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using LifeCraft.Systems; // Add this to access SubscriptionManager
 
 namespace LifeCraft.Core
 {
@@ -119,19 +120,34 @@ namespace LifeCraft.Core
         }
 
         /// <summary>
-        /// Add resources to the player's wallet
+        /// Add resources to the player's inventory with premium bonus
         /// </summary>
         public void AddResources(ResourceType resourceType, int amount)
         {
             if (!_resources.ContainsKey(resourceType))
+            {
                 _resources[resourceType] = 0;
+            }
 
-            _resources[resourceType] += amount;
+            // Apply premium resource bonus if user has subscription
+            float bonusMultiplier = 1f;
+            if (SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasPremiumResourcesAccess())
+            {
+                bonusMultiplier = SubscriptionManager.Instance.GetPremiumResourceBonus();
+                int bonusAmount = Mathf.RoundToInt(amount * (bonusMultiplier - 1f));
+                if (bonusAmount > 0)
+                {
+                    Debug.Log($"Premium user: +{bonusAmount} bonus {resourceType} (50% bonus)");
+                }
+            }
+
+            int finalAmount = Mathf.RoundToInt(amount * bonusMultiplier);
+            _resources[resourceType] += finalAmount;
             
             // Trigger event (replacing Godot signal)
             OnResourceUpdated?.Invoke(resourceType, _resources[resourceType]);
             
-            Debug.Log($"Added {amount} {resourceType}. New total: {_resources[resourceType]}");
+            Debug.Log($"Added {finalAmount} {resourceType}. New total: {_resources[resourceType]}");
         }
 
         /// <summary>

@@ -519,6 +519,10 @@ namespace LifeCraft.UI
                     // Start the construction timer with the saved progress
                     constructionTimer.ResumeConstruction(decorationItem.displayName, gridPosition, decorationItem.constructionDuration / 60f, decorationItem.region.ToString(), decorationItem.skipButtonText);
                     
+                    // IMMEDIATELY call ReSyncWithManager to update the Skip button text
+                    // Start the coroutine directly on the construction timer component
+                    constructionTimer.StartCoroutine(constructionTimer.ReSyncWithManager());
+                    
                     Debug.Log($"Restored construction for {decorationItem.displayName} at {gridPosition} with {decorationItem.constructionProgress:F1}s remaining");
                     
                     // Clear the saved construction progress to prevent it from being restored again
