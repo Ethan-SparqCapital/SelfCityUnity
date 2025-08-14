@@ -170,11 +170,31 @@ namespace LifeCraft.Shop
             // Check if user has premium subscription
             if (SubscriptionManager.Instance == null || !SubscriptionManager.Instance.HasPremiumDecorChestAccess())
             {
-                Debug.LogWarning("Premium Decor Chest requires Premium subscription!");
-                // Show upgrade prompt
-                if (UIManager.Instance != null)
+                Debug.Log("Free user attempted to access Premium Decor Chest - showing upgrade prompt");
+                
+                // Show a more user-friendly message with upgrade option
+                if (rewardModal != null)
                 {
+                    // Create a concise message for free users
+                    string upgradeMessage = 
+                        "🌟 <b>Premium Decor Chest</b>\n\n" +
+                        "Unlock exclusive premium decorations with higher chances for rare items!\n\n" +
+                        "💎 <b>Upgrade to Premium for $6.99/month</b>\n" +
+                        "to access this exclusive feature!";
+                    
+                    // Use slightly larger size for free users
+                    Vector2 customSize = new Vector2(600, 600); // Just a bit larger than default
+                    rewardModal.Show(upgradeMessage, premiumChestSprite, customSize);
+                    Debug.Log("[DecorChestManager] Showing upgrade modal with custom size for free user");
+                }
+                else if (UIManager.Instance != null)
+                {
+                    // Fallback to UIManager notification if rewardModal is not available
                     UIManager.Instance.ShowNotification("Premium Decor Chest requires Premium subscription. Upgrade now!");
+                }
+                else
+                {
+                    Debug.LogWarning("Premium Decor Chest requires Premium subscription!");
                 }
                 return;
             }

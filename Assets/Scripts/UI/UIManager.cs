@@ -634,25 +634,39 @@ namespace LifeCraft.UI
         public void UpdatePremiumIndicators()
         {
             bool hasPremium = false;
-            if (AuthenticationManager.Instance != null)
-            {
-                hasPremium = AuthenticationManager.Instance.HasPremiumSubscription;
-            }
-            else if (SubscriptionManager.Instance != null)
+            
+            // Use ONLY SubscriptionManager as the single source of truth
+            if (SubscriptionManager.Instance != null)
             {
                 hasPremium = SubscriptionManager.Instance.HasActiveSubscription();
             }
+            else
+            {
+                Debug.LogWarning("[UIManager] SubscriptionManager.Instance is null - defaulting to Free status");
+            }
+
+            Debug.Log($"[UIManager] UpdatePremiumIndicators - hasPremium = {hasPremium} (from SubscriptionManager)");
 
             // Update premium badge
             if (premiumBadge != null)
+            {
                 premiumBadge.SetActive(hasPremium);
+                Debug.Log($"[UIManager] Updated premium badge visibility to: {hasPremium}");
+            }
 
             // Update premium feature buttons
+            // Note: Premium Decor Chest button is always clickable to show upgrade message
             if (premiumDecorChestButton != null)
             {
                 var button = premiumDecorChestButton.GetComponent<Button>();
                 if (button != null)
-                    button.interactable = hasPremium;
+                {
+                    // Always keep Premium Decor Chest button clickable so free users can see upgrade message
+                    button.interactable = true;
+                    
+                    // Keep the button appearance consistent with Decor Chest button
+                    // No visual changes based on subscription status
+                }
             }
 
             if (premiumJournalButton != null)
@@ -667,6 +681,13 @@ namespace LifeCraft.UI
                 var button = premiumFriendsButton.GetComponent<Button>();
                 if (button != null)
                     button.interactable = hasPremium;
+            }
+
+            // Update upgrade button visibility (show for free users, hide for premium users)
+            if (upgradeToPremiumButton != null)
+            {
+                upgradeToPremiumButton.gameObject.SetActive(!hasPremium);
+                Debug.Log($"[UIManager] Updated upgrade button visibility to: {!hasPremium}");
             }
         }
 
@@ -765,17 +786,23 @@ namespace LifeCraft.UI
         {
             if (subscriptionStatusText != null)
             {
-                bool hasPremium = false;
-                if (AuthenticationManager.Instance != null)
+                if (SubscriptionManager.Instance != null)
                 {
-                    hasPremium = AuthenticationManager.Instance.HasPremiumSubscription;
+                    var (isActive, type, expiry, price) = SubscriptionManager.Instance.GetSubscriptionInfo();
+                    if (isActive)
+                    {
+                        int daysRemaining = SubscriptionManager.Instance.GetDaysRemaining();
+                        subscriptionStatusText.text = $"Premium ({type}) - {daysRemaining} days remaining";
+                    }
+                    else
+                    {
+                        subscriptionStatusText.text = "Free";
+                    }
                 }
-                else if (SubscriptionManager.Instance != null)
+                else
                 {
-                    hasPremium = SubscriptionManager.Instance.HasActiveSubscription();
+                    subscriptionStatusText.text = "Free";
                 }
-                subscriptionStatusText.text = hasPremium ? "Premium" : "Free";
-                subscriptionStatusText.color = hasPremium ? Color.green : Color.gray;
             }
         }
 

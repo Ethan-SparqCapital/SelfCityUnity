@@ -123,7 +123,7 @@ namespace LifeCraft.Systems
         /// <summary>
         /// Validate current subscription status
         /// </summary>
-        private void ValidateSubscriptionStatus()
+        public void ValidateSubscriptionStatus()
         {
             if (hasActiveSubscription)
             {
@@ -491,16 +491,32 @@ namespace LifeCraft.Systems
         /// </summary>
         public void ResetSubscriptionForTesting()
         {
+            Debug.Log("[SubscriptionManager] Starting subscription reset...");
+            
+            // Clear all subscription data
             PlayerPrefs.DeleteKey("Subscription_Active");
             PlayerPrefs.DeleteKey("Subscription_Id");
             PlayerPrefs.DeleteKey("Subscription_Expiry");
             PlayerPrefs.DeleteKey("Subscription_Type");
             PlayerPrefs.Save();
             
+            // Reset internal state
+            hasActiveSubscription = false;
+            currentSubscriptionId = "";
+            currentSubscriptionType = SubscriptionType.None;
+            subscriptionExpiryDate = DateTime.MinValue;
+            
+            Debug.Log("[SubscriptionManager] All subscription data cleared");
+            
+            // Reload data and validate
             LoadSubscriptionData();
             ValidateSubscriptionStatus();
             
-            Debug.Log("SIMULATION: Subscription reset for testing");
+            // Force UI update events
+            OnSubscriptionStatusChanged?.Invoke(false);
+            LockPremiumFeatures();
+            
+            Debug.Log("[SubscriptionManager] Subscription reset completed - Status: Free");
         }
     }
 } 

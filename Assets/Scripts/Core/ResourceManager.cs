@@ -129,25 +129,44 @@ namespace LifeCraft.Core
                 _resources[resourceType] = 0;
             }
 
-            // Apply premium resource bonus if user has subscription
-            float bonusMultiplier = 1f;
-            if (SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasPremiumResourcesAccess())
+            Debug.Log($"[ResourceManager] Adding {amount} {resourceType}");
+
+            // For quest rewards, premium users get exactly 8 currency, free users get the base amount
+            int finalAmount = amount;
+            
+            // Check if this is a quest reward (amount is 5 or 8)
+            if (amount == 5 || amount == 8)
             {
-                bonusMultiplier = SubscriptionManager.Instance.GetPremiumResourceBonus();
-                int bonusAmount = Mathf.RoundToInt(amount * (bonusMultiplier - 1f));
-                if (bonusAmount > 0)
+                // This is likely a quest reward - use the amount as-is since QuestItemUI already calculated the correct amount
+                finalAmount = amount;
+                Debug.Log($"[ResourceManager] Quest reward detected: +{finalAmount} {resourceType} (amount already calculated based on premium status)");
+            }
+            else
+            {
+                // For other resource additions (habits, purchases, etc.), apply premium resource bonus if user has subscription
+                float bonusMultiplier = 1f;
+                bool hasPremium = SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasPremiumResourcesAccess();
+                Debug.Log($"[ResourceManager] Non-quest reward: Premium check = {hasPremium}");
+                
+                if (hasPremium)
                 {
-                    Debug.Log($"Premium user: +{bonusAmount} bonus {resourceType} (50% bonus)");
+                    bonusMultiplier = SubscriptionManager.Instance.GetPremiumResourceBonus();
+                    int bonusAmount = Mathf.RoundToInt(amount * (bonusMultiplier - 1f));
+                    if (bonusAmount > 0)
+                    {
+                        Debug.Log($"[ResourceManager] Premium user: +{bonusAmount} bonus {resourceType} (50% bonus)");
+                    }
                 }
+                finalAmount = Mathf.RoundToInt(amount * bonusMultiplier);
+                Debug.Log($"[ResourceManager] Non-quest reward: Base {amount} * {bonusMultiplier} = {finalAmount}");
             }
 
-            int finalAmount = Mathf.RoundToInt(amount * bonusMultiplier);
             _resources[resourceType] += finalAmount;
             
             // Trigger event (replacing Godot signal)
             OnResourceUpdated?.Invoke(resourceType, _resources[resourceType]);
             
-            Debug.Log($"Added {finalAmount} {resourceType}. New total: {_resources[resourceType]}");
+            Debug.Log($"[ResourceManager] Final result: Added {finalAmount} {resourceType}. New total: {_resources[resourceType]}");
         }
 
         /// <summary>

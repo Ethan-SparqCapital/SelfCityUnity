@@ -31,6 +31,8 @@ SelfCity is a 2D city-building game where players construct and manage their own
 - **Building Unlocks**: Buildings unlock progressively based on player level and assessment results
 - **EXP Rewards**: Building placement and quest completion reward EXP with difficulty-based calculations
 - **Shop Database Integration**: Building prices tied to region-specific shop databases
+- **Premium Currency Bonuses**: Premium users get 8 currency per quest vs 5 for free users (60% increase)
+- **Premium Resource Bonuses**: 50% bonus on all resources earned for premium subscribers
 
 ### 🎒 Inventory & Shop System
 - **Persistent Inventory**: All decorations and buildings stored in persistent inventory
@@ -52,6 +54,10 @@ SelfCity is a 2D city-building game where players construct and manage their own
 - **Visual Feedback**: EXP popups, level-up celebrations, unlock notifications
 - **Mobile Optimization**: Touch-friendly controls and responsive design
 - **Action Menu UI**: Context-sensitive menu for building interactions
+- **Premium UI Synchronization**: Real-time updates of premium status across all UI components
+- **Unified Status Display**: Consistent Premium/Free indicators in Profile, main UI, and quest systems
+- **Smart Button Management**: Premium feature buttons automatically enable/disable based on subscription status
+- **Event-Driven Updates**: UI components automatically refresh when subscription status changes
 
 ## 🛠️ Technical Details
 
@@ -64,12 +70,14 @@ SelfCity is a 2D city-building game where players construct and manage their own
 
 ### Key Systems
 - **CityBuilder**: Core building placement and management
-- **ConstructionManager**: Construction timer and skip quest system with pause/resume functionality
+- **ConstructionManager**: Construction timer and skip quest system with pause/resume functionality and premium time reduction
 - **PlayerLevelManager**: Player progression and building unlocks
 - **QuestManager**: Quest generation, tracking, and rewards
 - **AuthenticationManager**: Multi-platform authentication
 - **InventoryManager**: Inventory and item management
-- **UIManager**: Centralized UI management
+- **UIManager**: Centralized UI management with premium status synchronization
+- **ProfileManager**: Profile management with unified subscription status display
+- **SubscriptionManager**: Single source of truth for premium subscription status
 - **HoldDownInteraction**: Action menu system for building interactions
 - **BuildingConstructionTimer**: Individual building construction timers with UI
 
@@ -135,6 +143,9 @@ For iOS development and testing, see: `iOS_SETUP_GUIDE.md` and `SETUP_IOS_WINDOW
 - **Progress Preservation**: Construction time, quest state, and skip button text saved
 - **Region Type Preservation**: Building region types maintained when storing/placing
 - **Skip Quest State**: Skip button text and quest progress preserved across sessions
+- **Premium Time Reduction**: Premium subscribers get 20% faster construction time on new buildings
+- **Smart Time Management**: Construction time reduction only applied to new projects, not restored progress
+- **Dual Registration System**: Separate methods for new construction vs. progress restoration
 
 ### 🏗️ Enhanced Building Management
 - **Shop Database Integration**: Building prices from region-specific shop databases
@@ -156,6 +167,13 @@ For iOS development and testing, see: `iOS_SETUP_GUIDE.md` and `SETUP_IOS_WINDOW
 - **Progress Boosts**: 20% faster construction, region/resource bonuses
 - **Unlimited Friends**: Removes free-tier friend cap
 - **Status UI**: Clear Premium/Free indicators across Profile/UI
+- **Construction Time Reduction**: Premium users get 20% faster building construction
+- **Smart Reduction Logic**: Time reduction only applies to new buildings, preserving saved progress integrity
+- **Quest Currency Bonuses**: Premium users get 8 currency per quest (60% increase from free user's 5)
+- **Resource Bonuses**: 50% bonus on all resources earned for premium subscribers
+- **Unified Premium System**: Single source of truth for subscription status across all UI components
+- **Real-time UI Synchronization**: All premium indicators update instantly when subscription status changes
+- **Comprehensive Feature Gating**: Premium buttons, badges, and status text synchronized across Profile, UI, and Quest systems
 
 ### 🔐 Authentication & Profile Improvements
 - **Auth Methods**: Google, Apple, Email/Password, Guest (simulated flows with session restore)
@@ -223,19 +241,20 @@ Assets/
 - [x] Persistent save/load system
 - [x] Inventory management with drag-and-drop
 - [x] Quest system (static, daily, custom, skip quests)
-- [x] Construction timer and skip quest system
+- [x] Construction timer and skip quest system with premium time reduction
 - [x] Level-up and progression system
 - [x] Multi-platform authentication
-- [x] Premium subscription system
-- [x] Profile and journal system
+- [x] Premium subscription system with construction benefits and unified UI synchronization
+- [x] Profile and journal system with real-time premium status updates
 - [x] Shop system with visual confirmations
 - [x] Region unlock system
 - [x] EXP and reward system
 - [x] Mobile optimization
 - [x] Action Menu system for building interactions
-- [x] Construction progress saving and restoration
+- [x] Construction progress saving and restoration with smart time management
 - [x] iOS development setup and cloud builds
 - [x] Enhanced building management with region preservation
+- [x] Comprehensive premium UI synchronization across all components
 
 ### 🔄 Current Development
 - **Performance Optimization**: Ongoing system improvements

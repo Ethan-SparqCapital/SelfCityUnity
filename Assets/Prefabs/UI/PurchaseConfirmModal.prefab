@@ -497,8 +497,8 @@ GameObject:
   - component: {fileID: 4075298077761182449}
   - component: {fileID: 8435743564284530113}
   - component: {fileID: 8371112736794107396}
-  - component: {fileID: 1292897117206857772}
   - component: {fileID: 1563311564261462598}
+  - component: {fileID: 1292897117206857772}
   m_Layer: 5
   m_Name: PurchaseConfirmModal
   m_TagString: Untagged
@@ -565,18 +565,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!225 &1292897117206857772
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7398800953337825862}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &1563311564261462598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,6 +581,19 @@ MonoBehaviour:
   yesButton: {fileID: 4480332612606199423}
   noButton: {fileID: 3922632996622553994}
   canvasGroup: {fileID: 1292897117206857772}
+  iconImage: {fileID: 0}
+--- !u!225 &1292897117206857772
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7398800953337825862}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7565955096483320918
 GameObject:
   m_ObjectHideFlags: 0

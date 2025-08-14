@@ -136,7 +136,8 @@ namespace LifeCraft.Systems
         }
         
         /// <summary>
-        /// Register a new construction project with premium time reduction applied
+        /// Register a new construction project with premium time reduction applied (ONLY method that applies premium reduction)
+        /// This method is called when a building is first placed and construction begins
         /// </summary>
         public void RegisterConstruction(string buildingName, Vector3Int gridPosition, float constructionTimeMinutes, string regionType)
         {
@@ -175,18 +176,15 @@ namespace LifeCraft.Systems
         }
 
         /// <summary>
-        /// Register a construction project with saved progress and premium time reduction
+        /// Register a construction project with saved progress (NO premium time reduction applied)
+        /// This method should only restore the exact saved construction time without modifications
         /// </summary>
         public void RegisterConstructionWithProgress(string buildingName, Vector3Int gridPosition, float constructionTimeMinutes, string regionType, float startTime, List<string> originalQuestTexts, List<string> activeQuestTexts, int completedSkipQuests, int totalSkipQuests)
         {
-            // Apply premium construction time reduction if user has subscription
+            // DO NOT apply premium time reduction here - this method restores saved progress
+            // The construction time should already be the correct value from when it was first registered
             float adjustedConstructionTime = constructionTimeMinutes;
-            if (SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasFasterConstruction())
-            {
-                float reductionMultiplier = SubscriptionManager.Instance.GetConstructionTimeReduction();
-                adjustedConstructionTime = constructionTimeMinutes * reductionMultiplier;
-                Debug.Log($"Premium user: Construction time reduced from {constructionTimeMinutes} to {adjustedConstructionTime} minutes for {buildingName}");
-            }
+            Debug.Log($"Restoring construction with progress: {buildingName} for {adjustedConstructionTime} minutes (no premium reduction applied)");
 
             string projectKey = $"{buildingName}_{gridPosition.x}_{gridPosition.y}_{gridPosition.z}";
             

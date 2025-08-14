@@ -3,6 +3,7 @@
 using UnityEngine; // we are using UnityEngine for MonoBehaviour, which is the base class for all scripts in Unity. 
 using TMPro; // we are using TMPro for TextMeshPro, which is a text rendering system in Unity that provides advanced text formatting and rendering capabilities. 
 using UnityEngine.UI; // we are using UnityEngine.UI for UI components like Button and InputField, which are used to create user interfaces in Unity. 
+using LifeCraft.Systems; // Add this to access SubscriptionManager
 
 namespace LifeCraft.UI
 {
@@ -29,16 +30,160 @@ namespace LifeCraft.UI
             questText.text = description; // set the quest text to that of the provided description parameter. 
             toDoListManager = manager; // set the To-Do List Manager reference to that of the provided manager parameter. 
             fromDailyQuest = isFromDailyQuest; // FIX: Store the origin flag for use when adding to the To-Do List.
-            questRewardAmount = amount; // Store the dynamic reward amount for use when the quest is completed.
+            
+            // Debug: Check subscription status
+            DebugSubscriptionStatus();
+            
+            // Calculate the actual reward amount based on premium status
+            questRewardAmount = CalculateRewardAmount(amount);
 
             ResourceIcon.sprite = GetResourceSpriteForRegion(region); // Assign the resource icon based on the region. This method should be defined elsewhere in my code to return the appropriate sprite based on the region of the quest. 
             if (ResourceAmountText != null)
-                ResourceAmountText.text = $"+{amount}"; // Dynamically display the reward amount next to the icon.
+                ResourceAmountText.text = $"+{questRewardAmount}"; // Dynamically display the reward amount next to the icon.
 
             addToDoButton.onClick.RemoveAllListeners(); // clear any existing listeners on the button to avoid duplicates. 
             addToDoButton.onClick.AddListener(OnAddToDoClicked); // add a new listener that calls OnAddToDoClicked when the button is clicked. 
 
-            Debug.Log($"Setting up quest: {description} (region: {region}, amount: {amount})");
+            Debug.Log($"Setting up quest: {description} (region: {region}, base amount: {amount}, final amount: {questRewardAmount})");
+        }
+
+        /// <summary>
+        /// Debug method to check subscription status
+        /// </summary>
+        private void DebugSubscriptionStatus()
+        {
+            if (SubscriptionManager.Instance != null)
+            {
+                var (isActive, type, expiry, price) = SubscriptionManager.Instance.GetSubscriptionInfo();
+                Debug.Log($"[QuestItemUI] Subscription Status: Active={isActive}, Type={type}, Expiry={expiry}, Price={price}");
+                Debug.Log($"[QuestItemUI] HasActiveSubscription={SubscriptionManager.Instance.HasActiveSubscription()}");
+                Debug.Log($"[QuestItemUI] HasPremiumDecorChestAccess={SubscriptionManager.Instance.HasPremiumDecorChestAccess()}");
+                Debug.Log($"[QuestItemUI] HasPremiumResourcesAccess={SubscriptionManager.Instance.HasPremiumResourcesAccess()}");
+                
+                // Force validate subscription status
+                Debug.Log($"[QuestItemUI] Forcing subscription validation...");
+                SubscriptionManager.Instance.ValidateSubscriptionStatus();
+                
+                // Check again after validation
+                var (isActiveAfter, typeAfter, expiryAfter, priceAfter) = SubscriptionManager.Instance.GetSubscriptionInfo();
+                Debug.Log($"[QuestItemUI] After validation - Active={isActiveAfter}, Type={typeAfter}, Expiry={expiryAfter}, Price={priceAfter}");
+                Debug.Log($"[QuestItemUI] After validation - HasActiveSubscription={SubscriptionManager.Instance.HasActiveSubscription()}");
+                Debug.Log($"[QuestItemUI] After validation - HasPremiumDecorChestAccess={SubscriptionManager.Instance.HasPremiumDecorChestAccess()}");
+            }
+            else
+            {
+                Debug.LogWarning("[QuestItemUI] SubscriptionManager.Instance is null!");
+            }
+        }
+
+        /// <summary>
+        /// Debug method to force reset subscription status (for testing)
+        /// </summary>
+        [ContextMenu("Force Reset Subscription Status")]
+        public void ForceResetSubscriptionStatus()
+        {
+            if (SubscriptionManager.Instance != null)
+            {
+                Debug.Log("[QuestItemUI] Force resetting subscription status...");
+                SubscriptionManager.Instance.ResetSubscriptionForTesting();
+                DebugSubscriptionStatus();
+                
+                // Force UI updates after reset
+                ForceUIUpdate();
+            }
+        }
+
+        /// <summary>
+        /// Force UI components to update after subscription status change
+        /// </summary>
+        private void ForceUIUpdate()
+        {
+            Debug.Log("[QuestItemUI] Starting comprehensive UI update...");
+            
+            // Force subscription validation first
+            if (SubscriptionManager.Instance != null)
+            {
+                Debug.Log("[QuestItemUI] Forcing subscription validation...");
+                SubscriptionManager.Instance.ValidateSubscriptionStatus();
+            }
+            
+            // Find and update UIManager
+            var uiManager = FindFirstObjectByType<UIManager>();
+            if (uiManager != null)
+            {
+                Debug.Log("[QuestItemUI] Forcing UIManager to update subscription indicators...");
+                uiManager.UpdatePremiumIndicators();
+                uiManager.UpdateSubscriptionStatus();
+            }
+            else
+            {
+                Debug.LogWarning("[QuestItemUI] UIManager not found!");
+            }
+            
+            // Find and update ProfileManager if it exists
+            var profileManager = FindFirstObjectByType<ProfileManager>();
+            if (profileManager != null)
+            {
+                Debug.Log("[QuestItemUI] Forcing ProfileManager to update...");
+                profileManager.UpdateProfileDisplay();
+            }
+            else
+            {
+                Debug.LogWarning("[QuestItemUI] ProfileManager not found!");
+            }
+            
+            // Force a frame delay to ensure all updates are processed
+            StartCoroutine(DelayedUIUpdate());
+            
+            Debug.Log("[QuestItemUI] Comprehensive UI update triggered - Profile page should now show 'Free' status");
+        }
+
+        /// <summary>
+        /// Delayed UI update to ensure all changes are processed
+        /// </summary>
+        private System.Collections.IEnumerator DelayedUIUpdate()
+        {
+            yield return new WaitForEndOfFrame();
+            
+            // Force another update after frame processing
+            var uiManager = FindFirstObjectByType<UIManager>();
+            if (uiManager != null)
+            {
+                uiManager.UpdatePremiumIndicators();
+                uiManager.UpdateSubscriptionStatus();
+            }
+            
+            var profileManager = FindFirstObjectByType<ProfileManager>();
+            if (profileManager != null)
+            {
+                profileManager.UpdateProfileDisplay();
+            }
+            
+            Debug.Log("[QuestItemUI] Delayed UI update completed");
+        }
+
+        /// <summary>
+        /// Calculate the reward amount based on premium subscription status
+        /// Premium users get 8 currency per quest, free users get 5
+        /// </summary>
+        private int CalculateRewardAmount(int baseAmount)
+        {
+            // Check if user has premium subscription - use the same check as Premium Decor Chest
+            bool hasPremium = SubscriptionManager.Instance != null && SubscriptionManager.Instance.HasPremiumDecorChestAccess();
+            Debug.Log($"[QuestItemUI] Premium check: SubscriptionManager.Instance = {SubscriptionManager.Instance != null}, HasPremiumDecorChestAccess = {hasPremium}");
+            
+            if (hasPremium)
+            {
+                // Premium users get 8 currency per quest (60% increase from base 5)
+                Debug.Log($"[QuestItemUI] Premium user detected - returning 8 currency (base was {baseAmount})");
+                return 8;
+            }
+            else
+            {
+                // Free users get the base amount (typically 5)
+                Debug.Log($"[QuestItemUI] Free user detected - returning base amount {baseAmount}");
+                return baseAmount;
+            }
         }
 
         private Sprite GetResourceSpriteForRegion(string region)
@@ -68,7 +213,7 @@ namespace LifeCraft.UI
             {
                 // FIX: Only flag as daily quest if this quest is actually from the Daily Quests list.
                 // TODO: Use questRewardAmount here to actually reward the player dynamically (e.g., toDoListManager.AddToDo(questDescription, fromDailyQuest, questRewardAmount);)
-                toDoListManager.AddToDo(questDescription, fromDailyQuest); // Use the correct flag. Update this if your ToDoListManager supports dynamic rewards.
+                toDoListManager.AddToDo(questDescription, fromDailyQuest, questRewardAmount); // Use the correct flag and reward amount. Update this if your ToDoListManager supports dynamic rewards.
             }
             else
             {

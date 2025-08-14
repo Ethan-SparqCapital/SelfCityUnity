@@ -141,17 +141,18 @@ namespace LifeCraft.UI
             LoadProfileData();
             LoadJournalData();
 
-            // Subscribe to subscription status changes to refresh UI immediately after upgrade
-            if (AuthenticationManager.Instance != null)
+            // Use ONLY SubscriptionManager as the single source of truth
+            if (SubscriptionManager.Instance != null)
             {
-                AuthenticationManager.Instance.OnSubscriptionStatusChanged.AddListener(OnSubscriptionStatusChanged);
-                // Initial paint based on auth manager
-                OnSubscriptionStatusChanged(AuthenticationManager.Instance.HasPremiumSubscription);
-            }
-            else if (SubscriptionManager.Instance != null)
-            {
-                // Fallback to simulation subscription state
+                // Subscribe to subscription status changes to refresh UI immediately after upgrade
+                SubscriptionManager.Instance.OnSubscriptionStatusChanged.AddListener(OnSubscriptionStatusChanged);
+                // Initial paint based on SubscriptionManager
                 OnSubscriptionStatusChanged(SubscriptionManager.Instance.HasActiveSubscription());
+                Debug.Log($"[ProfileManager] Initial subscription status from SubscriptionManager: {SubscriptionManager.Instance.HasActiveSubscription()}");
+            }
+            else
+            {
+                Debug.LogWarning("[ProfileManager] SubscriptionManager.Instance is null - cannot set up subscription monitoring");
             }
         }
 
@@ -160,16 +161,59 @@ namespace LifeCraft.UI
         /// </summary>
         private void OnSubscriptionStatusChanged(bool hasPremium)
         {
+            // Use SubscriptionManager as the single source of truth instead of the parameter
+            bool actualPremiumStatus = false;
+            if (SubscriptionManager.Instance != null)
+            {
+                actualPremiumStatus = SubscriptionManager.Instance.HasActiveSubscription();
+            }
+            
+            Debug.Log($"[ProfileManager] OnSubscriptionStatusChanged called with parameter: {hasPremium}, but using SubscriptionManager: {actualPremiumStatus}");
+            
+            UpdateProfileDisplay();
+        }
+
+        /// <summary>
+        /// Public method to force update profile display (can be called from external scripts)
+        /// </summary>
+        public void UpdateProfileDisplay()
+        {
+            bool hasPremium = false;
+            
+            // Use ONLY SubscriptionManager as the single source of truth
+            if (SubscriptionManager.Instance != null)
+            {
+                hasPremium = SubscriptionManager.Instance.HasActiveSubscription();
+                Debug.Log($"[ProfileManager] SubscriptionManager check: hasActiveSubscription = {hasPremium}");
+            }
+            else
+            {
+                Debug.LogWarning("[ProfileManager] SubscriptionManager.Instance is null - defaulting to Free status");
+            }
+
+            // Update subscription status text
             if (subscriptionStatusText != null)
             {
                 subscriptionStatusText.text = hasPremium ? "Premium" : "Free";
                 subscriptionStatusText.color = hasPremium ? Color.green : Color.gray;
+                Debug.Log($"[ProfileManager] Updated subscription status text to: {subscriptionStatusText.text} (color: {subscriptionStatusText.color})");
             }
 
+            // Update premium badge
             if (premiumBadge != null)
             {
                 premiumBadge.SetActive(hasPremium);
+                Debug.Log($"[ProfileManager] Updated premium badge visibility to: {hasPremium}");
             }
+            
+            // Update upgrade button visibility (show for free users, hide for premium users)
+            if (upgradeToPremiumButton != null)
+            {
+                upgradeToPremiumButton.gameObject.SetActive(!hasPremium);
+                Debug.Log($"[ProfileManager] Updated upgrade button visibility to: {!hasPremium}");
+            }
+            
+            Debug.Log($"[ProfileManager] Profile display updated - Final subscription status: {(hasPremium ? "Premium" : "Free")} (from SubscriptionManager)");
         }
 
         /// <summary>

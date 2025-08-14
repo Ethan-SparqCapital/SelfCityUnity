@@ -346,17 +346,7 @@ namespace LifeCraft.UI
         }
         #endregion
         #region Debug Methods
-        /// <summary>
-        /// Add test decorations for debugging.
-        /// </summary>
-        [ContextMenu("Add Test Decorations")]
-        public void AddTestDecorations()
-        {
-            if (InventoryManager.Instance != null)
-            {
-                InventoryManager.Instance.AddTestDecorations();
-            }
-        }
+        
         /// <summary>
         /// Clear inventory for debugging.
         /// </summary>

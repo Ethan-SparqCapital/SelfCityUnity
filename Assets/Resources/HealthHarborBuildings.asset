@@ -15,81 +15,61 @@ MonoBehaviour:
   buildings:
   - name: Hydration Station
     description: Fancy water fountains and bottle refill spots
-    price: 10
-    icon: {fileID: 0}
+    price: 20
   - name: Wellness Workshop
     description: Classes on stretching, posture, and more
-    price: 20
-    icon: {fileID: 0}
+    price: 35
   - name: Mindful Mile Path
     description: Scenic walking path for reflection
-    price: 15
-    icon: {fileID: 0}
+    price: 40
   - name: Wellness Clinic
     description: Basic health checkups and advice
-    price: 20
-    icon: {fileID: -7159117152848585878, guid: f631158fd61010446823882ec2a32c15, type: 3}
+    price: 45
   - name: Juice Bar
     description: Fresh juices and smoothies for all
-    price: 15
-    icon: {fileID: 0}
+    price: 50
   - name: Yoga Studio
     description: "Stretch, meditate, and find your center\t"
-    price: 25
-    icon: {fileID: 0}
+    price: 60
   - name: Nutrition Lab
     description: Learn about healthy eating and try new recipes
-    price: 25
-    icon: {fileID: 0}
+    price: 65
   - name: Running Track
     description: Outdoor track for jogging and races
-    price: 20
-    icon: {fileID: 0}
+    price: 70
   - name: Zen Cycle Studio
     description: Group cycling with calming visuals
-    price: 25
-    icon: {fileID: 0}
+    price: 75
   - name: Fresh Air Foundry
     description: Lush park with walking trails and gardens
-    price: 30
-    icon: {fileID: 0}
+    price: 75
   - name: Sleep Sanctuary
     description: Cozy nap pods and sleep education
-    price: 30
-    icon: {fileID: 0}
+    price: 80
   - name: Physical Therapy Center
     description: Rehab and recovery for all ages
-    price: 35
-    icon: {fileID: 0}
+    price: 85
   - name: Climbing Wall Plaza
     description: Indoor/outdoor climbing adventures
-    price: 35
-    icon: {fileID: 0}
+    price: 90
   - name: Spa Retreat
     description: Relaxation and self-care center
-    price: 40
-    icon: {fileID: 0}
+    price: 95
   - name: Sunlight Solarium
     description: Glass atrium for vitamin D and plant life
-    price: 40
-    icon: {fileID: 0}
+    price: 100
   - name: Movement Metro
     description: Transit system powered by your steps
-    price: 45
-    icon: {fileID: 0}
+    price: 105
   - name: Biohacking Hub
     description: Cutting-edge wellness tech and gadgets
-    price: 50
-    icon: {fileID: 0}
+    price: 110
   - name: Adventure Obstacle Park
     description: Ninja course for all ages
-    price: 50
-    icon: {fileID: 0}
+    price: 120
   - name: Fitness Fortress
     description: High-tech gym with all the latest equipment
-    price: 55
-    icon: {fileID: 0}
+    price: 135
   - name: Aquatic Center
     description: Pools, water slides, and aquatic fitness
-    price: 60
-    icon: {fileID: 0}
+    price: 140

@@ -134,6 +134,8 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
     /// <param name="questText"> The text of the quest/task to be added to the To-Do List. </param>
     public void AddToDo(string questText, bool fromDailyQuest = false, int rewardAmount = 5) // this method adds a new to-do item to the list, checks if it is from Daily Quests, and stores the dynamic reward amount.
     {
+        Debug.Log($"[ToDoListManager] AddToDo called: quest='{questText}', fromDailyQuest={fromDailyQuest}, rewardAmount={rewardAmount}");
+        
         Debug.Log($"ToDoListManager: Attempting to add quest: '{questText}' (Container has {toDoListContainer?.childCount ?? 0} items)");
         
         if (toDoListContainer == null || toDoItemPrefab == null) // check if the container or prefab is not assigned.
@@ -174,6 +176,9 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
                 meta.isFromDailyQuest = fromDailyQuest; // set the isFromDailyQuest variable to the fromDailyQuest parameter (which is a boolean that indicates if the new item is from Daily Quests). 
                 meta.dailyQuestText = questText; // set the dailyQuestText variable to the questText parameter (which is the text of the quest/task to be added from one of the 4 regions or the Daily Quests list). 
                 meta.rewardAmount = rewardAmount; // set the dynamic reward amount for this to-do item.
+                
+                Debug.Log($"[ToDoListManager] Stored rewardAmount={meta.rewardAmount} in ToDoItemMeta for quest: '{questText}'");
+                
                 // Assign the LabelText and RewardAmountText fields in the Inspector to the correct TMP_Text objects on your prefab.
                 // Set the quest label and reward amount text in the UI if the fields are assigned.
                 if (meta.LabelText != null)
@@ -614,6 +619,8 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
                 ToDoItemMeta metaReward = item.GetComponent<ToDoItemMeta>();
                 if (metaReward != null)
                     rewardAmount = metaReward.rewardAmount;
+                
+                Debug.Log($"[ToDoListManager] Quest completion: '{questText}' - rewardAmount from meta: {rewardAmount}");
                 GiveCurrencyReward(questText, rewardAmount); // Give the dynamic reward amount for this quest.
 
                 // Reward EXP for completing the quest/task:
@@ -760,9 +767,12 @@ public class ToDoListManager : MonoBehaviour // this class manages the to-do lis
     /// </summary>
     private void GiveCurrencyReward(string questText, int rewardAmount = 5)
     {
+        Debug.Log($"[ToDoListManager] GiveCurrencyReward called: quest='{questText}', rewardAmount={rewardAmount}");
+        
         string region = GetRegionFromQuest(questText);
         if (!string.IsNullOrEmpty(region))
         {
+            Debug.Log($"[ToDoListManager] Adding {rewardAmount} currency for region: {region}");
             switch (region)
             {
                 case "Health Harbor":

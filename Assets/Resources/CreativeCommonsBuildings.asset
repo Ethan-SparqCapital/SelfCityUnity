@@ -15,81 +15,61 @@ MonoBehaviour:
   buildings:
   - name: Poetry Pavilion
     description: Share and perform poetry
-    price: 15
-    icon: {fileID: 0}
+    price: 20
   - name: Writers' Loft
     description: Collaborative writing and storytelling
-    price: 20
-    icon: {fileID: 0}
+    price: 35
   - name: Improv Island
     description: Spontaneous theater and comedy
-    price: 20
-    icon: {fileID: 0}
+    price: 40
   - name: Animation Arcade
     description: Create and watch your own cartoons
-    price: 20
-    icon: {fileID: 0}
+    price: 45
   - name: "Creative Caf\xE9"
     description: Sip, sketch, and brainstorm with friends
-    price: 20
-    icon: {fileID: 0}
+    price: 45
   - name: Street Art Alley
     description: Ever-evolving mural gallery
-    price: 25
-    icon: {fileID: 0}
+    price: 55
   - name: Style Studio
     description: Fashion district for personal style
-    price: 25
-    icon: {fileID: 0}
+    price: 60
   - name: Design Den
     description: Graphic design and digital art
-    price: 25
-    icon: {fileID: 0}
+    price: 65
   - name: Color Splash Park
     description: Interactive paint and color play
-    price: 25
-    icon: {fileID: 0}
+    price: 70
   - name: Expression Exhibit
     description: Museum of your creative journey
-    price: 30
-    icon: {fileID: 0}
+    price: 70
   - name: Makerspace Market
     description: DIY crafts, 3D printing, and invention
-    price: 30
-    icon: {fileID: 0}
+    price: 80
   - name: Sculpture Studio
     description: Hands-on clay, wood, and metalwork
-    price: 30
-    icon: {fileID: 0}
+    price: 85
   - name: Fashion Runway
     description: Host your own fashion shows
-    price: 30
-    icon: {fileID: 0}
+    price: 90
   - name: Music Monument
     description: Concert hall and recording studio
-    price: 35
-    icon: {fileID: 0}
+    price: 95
   - name: Film Festival Plaza
     description: Outdoor movie screenings and film contests
-    price: 35
-    icon: {fileID: 0}
+    price: 100
   - name: Art Amphitheater
     description: Performance venue for music, dance, and more
-    price: 40
-    icon: {fileID: 0}
+    price: 105
   - name: Dream Lab
     description: Invent, tinker, and bring ideas to life
-    price: 40
-    icon: {fileID: 0}
+    price: 110
   - name: Inspiration Tower
     description: "Panoramic views and creative brainstorming\t"
-    price: 45
-    icon: {fileID: 0}
+    price: 120
   - name: Innovation Incubator
     description: Tech hub for learning new skills
-    price: 50
-    icon: {fileID: 0}
+    price: 135
   - name: Game Dev Garage
     description: Build and test your own video games
-    price: 50
-    icon: {fileID: 0}
+    price: 140

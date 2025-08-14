@@ -16,80 +16,60 @@ MonoBehaviour:
   - name: Focus Fountain
     description: Boosts concentration and clarity
     price: 20
-    icon: {fileID: 0}
   - name: Wisdom Workshop
     description: Classes on meditation, journaling, and more
-    price: 20
-    icon: {fileID: 0}
+    price: 30
   - name: Puzzle Plaza
     description: Brain games and logic challenges
-    price: 20
-    icon: {fileID: 0}
+    price: 35
   - name: Reflection Pavilion
     description: Quiet spot for journaling and self-reflection
-    price: 15
-    icon: {fileID: 0}
+    price: 40
   - name: Meditation Garden
     description: Peaceful space for mindfulness
-    price: 20
-    icon: {fileID: 0}
+    price: 45
   - name: Boundary Bridge
     description: Visualize and reinforce healthy boundaries
-    price: 20
-    icon: {fileID: 0}
+    price: 50
   - name: Empathy Emporium
     description: Learn about emotions and understanding others
-    price: 25
-    icon: {fileID: 0}
+    price: 60
   - name: Gratitude Gardens
     description: Botanical blooms that grow with gratitude
-    price: 25
-    icon: {fileID: 0}
+    price: 70
   - name: Memory Museum
     description: Celebrate your milestones and memories
-    price: 30
-    icon: {fileID: 0}
+    price: 75
   - name: Mindful Maze
     description: Labyrinth for contemplation and focus
-    price: 30
-    icon: {fileID: 0}
+    price: 80
   - name: Therapy Center
     description: Support for mental health and growth
-    price: 30
-    icon: {fileID: 0}
+    price: 85
   - name: Calm Cascade
     description: Waterfall for stress relief and relaxation
-    price: 35
-    icon: {fileID: 0}
+    price: 90
   - name: Dream Dome
     description: Imagination and lucid dreaming center
-    price: 35
-    icon: {fileID: 0}
+    price: 90
   - name: Meditation Monument
     description: Zen garden and peaceful temple
-    price: 40
-    icon: {fileID: 0}
+    price: 95
   - name: Resilience Retreat
     description: Build mental strength and bounce back
-    price: 40
-    icon: {fileID: 0}
+    price: 100
   - name: Inspiration Observatory
     description: Stargazing and big-picture thinking
-    price: 45
-    icon: {fileID: 0}
+    price: 105
   - name: Therapy Tower
     description: Safe space for professional support
-    price: 45
-    icon: {fileID: 0}
+    price: 110
   - name: Insight Library
     description: "Expansive library of wisdom and stories\t"
-    price: 50
-    icon: {fileID: 0}
+    price: 120
   - name: Serotonin Springs
     description: Uplifting hot springs for mood boosts
-    price: 50
-    icon: {fileID: 0}
+    price: 135
   - name: Mindfulness Monorail
     description: Tranquil ride through calming scenery
-    price: 60
-    icon: {fileID: 0}
+    price: 140
