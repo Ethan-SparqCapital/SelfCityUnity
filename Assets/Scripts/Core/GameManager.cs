@@ -405,6 +405,29 @@ namespace LifeCraft.Core
                     PlayerPrefs.SetString("BuildingUnlockData", buildingUnlockJson); // Save the JSON to PlayerPrefs. 
                     Debug.Log("Building unlock data saved");
                 }
+
+                // Save mood and weather system data
+                if (MoodManager.Instance != null)
+                {
+                    MoodManager.Instance.SaveMoodData();
+                    Debug.Log("Mood data saved");
+                }
+                else
+                {
+                    Debug.LogWarning("MoodManager.Instance is null - skipping mood save");
+                }
+
+                // Save weather system data
+                var weatherSystem = FindFirstObjectByType<WeatherSystem>();
+                if (weatherSystem != null)
+                {
+                    weatherSystem.SaveWeatherData();
+                    Debug.Log("Weather data saved");
+                }
+                else
+                {
+                    Debug.LogWarning("WeatherSystem not found - skipping weather save");
+                }
             }
             catch (System.Exception e)
             {
@@ -629,6 +652,30 @@ namespace LifeCraft.Core
                     }
                 }
 
+                // Load mood and weather system data
+                if (MoodManager.Instance != null)
+                {
+                    MoodManager.Instance.LoadMoodData();
+                    Debug.Log("Mood data loaded successfully");
+                }
+                else
+                {
+                    Debug.LogWarning("MoodManager.Instance is null - skipping mood load");
+                }
+
+                // Load weather system data
+                var weatherSystem = FindFirstObjectByType<WeatherSystem>();
+                if (weatherSystem != null)
+                {
+                    weatherSystem.LoadWeatherData();
+                    weatherSystem.ApplyLoadedWeatherState();
+                    Debug.Log("Weather data loaded and applied successfully");
+                }
+                else
+                {
+                    Debug.LogWarning("WeatherSystem not found - skipping weather load");
+                }
+
                 // CRITICAL FIX: Re-initialize building unlock system with saved quiz scores and selected region
                 // LOGIC FLOW EXPLANATION:
                 // 1. During first play: Assessment Quiz → OnRegionSelected → InitializeBuildingUnlockSystem → Buildings get unlock levels assigned
@@ -747,6 +794,12 @@ namespace LifeCraft.Core
             PlayerPrefs.DeleteKey("BuildingUnlockData"); // Clear the data from the PlayerPrefs BuildingUnlockData key. 
             PlayerPrefs.DeleteKey("QuizScores"); // Clear quiz scores (part of the building unlock system fix)
             PlayerPrefs.DeleteKey("SelectedRegion"); // Clear selected region (part of the building unlock system fix)
+            
+            // Clear mood and weather system data
+            PlayerPrefs.DeleteKey("CurrentMood");
+            PlayerPrefs.DeleteKey("LastMoodSelectionTime");
+            PlayerPrefs.DeleteKey("CurrentWeatherMood");
+            PlayerPrefs.DeleteKey("WeatherTransitionDuration");
             
             // Note: ResourceManager and QuestManager don't have ClearSaveData methods
             // Their data will be reset when the game restarts

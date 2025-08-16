@@ -37,7 +37,7 @@ MonoBehaviour:
   - name: Running Track
     description: Outdoor track for jogging and races
     price: 70
-  - name: Zen Cycle Studio
+  - name: Cycle Studio
     description: Group cycling with calming visuals
     price: 75
   - name: Fresh Air Foundry
@@ -61,8 +61,8 @@ MonoBehaviour:
   - name: Movement Metro
     description: Transit system powered by your steps
     price: 105
-  - name: Biohacking Hub
-    description: Cutting-edge wellness tech and gadgets
+  - name: Gym
+    description: A place to work out
     price: 110
   - name: Adventure Obstacle Park
     description: Ninja course for all ages

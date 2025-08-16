@@ -80,6 +80,8 @@ SelfCity is a 2D city-building game where players construct and manage their own
 - **SubscriptionManager**: Single source of truth for premium subscription status
 - **HoldDownInteraction**: Action menu system for building interactions
 - **BuildingConstructionTimer**: Individual building construction timers with UI
+- **MoodManager**: Daily mood tracking and persistence with event-driven mood change system
+- **WeatherSystem**: Dynamic weather effects based on player mood with smooth transitions and persistence
 
 ### Data Persistence
 - **JSON Serialization**: Save data in JSON format
@@ -87,6 +89,8 @@ SelfCity is a 2D city-building game where players construct and manage their own
 - **Automatic Saving**: Game saves after key actions
 - **Cross-Session Persistence**: All data maintained between sessions
 - **Construction Progress**: Building construction state saved and restored
+- **Mood & Weather Data**: Player mood selections and weather states persisted across sessions
+- **AI Chat History**: Local chat history with export and clear functionality
 
 ## 🚀 Getting Started
 
@@ -119,6 +123,14 @@ For iOS development and testing, see: `iOS_SETUP_GUIDE.md` and `SETUP_IOS_WINDOW
 7. **Manage Construction**: Wait for buildings to complete or complete skip quests to finish instantly
 
 ## 🆕 Latest Features
+
+### 🌤️ Mood & Weather System
+- **Daily Mood Tracking**: 24-hour mood check system with persistent mood selection (`MoodManager` + `MoodCheck`)
+- **Mood-Based Weather**: Dynamic weather effects that change based on player mood (Happy=Sunny, Sad=Rainy, Moody=Cloudy, Stressed=Stormy)
+- **Smooth Weather Transitions**: 2-second fade transitions between weather states with coroutine-based animation system
+- **Weather Persistence**: Weather state saved and restored across game sessions (`WeatherSystem`)
+- **Event-Driven Architecture**: Mood changes automatically trigger weather updates via event system
+- **Debug Tools**: Context menu options for testing weather states and system status
 
 ### 🤖 AI Assistant System
 - **In-Game AI Chat**: Context-aware assistant that understands your current level, resources, and quests
@@ -159,7 +171,6 @@ For iOS development and testing, see: `iOS_SETUP_GUIDE.md` and `SETUP_IOS_WINDOW
 - **Unity Cloud Build**: Alternative cloud-based iOS building
 - **Info.plist Configuration**: Proper iOS app configuration
 - **Build Automation**: Automated build scripts for iOS and Android
-
 
 ### ⭐ Premium Subscription Enhancements
 - **Simulation Mode**: Safe, local-only subscription testing (no real purchases)
@@ -255,6 +266,9 @@ Assets/
 - [x] iOS development setup and cloud builds
 - [x] Enhanced building management with region preservation
 - [x] Comprehensive premium UI synchronization across all components
+- [x] Mood tracking system with daily mood checks and persistence
+- [x] Dynamic weather system with mood-based weather effects and smooth transitions
+- [x] AI Assistant system with context-aware wellness advice and chat history
 
 ### 🔄 Current Development
 - **Performance Optimization**: Ongoing system improvements
@@ -292,6 +306,6 @@ This project uses various asset packs with their respective licenses. Please ref
 
 **Built with ❤️ using Unity**
 
-*Last Updated: February 2025.*
+*Last Updated: August 2025.*
 *Developed By: Ethan Le.*
-*Development Status: Active Development - Core Systems Complete.* 
+*Development Status: Active Development - Core Systems Complete with Mood & Weather Integration.* 
